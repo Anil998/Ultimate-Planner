@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0f172a">
-<title>Ultimate Planner | Event Booking & Invoice Generator</title>
+<title>Ultimate Planner | Mobile & Desktop Invoice Generator</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
@@ -24,13 +25,10 @@
     --emerald-light: #ecfdf5;
     --rose: #e11d48;
     --rose-light: #fff1f2;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
-    --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
-    --shadow-lg: 0 20px 40px -15px rgba(15, 23, 42, 0.12);
     --radius: 12px;
 }
 
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html { scroll-behavior: smooth; }
 
 body {
@@ -47,7 +45,7 @@ button { cursor: pointer; }
 .app-shell {
     max-width: 1560px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 16px;
 }
 
 /* Header */
@@ -55,54 +53,52 @@ button { cursor: pointer; }
     background: #0f172a;
     color: #fff;
     border-radius: 16px;
-    padding: 14px 24px;
+    padding: 12px 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
     position: sticky;
-    top: 12px;
+    top: 8px;
     z-index: 50;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.15);
 }
 
 .brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
 }
 
 .brand-mark {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 10px;
     display: grid;
     place-items: center;
     background: linear-gradient(135deg, #f59e0b, #b45309);
     font-family: 'Playfair Display', serif;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     color: #fff;
-    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+    flex-shrink: 0;
 }
 
 .brand-copy h1 {
     margin: 0;
-    font-size: 17px;
+    font-size: 16px;
     font-weight: 700;
-    letter-spacing: -0.01em;
 }
 
 .brand-copy p {
-    margin: 2px 0 0;
-    font-size: 12px;
+    margin: 1px 0 0;
+    font-size: 11px;
     color: #94a3b8;
 }
 
 .top-actions {
     display: flex;
-    gap: 10px;
+    gap: 8px;
 }
 
 .btn {
@@ -112,79 +108,104 @@ button { cursor: pointer; }
     gap: 6px;
     border: 0;
     border-radius: 8px;
-    padding: 9px 16px;
-    font-weight: 600;
-    font-size: 13px;
-    transition: all 0.15s ease;
+    padding: 9px 14px;
+    font-weight: 700;
+    font-size: 12px;
+    transition: transform 0.12s ease;
+    white-space: nowrap;
+    min-height: 40px;
 }
 
-.btn:hover { transform: translateY(-1px); }
-.btn:active { transform: translateY(0); }
-
+.btn:active { transform: scale(0.97); }
 .btn-primary { background: #fff; color: #0f172a; }
-.btn-primary:hover { background: #f8fafc; }
 .btn-accent { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
-.btn-accent:hover { box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3); }
 .btn-emerald { background: var(--emerald); color: #fff; }
 .btn-light { background: #e2e8f0; color: #334155; }
 .btn-danger-soft { background: var(--rose-light); color: var(--rose); }
 
-/* Workspace */
+/* Mobile View Switcher Tab Bar */
+.mobile-view-tabs {
+    display: none;
+    margin-top: 12px;
+    background: #e2e8f0;
+    padding: 4px;
+    border-radius: 10px;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+}
+
+.view-tab-btn {
+    border: 0;
+    background: transparent;
+    padding: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    border-radius: 8px;
+    color: var(--ink-secondary);
+}
+
+.view-tab-btn.active {
+    background: #fff;
+    color: var(--ink-primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* Workspace Layout */
 .workspace {
     display: grid;
-    grid-template-columns: 500px minmax(0, 1fr);
-    gap: 24px;
-    margin-top: 20px;
+    grid-template-columns: 480px minmax(0, 1fr);
+    gap: 20px;
+    margin-top: 16px;
     align-items: start;
 }
 
 .editor {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 16px;
 }
 
 .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 20px;
-    box-shadow: var(--shadow-sm);
+    padding: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
 }
 
 .card-head {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 .card-title {
     margin: 0;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 14px;
+    font-weight: 800;
     color: var(--ink-primary);
 }
 
 .card-subtitle {
-    margin: 3px 0 0;
+    margin: 2px 0 0;
     color: var(--ink-secondary);
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .section-tag {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 10px;
+    font-weight: 800;
     color: var(--gold);
     background: var(--gold-light);
-    padding: 3px 8px;
+    padding: 2px 8px;
     border-radius: 6px;
 }
 
 .form-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
+    gap: 10px;
 }
 
 .form-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -193,12 +214,12 @@ button { cursor: pointer; }
 .field {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
 }
 
 .field label {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 10px;
+    font-weight: 800;
     color: #475569;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -211,15 +232,15 @@ button { cursor: pointer; }
     border: 1px solid #cbd5e1;
     background: #fff;
     color: var(--ink-primary);
-    padding: 9px 12px;
+    padding: 10px 12px;
     border-radius: 8px;
     outline: 0;
-    font-size: 13px;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    font-size: 14px;
+    transition: border-color 0.15s;
 }
 
 .field textarea {
-    min-height: 80px;
+    min-height: 72px;
     resize: vertical;
 }
 
@@ -232,20 +253,20 @@ button { cursor: pointer; }
 
 .logo-uploader {
     display: grid;
-    grid-template-columns: 1fr 100px;
-    gap: 12px;
+    grid-template-columns: 1fr 90px;
+    gap: 10px;
     align-items: center;
 }
 
 .logo-preview-box {
-    height: 80px;
+    height: 76px;
     border: 1px dashed #cbd5e1;
     border-radius: 8px;
     display: grid;
     place-items: center;
     background: #f8fafc;
     overflow: hidden;
-    padding: 6px;
+    padding: 4px;
 }
 
 .logo-preview-box img {
@@ -257,69 +278,69 @@ button { cursor: pointer; }
 .service-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .service-row {
     display: grid;
-    grid-template-columns: 140px 1fr 36px;
+    grid-template-columns: 120px 1fr 36px;
     gap: 8px;
     align-items: start;
     background: var(--surface-subtle);
-    padding: 10px;
+    padding: 8px;
     border-radius: 8px;
     border: 1px solid var(--border);
 }
 
 .btn-remove {
-    height: 38px;
+    height: 40px;
     border: 0;
     border-radius: 6px;
     background: var(--rose-light);
     color: var(--rose);
-    font-weight: 700;
+    font-weight: 800;
     display: grid;
     place-items: center;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .btn-add-service {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px dashed var(--gold-accent);
     background: var(--gold-light);
     color: #92400e;
     border-radius: 8px;
-    font-weight: 700;
-    font-size: 12px;
-    margin-top: 10px;
+    font-weight: 800;
+    font-size: 13px;
+    margin-top: 8px;
 }
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    margin-top: 12px;
+    gap: 8px;
+    margin-top: 10px;
 }
 
 .stat-card {
     background: var(--surface-subtle);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 12px;
+    padding: 10px;
 }
 
 .stat-card .lbl {
-    font-size: 10px;
-    font-weight: 700;
+    font-size: 9px;
+    font-weight: 800;
     color: var(--ink-secondary);
     text-transform: uppercase;
 }
 
 .stat-card .val {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 .stat-card.alert {
@@ -328,22 +349,22 @@ button { cursor: pointer; }
     color: var(--rose);
 }
 
-/* Document / Invoice Sheet */
+/* Invoice Sheet / Document */
 .preview-panel {
     position: sticky;
-    top: 92px;
+    top: 80px;
 }
 
 .invoice-sheet {
     background: #fff;
-    border-radius: 2px;
-    box-shadow: var(--shadow-lg);
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(15,23,42,0.08);
     border: 1px solid #d8e2ec;
     max-width: 860px;
     margin: 0 auto;
-    padding: 48px 52px;
+    padding: 40px 44px;
     position: relative;
-    font-size: 13px;
+    font-size: 12px;
     color: #1e293b;
 }
 
@@ -353,7 +374,7 @@ button { cursor: pointer; }
     top: 0;
     left: 0;
     right: 0;
-    height: 6px;
+    height: 5px;
     background: linear-gradient(90deg, #0f172a 0%, #0f172a 70%, #d97706 70%, #d97706 100%);
 }
 
@@ -361,46 +382,47 @@ button { cursor: pointer; }
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding-bottom: 24px;
+    padding-bottom: 20px;
     border-bottom: 1px solid var(--border);
 }
 
 .inv-brand {
     display: flex;
-    gap: 18px;
+    gap: 16px;
     align-items: center;
 }
 
 .inv-logo {
-    width: 68px;
-    height: 68px;
+    width: 64px;
+    height: 64px;
     object-fit: contain;
     border-radius: 8px;
     background: #fff;
+    border: 1px solid #e2e8f0;
 }
 
 .inv-company-name {
     margin: 0;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 800;
     letter-spacing: -0.02em;
     color: var(--ink-primary);
 }
 
 .inv-company-tagline {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--gold);
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-top: 2px;
 }
 
 .inv-company-contact {
-    margin-top: 8px;
-    font-size: 11px;
+    margin-top: 6px;
+    font-size: 10.5px;
     color: var(--ink-secondary);
-    line-height: 1.5;
+    line-height: 1.45;
 }
 
 .inv-meta {
@@ -408,21 +430,21 @@ button { cursor: pointer; }
 }
 
 .inv-title-badge {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     color: #0f172a;
     text-transform: uppercase;
 }
 
 .inv-meta-table {
-    margin-top: 10px;
+    margin-top: 8px;
     font-size: 11px;
     display: inline-table;
 }
 
 .inv-meta-table td {
-    padding: 3px 6px;
+    padding: 2px 4px;
 }
 
 .inv-meta-table td:first-child {
@@ -437,10 +459,10 @@ button { cursor: pointer; }
 
 .status-tag {
     display: inline-block;
-    margin-top: 8px;
+    margin-top: 6px;
     padding: 4px 10px;
     border-radius: 999px;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -450,39 +472,38 @@ button { cursor: pointer; }
 .status-partial { background: var(--gold-light); color: #b45309; border: 1px solid #fde68a; }
 .status-pending { background: var(--rose-light); color: var(--rose); border: 1px solid #fecdd3; }
 
-/* Blocks */
 .inv-grid-two {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-top: 24px;
+    gap: 16px;
+    margin-top: 20px;
 }
 
 .inv-box {
     background: #f8fafc;
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 14px 16px;
+    padding: 12px 14px;
 }
 
 .inv-box-title {
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--gold);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .inv-data-row {
     display: flex;
     font-size: 11px;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
     line-height: 1.4;
 }
 
 .inv-data-row .k {
-    width: 80px;
+    width: 78px;
     color: var(--ink-secondary);
     flex-shrink: 0;
 }
@@ -490,37 +511,38 @@ button { cursor: pointer; }
 .inv-data-row .v {
     font-weight: 600;
     color: var(--ink-primary);
+    word-break: break-word;
 }
 
-/* Event Details Banner */
 .inv-event-banner {
     background: #0f172a;
     color: #fff;
     border-radius: 8px;
-    padding: 16px 20px;
-    margin-top: 20px;
+    padding: 14px 18px;
+    margin-top: 16px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
+    gap: 12px;
 }
 
 .inv-event-cell .lbl {
-    font-size: 9px;
+    font-size: 8.5px;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: #94a3b8;
 }
 
 .inv-event-cell .val {
-    margin-top: 4px;
-    font-size: 12px;
+    margin-top: 3px;
+    font-size: 11.5px;
     font-weight: 700;
     color: #fff;
+    word-break: break-word;
 }
 
-/* Table */
 .inv-table-wrap {
-    margin-top: 24px;
+    margin-top: 20px;
+    overflow-x: auto;
 }
 
 .inv-table {
@@ -532,37 +554,36 @@ button { cursor: pointer; }
 .inv-table th {
     background: #f1f5f9;
     color: #334155;
-    padding: 9px 12px;
+    padding: 8px 10px;
     text-transform: uppercase;
-    font-weight: 700;
-    font-size: 9px;
+    font-weight: 800;
+    font-size: 8.5px;
     letter-spacing: 0.05em;
     border-bottom: 2px solid #cbd5e1;
     text-align: left;
 }
 
 .inv-table td {
-    padding: 11px 12px;
+    padding: 9px 10px;
     border-bottom: 1px solid var(--border);
     vertical-align: top;
     line-height: 1.4;
 }
 
-.inv-table .col-idx { width: 32px; text-align: center; color: var(--ink-secondary); }
+.inv-table .col-idx { width: 30px; text-align: center; color: var(--ink-secondary); }
 .inv-table .col-type { width: 28%; font-weight: 700; color: var(--ink-primary); }
 .inv-table .col-desc { color: #334155; }
 
-/* Financial Summary */
 .inv-summary-section {
     display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 24px;
-    margin-top: 20px;
+    grid-template-columns: 1fr 280px;
+    gap: 20px;
+    margin-top: 16px;
     align-items: start;
 }
 
 .inv-notes-box {
-    font-size: 11px;
+    font-size: 10.5px;
     color: var(--ink-secondary);
     line-height: 1.5;
     background: #fdfdfd;
@@ -574,7 +595,7 @@ button { cursor: pointer; }
 .inv-notes-box strong {
     color: var(--ink-primary);
     display: block;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
 .inv-totals {
@@ -587,31 +608,29 @@ button { cursor: pointer; }
 .inv-totals-row {
     display: flex;
     justify-content: space-between;
-    padding: 8px 12px;
+    padding: 7px 10px;
     border-bottom: 1px solid var(--border);
 }
 
 .inv-totals-row:last-child { border-bottom: 0; }
-.inv-totals-row.lead { background: #f8fafc; font-weight: 800; font-size: 12px; }
-.inv-totals-row.due { background: var(--rose-light); color: var(--rose); font-weight: 800; font-size: 12px; }
+.inv-totals-row.lead { background: #f8fafc; font-weight: 800; font-size: 11.5px; }
+.inv-totals-row.due { background: var(--rose-light); color: var(--rose); font-weight: 800; font-size: 11.5px; }
 
 .amount-words-line {
-    padding: 8px 12px;
+    padding: 6px 10px;
     background: #fdfefe;
-    font-size: 10px;
+    font-size: 9.5px;
     color: var(--ink-secondary);
     font-style: italic;
     border-bottom: 1px solid var(--border);
     line-height: 1.4;
 }
 
-/* Signatures */
 .inv-signatures {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    margin-top: 48px;
-    padding-top: 14px;
+    gap: 50px;
+    margin-top: 40px;
 }
 
 .sign-line {
@@ -625,21 +644,20 @@ button { cursor: pointer; }
 
 .sign-sub {
     text-align: center;
-    font-size: 9px;
+    font-size: 8.5px;
     color: var(--ink-muted);
     margin-top: 2px;
 }
 
-/* Terms */
 .inv-terms {
-    margin-top: 30px;
+    margin-top: 24px;
     border-top: 1px solid var(--border);
-    padding-top: 14px;
+    padding-top: 12px;
 }
 
 .inv-terms h4 {
-    margin: 0 0 6px;
-    font-size: 9px;
+    margin: 0 0 4px;
+    font-size: 8.5px;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: var(--ink-secondary);
@@ -647,55 +665,125 @@ button { cursor: pointer; }
 
 .inv-terms ol {
     margin: 0;
-    padding-left: 14px;
-    font-size: 9px;
+    padding-left: 12px;
+    font-size: 8.5px;
     color: #64748b;
     line-height: 1.5;
 }
 
 .toast {
     position: fixed;
-    bottom: 24px;
+    bottom: 20px;
     left: 50%;
     transform: translate(-50%, 40px);
     background: #0f172a;
     color: #fff;
-    padding: 10px 18px;
+    padding: 10px 16px;
     border-radius: 8px;
     font-size: 12px;
-    font-weight: 600;
-    box-shadow: var(--shadow-lg);
+    font-weight: 700;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s ease;
     z-index: 100;
 }
 
-.toast.show {
-    opacity: 1;
-    transform: translate(-50%, 0);
-}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-/* Print Rules */
-@media print {
-    body {
-        background: #fff !important;
-        color: #000;
-    }
-    .app-topbar, .editor, .toast {
-        display: none !important;
-    }
-    .app-shell {
-        max-width: none;
-        padding: 0;
-        margin: 0;
-    }
+/* RESPONSIVE CSS */
+@media (max-width: 1024px) {
     .workspace {
-        display: block;
-        margin: 0;
+        grid-template-columns: 1fr;
     }
     .preview-panel {
         position: static;
+    }
+    .mobile-view-tabs {
+        display: grid;
+    }
+    .view-mode-preview .editor {
+        display: none !important;
+    }
+    .view-mode-edit .preview-panel {
+        display: none !important;
+    }
+}
+
+@media (max-width: 680px) {
+    .app-shell { padding: 8px; }
+    .app-topbar {
+        padding: 10px 12px;
+        flex-wrap: wrap;
+    }
+    .brand-copy h1 { font-size: 14px; }
+    .top-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+    }
+    .top-actions .btn {
+        padding: 8px 4px;
+        font-size: 11px;
+    }
+    .form-grid, .form-grid.three {
+        grid-template-columns: 1fr;
+    }
+    .service-row {
+        grid-template-columns: 1fr 36px;
+    }
+    .service-row .srv-type {
+        grid-column: 1 / 2;
+    }
+    .service-row .srv-desc {
+        grid-column: 1 / -1;
+    }
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    .invoice-sheet {
+        padding: 24px 16px;
+        border-radius: 0;
+        border: 0;
+    }
+    .inv-header {
+        flex-direction: column;
+        gap: 14px;
+    }
+    .inv-meta {
+        text-align: left;
+        width: 100%;
+    }
+    .inv-meta-table td:first-child, .inv-meta-table td:last-child {
+        text-align: left;
+    }
+    .inv-grid-two {
+        grid-template-columns: 1fr;
+    }
+    .inv-event-banner {
+        grid-template-columns: 1fr 1fr;
+    }
+    .inv-summary-section {
+        grid-template-columns: 1fr;
+    }
+    .inv-signatures {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+/* Print Overrides */
+@media print {
+    body { background: #fff !important; color: #000; }
+    .app-topbar, .editor, .mobile-view-tabs, .toast {
+        display: none !important;
+    }
+    .app-shell, .workspace, .preview-panel {
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
     }
     .invoice-sheet {
         border: 0 !important;
@@ -703,52 +791,26 @@ button { cursor: pointer; }
         max-width: 100% !important;
         padding: 0 10mm !important;
     }
-    .invoice-sheet::before {
-        display: none;
-    }
-    @page {
-        size: A4;
-        margin: 12mm 0;
-    }
-    .inv-table th {
-        background: #eee !important;
-        color: #000 !important;
-    }
+    .invoice-sheet::before { display: none; }
+    @page { size: A4; margin: 10mm 0; }
+    .inv-table th { background: #f1f5f9 !important; color: #000 !important; }
     .inv-event-banner {
-        background: #f1f5f9 !important;
+        background: #f8fafc !important;
         color: #000 !important;
         border: 1px solid #cbd5e1 !important;
     }
     .inv-event-cell .lbl { color: #64748b !important; }
     .inv-event-cell .val { color: #000 !important; }
-    .inv-box {
-        background: #fff !important;
-        border: 1px solid #cbd5e1 !important;
-    }
+    .inv-box { background: #fff !important; border: 1px solid #cbd5e1 !important; }
     .inv-summary-section, .inv-signatures, .inv-terms {
         page-break-inside: avoid;
         break-inside: avoid;
     }
 }
-
-@media(max-width: 1180px) {
-    .workspace { grid-template-columns: 1fr; }
-    .preview-panel { position: static; }
-}
-
-@media(max-width: 640px) {
-    .app-shell { padding: 10px; }
-    .inv-header { flex-direction: column; gap: 14px; }
-    .inv-meta { text-align: left; }
-    .inv-meta-table td:first-child { text-align: left; }
-    .inv-meta-table td:last-child { text-align: left; }
-    .inv-grid-two, .inv-event-banner, .inv-summary-section { grid-template-columns: 1fr; }
-    .invoice-sheet { padding: 24px 16px; }
-}
 </style>
 </head>
 
-<body>
+<body class="view-mode-edit">
 <div class="app-shell">
 
     <header class="app-topbar">
@@ -756,16 +818,22 @@ button { cursor: pointer; }
             <div class="brand-mark">UP</div>
             <div class="brand-copy">
                 <h1>Ultimate Planner</h1>
-                <p>Event Billing & Receipt Generator</p>
+                <p>Event Billing & Receipt Portal</p>
             </div>
         </div>
 
         <div class="top-actions">
-            <button class="btn btn-primary" type="button" onclick="generateReceipt()">Refresh Bill</button>
-            <button class="btn btn-accent" type="button" onclick="window.print()">Print / Save PDF</button>
-            <button class="btn btn-emerald" type="button" onclick="shareBill()">Share Receipt</button>
+            <button class="btn btn-primary" type="button" onclick="switchToPreview(true)">Preview</button>
+            <button class="btn btn-accent" type="button" onclick="triggerPrint()">Print / PDF</button>
+            <button class="btn btn-emerald" type="button" onclick="shareBill()">Share</button>
         </div>
     </header>
+
+    <!-- Mobile Screen Switch Tabs -->
+    <div class="mobile-view-tabs" id="mobileTabs">
+        <button class="view-tab-btn active" id="tabBtnEdit" onclick="switchMobileTab('edit')">✏️ Edit Details</button>
+        <button class="view-tab-btn" id="tabBtnPreview" onclick="switchMobileTab('preview')">📄 View Receipt</button>
+    </div>
 
     <main class="workspace">
 
@@ -801,16 +869,16 @@ button { cursor: pointer; }
                     </div>
                     <div class="field full">
                         <label>Office Address</label>
-                        <textarea id="companyAddress" rows="2" placeholder="Suite / Office address, City, Pincode"></textarea>
+                        <textarea id="companyAddress" rows="2" placeholder="Office suite, Road, City, Pincode"></textarea>
                     </div>
                     <div class="field full">
-                        <label>Company Logo</label>
+                        <label>Company Logo URL</label>
                         <div class="logo-uploader">
                             <div>
-                                <input id="logoUrl" placeholder="Direct Image URL (PNG/JPG/SVG)">
-                                <div style="margin-top:8px; display:flex; gap:6px;">
+                                <input id="logoUrl" value="https://instagram.fccu4-3.fna.fbcdn.net/v/t51.82787-19/730004157_17956071813171342_3162059531330661234_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=instagram.fccu4-3.fna.fbcdn.net&_nc_cat=106&_nc_oc=Q6cZ2gF2I-fhLMxe-83L8xpkV3OL7G5YY3RQ3H6UO3APbYM4XJZ9f5O2TvKjVZl66QAuECzKsjjHqFc6DiLFLm6zWbIg&_nc_ohc=9o37-NTLgMsQ7kNvwFdPEbm&_nc_gid=tB7jL_yKZtw3TxxY1luMmw&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_AQJsbRWpYBma-BQ2CHsZnFz8zCtdYmfrU0xyYiRgfqbnRw&oe=6AA76A9C&_nc_sid=7a9f4b" placeholder="Direct Image URL">
+                                <div style="margin-top:6px; display:flex; gap:6px;">
                                     <input type="file" id="logoFile" accept="image/*" style="display:none">
-                                    <button class="btn btn-light" type="button" onclick="$('logoFile').click()">Browse Device</button>
+                                    <button class="btn btn-light" type="button" onclick="$('logoFile').click()" style="flex:1;">Upload Device</button>
                                     <button class="btn btn-danger-soft" type="button" onclick="clearLogo()">Reset</button>
                                 </div>
                             </div>
@@ -833,7 +901,7 @@ button { cursor: pointer; }
                 </div>
                 <div class="form-grid three">
                     <div class="field">
-                        <label>Receipt / Bill No.</label>
+                        <label>Receipt No.</label>
                         <input id="receiptNumber" placeholder="UP-2026-001">
                     </div>
                     <div class="field">
@@ -852,7 +920,7 @@ button { cursor: pointer; }
                 </div>
             </div>
 
-            <!-- 3. Client -->
+            <!-- 3. Client Details -->
             <div class="card">
                 <div class="card-head">
                     <div>
@@ -875,12 +943,12 @@ button { cursor: pointer; }
                         <input id="clientAltPhone" type="tel" placeholder="Optional">
                     </div>
                     <div class="field">
-                        <label>Billing City / Area</label>
-                        <input id="clientCity" placeholder="e.g. South Delhi, New Delhi">
+                        <label>City / Location</label>
+                        <input id="clientCity" placeholder="e.g. South Delhi, Delhi">
                     </div>
                     <div class="field full">
                         <label>Full Address</label>
-                        <textarea id="clientAddress" rows="2" placeholder="Residence or business address"></textarea>
+                        <textarea id="clientAddress" rows="2" placeholder="Residence / Billing address"></textarea>
                     </div>
                 </div>
             </div>
@@ -890,21 +958,21 @@ button { cursor: pointer; }
                 <div class="card-head">
                     <div>
                         <h2 class="card-title">Event Schedule & Venue</h2>
-                        <p class="card-subtitle">Crucial logistics information.</p>
+                        <p class="card-subtitle">Occasion and logistics details.</p>
                     </div>
                     <span class="section-tag">04</span>
                 </div>
                 <div class="form-grid three">
                     <div class="field">
-                        <label>Event Nature</label>
+                        <label>Occasion Type</label>
                         <select id="eventType">
                             <option>Wedding & Varmala</option>
                             <option>Grand Reception</option>
                             <option>Engagement / Ring Ceremony</option>
-                            <option>Sangeet & Haldi Setup</option>
+                            <option>Sangeet & Haldi Decor</option>
                             <option>Birthday Celebration</option>
-                            <option>Corporate Annual Meet</option>
-                            <option>Other Private Event</option>
+                            <option>Corporate Gala / Event</option>
+                            <option>Other Private Function</option>
                         </select>
                     </div>
                     <div class="field">
@@ -916,18 +984,18 @@ button { cursor: pointer; }
                         <input id="functionTime" type="time">
                     </div>
                     <div class="field full">
-                        <label>Venue Name & Details</label>
-                        <textarea id="eventVenue" rows="2" placeholder="Hotel / Banquet / Farmhouse name, Hall no., Address"></textarea>
+                        <label>Venue Details</label>
+                        <textarea id="eventVenue" rows="2" placeholder="Hotel / Banquet / Farmhouse name & hall details"></textarea>
                     </div>
                 </div>
             </div>
 
-            <!-- 5. Payment Calculations -->
+            <!-- 5. Commercials -->
             <div class="card">
                 <div class="card-head">
                     <div>
-                        <h2 class="card-title">Commercials & Balance</h2>
-                        <p class="card-subtitle">Real-time ledger calculations.</p>
+                        <h2 class="card-title">Commercials & Ledger</h2>
+                        <p class="card-subtitle">Real-time calculations.</p>
                     </div>
                     <span class="section-tag">05</span>
                 </div>
@@ -941,7 +1009,7 @@ button { cursor: pointer; }
                         <input id="advanceAmount" type="number" min="0" step="500" value="0">
                     </div>
                     <div class="field">
-                        <label>Payment Method</label>
+                        <label>Payment Mode</label>
                         <select id="paymentMode">
                             <option>UPI / QR Scan</option>
                             <option>Bank IMPS / NEFT</option>
@@ -953,7 +1021,7 @@ button { cursor: pointer; }
 
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="lbl">Agreed Package</div>
+                        <div class="lbl">Package Total</div>
                         <div class="val" id="dispTotal">₹0</div>
                     </div>
                     <div class="stat-card">
@@ -961,37 +1029,37 @@ button { cursor: pointer; }
                         <div class="val" id="dispAdvance" style="color:var(--emerald)">₹0</div>
                     </div>
                     <div class="stat-card" id="balanceCard">
-                        <div class="lbl">Pending Balance</div>
+                        <div class="lbl">Pending Due</div>
                         <div class="val" id="dispBalance">₹0</div>
                     </div>
                 </div>
             </div>
 
-            <!-- 6. Scope of Work / Services -->
+            <!-- 6. Deliverables -->
             <div class="card">
                 <div class="card-head">
                     <div>
-                        <h2 class="card-title">Finalized Deliverables</h2>
-                        <p class="card-subtitle">Itemized scope client signed off on.</p>
+                        <h2 class="card-title">Scope of Work</h2>
+                        <p class="card-subtitle">Approved services and deliverables.</p>
                     </div>
                     <span class="section-tag">06</span>
                 </div>
 
                 <div id="serviceContainer" class="service-list"></div>
-                <button class="btn-add-service" type="button" onclick="addServiceItem()">+ Add Deliverable / Service</button>
+                <button class="btn-add-service" type="button" onclick="addServiceItem()">+ Add Service / Deliverable</button>
             </div>
 
             <!-- 7. Special Notes -->
             <div class="card">
                 <div class="card-head">
                     <div>
-                        <h2 class="card-title">Specific Instructions</h2>
-                        <p class="card-subtitle">Colors, props, fresh flowers, stage dimensions.</p>
+                        <h2 class="card-title">Special Notes / Directives</h2>
+                        <p class="card-subtitle">Colors, props, fresh flowers, entry notes.</p>
                     </div>
                     <span class="section-tag">07</span>
                 </div>
                 <div class="field">
-                    <textarea id="specialRequirements" rows="3" placeholder="e.g. Pure fresh orchids & carnations only. Stage riser dimensions: 32x20 ft. Heavy cold pyro for couple entry. Sound decibel restrictions post 10 PM."></textarea>
+                    <textarea id="specialRequirements" rows="3" placeholder="e.g. 100% fresh flowers only. Stage dimensions: 32x20 ft. Cold pyros on couple entry."></textarea>
                 </div>
             </div>
 
@@ -999,33 +1067,32 @@ button { cursor: pointer; }
             <div class="card">
                 <div class="card-head">
                     <div>
-                        <h2 class="card-title">Contractual Terms</h2>
-                        <p class="card-subtitle">Printed on invoice bottom.</p>
+                        <h2 class="card-title">Terms & Conditions</h2>
+                        <p class="card-subtitle">Printed at the bottom of the bill.</p>
                     </div>
                     <span class="section-tag">08</span>
                 </div>
                 <div class="field">
-                    <textarea id="termsInput" rows="6">1. Confirmation: Booking is locked only upon clearance of the agreed advance payment.
-2. Balance Settlement: Outstanding balance must be settled prior to or on the event date before setup handover.
-3. Add-ons & Scope: Any additional setup, props, extended hours, or sound equipment outside this receipt will incur additional charges.
-4. Logistics & Venue Permissions: Permissions from local authorities, electric load clearance, and venue entry timing remain client responsibility.
-5. Postponement / Force Majeure: Dates may be transferred subject to slot availability. Advances are strictly non-refundable.</textarea>
+                    <textarea id="termsInput" rows="5">1. Confirmation: Booking is locked only upon clearance of the agreed advance payment.
+2. Balance Settlement: Outstanding balance must be settled on or prior to the event setup handover.
+3. Additional Scope: Any setup, extra props, or extended venue timings outside this receipt will attract additional charges.
+4. Logistics & Venue Permissions: Electric load, DJ permissions, and venue access timings are client responsibility.
+5. Postponement: Advances are non-refundable but transferable to alternate available dates.</textarea>
                 </div>
-                <div style="margin-top:14px; display:flex; gap:8px;">
-                    <button class="btn btn-primary" type="button" onclick="saveDraft()">Save Template</button>
-                    <button class="btn btn-light" type="button" onclick="loadDraft()">Load Template</button>
-                    <button class="btn btn-danger-soft" type="button" onclick="resetAll()">Reset Form</button>
+                <div style="margin-top:12px; display:flex; gap:6px; flex-wrap:wrap;">
+                    <button class="btn btn-primary" type="button" onclick="saveDraft()" style="flex:1;">Save Draft</button>
+                    <button class="btn btn-light" type="button" onclick="loadDraft()" style="flex:1;">Load Draft</button>
+                    <button class="btn btn-danger-soft" type="button" onclick="resetAll()">Reset</button>
                 </div>
             </div>
 
         </section>
 
         <!-- ================= LIVE PREVIEW ================= -->
-        <section class="preview-panel">
+        <section class="preview-panel" id="previewPanel">
 
             <div class="invoice-sheet" id="invoice">
 
-                <!-- Header -->
                 <header class="inv-header">
                     <div class="inv-brand">
                         <img id="rLogo" class="inv-logo" alt="Ultimate Planner Logo">
@@ -1056,10 +1123,9 @@ button { cursor: pointer; }
                     </div>
                 </header>
 
-                <!-- 2-Col Parties -->
                 <div class="inv-grid-two">
                     <div class="inv-box">
-                        <div class="inv-box-title">Client Information</div>
+                        <div class="inv-box-title">Client Details</div>
                         <div class="inv-data-row"><span class="k">Client Name:</span><span class="v" id="rClientName">-</span></div>
                         <div class="inv-data-row"><span class="k">Contact:</span><span class="v" id="rClientPhone">-</span></div>
                         <div class="inv-data-row"><span class="k">Alt Phone:</span><span class="v" id="rClientAltPhone">-</span></div>
@@ -1067,7 +1133,7 @@ button { cursor: pointer; }
                     </div>
 
                     <div class="inv-box">
-                        <div class="inv-box-title">Event Logistics</div>
+                        <div class="inv-box-title">Event Schedule</div>
                         <div class="inv-data-row"><span class="k">Occasion:</span><span class="v" id="rEventType">Wedding</span></div>
                         <div class="inv-data-row"><span class="k">Date:</span><span class="v" id="rFunctionDate">-</span></div>
                         <div class="inv-data-row"><span class="k">Time:</span><span class="v" id="rFunctionTime">-</span></div>
@@ -1075,7 +1141,6 @@ button { cursor: pointer; }
                     </div>
                 </div>
 
-                <!-- Dark Event Summary Banner -->
                 <div class="inv-event-banner">
                     <div class="inv-event-cell">
                         <div class="lbl">Occasion</div>
@@ -1095,27 +1160,25 @@ button { cursor: pointer; }
                     </div>
                 </div>
 
-                <!-- Deliverables Table -->
                 <div class="inv-table-wrap">
                     <table class="inv-table">
                         <thead>
                             <tr>
                                 <th class="col-idx">#</th>
                                 <th class="col-type">Deliverable Category</th>
-                                <th class="col-desc">Scope & Execution Specifications</th>
+                                <th class="col-desc">Scope Specifications</th>
                             </tr>
                         </thead>
                         <tbody id="rServiceTableBody">
-                            <tr><td colspan="3" style="text-align:center;color:#94a3b8;">No specific items added.</td></tr>
+                            <tr><td colspan="3" style="text-align:center;color:#94a3b8;">No items added.</td></tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Financial Summary & Notes -->
                 <div class="inv-summary-section">
                     <div class="inv-notes-box">
-                        <strong>Specific Notes & Custom Directives:</strong>
-                        <div id="rSpecialNotes" style="white-space: pre-line;">Standard terms applied.</div>
+                        <strong>Execution Notes & Directives:</strong>
+                        <div id="rSpecialNotes" style="white-space: pre-line;">Standard specifications applied.</div>
                     </div>
 
                     <div class="inv-totals">
@@ -1137,21 +1200,19 @@ button { cursor: pointer; }
                     </div>
                 </div>
 
-                <!-- Signatures -->
                 <div class="inv-signatures">
                     <div>
                         <div class="sign-line" id="rSignClient">Client Acceptance Signature</div>
-                        <div class="sign-sub">I confirm the deliverables, event timings & payment structure</div>
+                        <div class="sign-sub">Scope and payment verification</div>
                     </div>
                     <div>
                         <div class="sign-line" id="rSignCompany">Authorized Signatory (Ultimate Planner)</div>
-                        <div class="sign-sub">Booking confirmation & official money receipt</div>
+                        <div class="sign-sub">Official booking acknowledgement</div>
                     </div>
                 </div>
 
-                <!-- Terms & Conditions -->
                 <div class="inv-terms">
-                    <h4>Terms & Governing Agreement</h4>
+                    <h4>Terms & Governing Conditions</h4>
                     <ol id="rTermsList"></ol>
                 </div>
 
@@ -1162,25 +1223,19 @@ button { cursor: pointer; }
     </main>
 </div>
 
-<div class="toast" id="toast">Changes Saved</div>
+<div class="toast" id="toast">Saved</div>
 
 <script>
 "use strict";
 
 const $ = id => document.getElementById(id);
 
-// Professional Default Vector Logo for Ultimate Planner
-const DEFAULT_BRAND_LOGO = "data:image/svg+xml;utf8," + encodeURIComponent(`
+// Permanent Monogram Fallback if External CDN Link Expires
+const DEFAULT_FALLBACK_SVG = "data:image/svg+xml;utf8," + encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-  <defs>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f59e0b" />
-      <stop offset="100%" stop-color="#92400e" />
-    </linearGradient>
-  </defs>
-  <rect width="200" height="200" rx="36" fill="#0f172a"/>
-  <circle cx="100" cy="100" r="76" stroke="url(#goldGrad)" stroke-width="3" fill="none" stroke-dasharray="8 6"/>
-  <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="64" font-weight="bold" fill="url(#goldGrad)" text-anchor="middle" letter-spacing="2">UP</text>
+  <rect width="200" height="200" rx="30" fill="#0f172a"/>
+  <circle cx="100" cy="100" r="74" stroke="#d97706" stroke-width="3" fill="none" stroke-dasharray="6 5"/>
+  <text x="100" y="118" font-family="'Playfair Display', Georgia, serif" font-size="64" font-weight="bold" fill="#f59e0b" text-anchor="middle">UP</text>
 </svg>
 `);
 
@@ -1197,7 +1252,7 @@ function showToast(msg) {
     t.textContent = msg;
     t.classList.add("show");
     clearTimeout(showToast.timeout);
-    showToast.timeout = setTimeout(() => t.classList.remove("show"), 2000);
+    showToast.timeout = setTimeout(() => t.classList.remove("show"), 1800);
 }
 
 function formatDate(iso) {
@@ -1227,7 +1282,6 @@ function formatINR(num) {
     }).format(n);
 }
 
-/* Indian Currency Number-to-Words */
 const ONES = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
     "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
 const TENS = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
@@ -1269,13 +1323,13 @@ function convertToIndianWords(value) {
     return "Rupees " + parts.join(" ") + " Only";
 }
 
-/* Dynamic Services Engine */
+/* Dynamic Scope / Deliverables List */
 function addServiceItem(type = "", desc = "") {
     const wrap = document.createElement("div");
     wrap.className = "service-row";
     wrap.innerHTML = `
         <input class="srv-type" placeholder="Category" value="${type}">
-        <textarea class="srv-desc" rows="2" placeholder="Specific measurements, flowers, colors, materials">${desc}</textarea>
+        <textarea class="srv-desc" rows="2" placeholder="Specifications, measurements, colors">${desc}</textarea>
         <button class="btn-remove" type="button" title="Remove">×</button>
     `;
 
@@ -1299,27 +1353,31 @@ function getServicesData() {
     })).filter(x => x.type || x.desc);
 }
 
-/* Logo Management */
+/* Logo Management with Error Fallback */
 function applyLogo(src) {
-    const target = src || DEFAULT_BRAND_LOGO;
-    $("logoPreviewImg").src = target;
-    $("rLogo").src = target;
+    const target = src || DEFAULT_FALLBACK_SVG;
+    const prev = $("logoPreviewImg");
+    const rLogo = $("rLogo");
+
+    prev.onerror = () => { prev.src = DEFAULT_FALLBACK_SVG; };
+    rLogo.onerror = () => { rLogo.src = DEFAULT_FALLBACK_SVG; };
+
+    prev.src = target;
+    rLogo.src = target;
 }
 
 function clearLogo() {
     $("logoUrl").value = "";
     $("logoFile").value = "";
     localStorage.removeItem("up_custom_logo");
-    applyLogo(DEFAULT_BRAND_LOGO);
-    showToast("Logo restored to default");
+    applyLogo(DEFAULT_FALLBACK_SVG);
+    showToast("Logo reset");
 }
 
 $("logoUrl").addEventListener("input", e => {
     const val = e.target.value.trim();
-    if (val) {
-        localStorage.setItem("up_custom_logo", val);
-        applyLogo(val);
-    }
+    localStorage.setItem("up_custom_logo", val);
+    applyLogo(val);
 });
 
 $("logoFile").addEventListener("change", e => {
@@ -1331,18 +1389,18 @@ $("logoFile").addEventListener("change", e => {
         localStorage.setItem("up_custom_logo", data);
         $("logoUrl").value = "";
         applyLogo(data);
-        showToast("Custom logo uploaded");
+        showToast("Device logo saved");
     };
     r.readAsDataURL(f);
 });
 
-/* Main Receipt Render Function */
+/* Core Invoice Builder */
 function generateReceipt() {
     const total = Math.max(0, Number($("totalAmount").value) || 0);
     const advance = Math.max(0, Number($("advanceAmount").value) || 0);
     const balance = Math.max(0, total - advance);
 
-    // Business identity
+    // Business info
     const company = $("companyName").value.trim() || "Ultimate Planner";
     $("rCompanyName").textContent = company;
     $("rTagline").textContent = $("companyTagline").value.trim() || "Event Planning • Luxury Décor • Management";
@@ -1354,7 +1412,7 @@ function generateReceipt() {
     $("rReceiptNo").textContent = $("receiptNumber").value.trim() || "UP-" + new Date().getFullYear() + "-001";
     $("rBookingDate").textContent = formatDate($("bookingDate").value);
 
-    // Status Pill
+    // Status
     const st = $("paymentStatus").value;
     const badge = $("rStatusBadge");
     badge.textContent = st;
@@ -1390,20 +1448,20 @@ function generateReceipt() {
     const tbody = $("rServiceTableBody");
     tbody.innerHTML = "";
     if (services.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#94a3b8;padding:16px;">No specific services configured.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#94a3b8;padding:12px;">No specific services configured.</td></tr>`;
     } else {
         services.forEach((s, idx) => {
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td class="col-idx">${idx + 1}</td>
-                <td class="col-type">${s.type || "General Requirement"}</td>
+                <td class="col-type">${s.type || "Deliverable"}</td>
                 <td class="col-desc">${s.desc || "-"}</td>
             `;
             tbody.appendChild(tr);
         });
     }
 
-    // Commercials & Words
+    // Numbers & Balance
     $("dispTotal").textContent = formatINR(total);
     $("dispAdvance").textContent = formatINR(advance);
     $("dispBalance").textContent = formatINR(balance);
@@ -1413,7 +1471,6 @@ function generateReceipt() {
     $("rBalanceFin").textContent = formatINR(balance);
     $("rTotalWords").textContent = convertToIndianWords(total);
 
-    // Over-advance detection
     if (advance > total) {
         $("balanceCard").classList.add("alert");
         $("rDueRow").style.background = "#fff1f2";
@@ -1422,13 +1479,10 @@ function generateReceipt() {
         $("balanceCard").classList.remove("alert");
         $("rDueRow").style.background = balance > 0 ? "var(--rose-light)" : "var(--emerald-light)";
         $("rDueRow").style.color = balance > 0 ? "var(--rose)" : "var(--emerald)";
-        $("rDueRow").innerHTML = `<span>${balance > 0 ? "Balance Pending" : "Full Cleared"}</span><span>${formatINR(balance)}</span>`;
+        $("rDueRow").innerHTML = `<span>${balance > 0 ? "Balance Due" : "Settled"}</span><span>${formatINR(balance)}</span>`;
     }
 
-    // Notes
     $("rSpecialNotes").textContent = $("specialRequirements").value.trim() || "No customized execution constraints noted.";
-
-    // Signatures
     $("rSignClient").textContent = "Signature: " + cName;
     $("rSignCompany").textContent = "For " + company;
 
@@ -1442,6 +1496,36 @@ function generateReceipt() {
     });
 }
 
+/* Mobile Screen Tabs Switcher */
+function switchMobileTab(mode) {
+    if (mode === "preview") {
+        document.body.classList.remove("view-mode-edit");
+        document.body.classList.add("view-mode-preview");
+        $("tabBtnEdit").classList.remove("active");
+        $("tabBtnPreview").classList.add("active");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        document.body.classList.remove("view-mode-preview");
+        document.body.classList.add("view-mode-edit");
+        $("tabBtnPreview").classList.remove("active");
+        $("tabBtnEdit").classList.add("active");
+    }
+}
+
+function switchToPreview(scroll = true) {
+    generateReceipt();
+    if (window.innerWidth <= 1024) {
+        switchMobileTab('preview');
+    } else if (scroll) {
+        $("previewPanel").scrollIntoView({ behavior: 'smooth' });
+    }
+}
+
+function triggerPrint() {
+    generateReceipt();
+    window.print();
+}
+
 /* Storage / Drafts */
 function saveDraft() {
     const payload = {};
@@ -1450,7 +1534,7 @@ function saveDraft() {
     });
     payload.services = getServicesData();
     localStorage.setItem("up_invoice_draft", JSON.stringify(payload));
-    showToast("Template & draft saved locally");
+    showToast("Template saved locally");
 }
 
 function loadDraft() {
@@ -1469,12 +1553,12 @@ function loadDraft() {
         generateReceipt();
         showToast("Draft restored");
     } catch(e) {
-        showToast("Error loading draft");
+        showToast("Draft corrupted");
     }
 }
 
 function resetAll() {
-    if (!confirm("Are you sure you want to reset all billing inputs?")) return;
+    if (!confirm("Reset all invoice inputs to default?")) return;
     $("companyName").value = "Ultimate Planner";
     $("companyTagline").value = "Event Planning • Luxury Décor • Management";
     $("receiptNumber").value = "";
@@ -1491,62 +1575,59 @@ function resetAll() {
 
     seedDefaultServices();
     generateReceipt();
-    showToast("Form reset to clean state");
+    showToast("Reset completed");
 }
 
-/* Sharing */
+/* Web Share API */
 async function shareBill() {
     generateReceipt();
     const summary = [
         `*${$("companyName").value.trim() || "ULTIMATE PLANNER"}*`,
-        `Booking Confirmation & Receipt: ${$("rReceiptNo").textContent}`,
-        `Client: ${$("clientName").value || "N/A"}`,
+        `Booking Confirmation & Bill: ${$("rReceiptNo").textContent}`,
+        `Client: ${$("clientName").value || "Valued Client"}`,
         `Event: ${$("eventType").value} on ${formatDate($("functionDate").value)}`,
-        `Venue: ${$("eventVenue").value || "Not specified"}`,
+        `Venue: ${$("eventVenue").value || "Specified in contract"}`,
         `---------------------------`,
-        `Agreed Total: ${formatINR($("totalAmount").value)}`,
-        `Advance Paid: ${formatINR($("advanceAmount").value)}`,
+        `Package Amount: ${formatINR($("totalAmount").value)}`,
+        `Advance Received: ${formatINR($("advanceAmount").value)}`,
         `Balance Due: ${$("rBalanceFin").textContent}`,
         `Payment Mode: ${$("paymentMode").value}`,
         `---------------------------`,
-        `Official digital receipt generated via Ultimate Planner portal.`
+        `Generated via Ultimate Planner official portal.`
     ].join("\n");
 
     if (navigator.share) {
         try {
             await navigator.share({
-                title: "Booking Receipt - " + $("rReceiptNo").textContent,
+                title: "Event Booking Receipt",
                 text: summary
             });
             return;
         } catch(e) {}
     }
     navigator.clipboard.writeText(summary).then(() => {
-        showToast("Receipt summary copied to clipboard");
+        showToast("Receipt copied for WhatsApp / SMS");
     }).catch(() => {
-        prompt("Copy Receipt Summary:", summary);
+        prompt("Copy text summary:", summary);
     });
 }
 
 function seedDefaultServices() {
-    addServiceItem("Stage & Backdrop", "32x18 ft royal velvet backdrop, gold pillars & warm amber wash");
-    addServiceItem("Floral Setup", "100% fresh Dutch roses, baby breath, orchids for couple stage");
-    addServiceItem("Atmospheric Lighting", "Sharpies, warm LED pars, dimmer ambiance setup");
+    addServiceItem("Main Stage & Backdrop", "32x18 ft royal velvet backdrop, gold accents & ambient wash");
+    addServiceItem("Floral Scenography", "100% fresh Dutch roses, baby breath, orchids for couple dais");
+    addServiceItem("Atmospheric Lighting", "Moving sharpies, warm profile dimmers, entrance fairy walk");
 }
 
-/* Init */
+/* Init Engine */
 function init() {
     const today = new Date().toISOString().slice(0, 10);
     $("bookingDate").value = today;
 
-    // Load logo if saved
-    const savedLogo = localStorage.getItem("up_custom_logo");
-    applyLogo(savedLogo || DEFAULT_BRAND_LOGO);
+    const savedLogo = localStorage.getItem("up_custom_logo") || $("logoUrl").value.trim();
+    applyLogo(savedLogo);
 
-    // Initial default services
     seedDefaultServices();
 
-    // Auto update listener on all standard form inputs
     document.querySelectorAll(".editor input, .editor textarea, .editor select").forEach(el => {
         el.addEventListener("input", generateReceipt);
         el.addEventListener("change", generateReceipt);
