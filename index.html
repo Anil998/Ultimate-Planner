@@ -2,2176 +2,2226 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Ultimate Planner | Booking Receipt Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>Ultimate Planner | Event Booking & Receipt Generator</title>
 
 <style>
-:root {
-    --primary: #6d28d9;
-    --primary-dark: #4c1d95;
-    --secondary: #f59e0b;
-    --dark: #1f2937;
-    --light: #f8fafc;
-    --border: #d1d5db;
-    --danger: #dc2626;
-    --success: #16a34a;
+:root{
+    --ink:#111827;
+    --muted:#6b7280;
+    --line:#e5e7eb;
+    --soft:#f8fafc;
+    --paper:#ffffff;
+    --accent:#b45309;
+    --accent-2:#d97706;
+    --accent-soft:#fff7ed;
+    --navy:#111827;
+    --green:#15803d;
+    --red:#b91c1c;
+    --shadow:0 18px 50px rgba(15,23,42,.10);
+    --radius:16px;
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+    margin:0;
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at top left,#fff7ed 0,#f8fafc 28%,#eef2f7 100%);
+    min-height:100vh;
+}
+
+button,input,textarea,select{font:inherit}
+
+button{cursor:pointer}
+
+.app-shell{
+    max-width:1500px;
+    margin:0 auto;
+    padding:18px;
+}
+
+.app-topbar{
+    background:rgba(17,24,39,.97);
+    color:#fff;
+    border-radius:18px;
+    padding:16px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    position:sticky;
+    top:10px;
+    z-index:40;
+    box-shadow:0 14px 40px rgba(15,23,42,.16);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+}
+
+.brand-mark{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg,#f59e0b,#92400e);
+    font-weight:900;
+    letter-spacing:.04em;
+    color:#fff;
+    flex:none;
+}
+
+.brand-copy{min-width:0}
+
+.brand-copy h1{
+    margin:0;
+    font-size:18px;
+    line-height:1.1;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.brand-copy p{
+    margin:4px 0 0;
+    font-size:12px;
+    color:#cbd5e1;
+}
+
+.top-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    justify-content:flex-end;
+}
+
+.btn{
+    border:0;
+    border-radius:10px;
+    padding:11px 14px;
+    font-weight:800;
+    font-size:13px;
+    transition:.18s ease;
 }
 
-* {
-    box-sizing: border-box;
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+
+.btn-dark{background:#fff;color:#111827}
+.btn-accent{background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff}
+.btn-green{background:#166534;color:#fff}
+.btn-light{background:#f3f4f6;color:#374151}
+.btn-danger{background:#fee2e2;color:#991b1b}
+
+.workspace{
+    display:grid;
+    grid-template-columns:minmax(360px,520px) minmax(0,1fr);
+    gap:22px;
+    align-items:start;
+    margin-top:22px;
+}
+
+.editor{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+}
+
+.card{
+    background:rgba(255,255,255,.96);
+    border:1px solid rgba(226,232,240,.95);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:20px;
+}
+
+.card-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:16px;
+}
+
+.card-title{
+    margin:0;
+    font-size:16px;
+    font-weight:900;
+    letter-spacing:-.01em;
+}
+
+.card-subtitle{
+    margin:4px 0 0;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+}
+
+.section-number{
+    flex:none;
+    width:30px;
+    height:30px;
+    border-radius:10px;
+    display:grid;
+    place-items:center;
+    background:var(--accent-soft);
+    color:var(--accent);
+    border:1px solid #fed7aa;
+    font-weight:900;
+    font-size:12px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:13px;
+}
+
+.form-grid.three{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+}
+
+.full{grid-column:1/-1}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.field label{
+    font-size:11px;
+    font-weight:900;
+    color:#374151;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+}
+
+.field input,
+.field textarea,
+.field select{
+    width:100%;
+    border:1px solid #d1d5db;
+    background:#fff;
+    color:var(--ink);
+    padding:11px 12px;
+    border-radius:10px;
+    outline:0;
+    font-size:13px;
+    min-height:43px;
+}
+
+.field textarea{
+    min-height:88px;
+    resize:vertical;
+    line-height:1.5;
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus{
+    border-color:#f59e0b;
+    box-shadow:0 0 0 3px rgba(245,158,11,.12);
+}
+
+.help{
+    font-size:11px;
+    color:var(--muted);
+    line-height:1.45;
+}
+
+.logo-row{
+    display:grid;
+    grid-template-columns:1fr 110px;
+    gap:12px;
+    align-items:start;
+}
+
+.logo-preview{
+    height:110px;
+    border:1px dashed #cbd5e1;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:#f8fafc;
+    overflow:hidden;
+}
+
+.logo-preview img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    padding:8px;
+}
+
+.logo-fallback{
+    font-weight:900;
+    font-size:11px;
+    color:#94a3b8;
+    text-align:center;
+    padding:10px;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #eef2f7;
-    color: #1f2937;
+.file-control{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
 }
 
-/* =========================
-   APP HEADER
-========================= */
+.file-control input[type=file]{
+    position:absolute;
+    width:1px;
+    height:1px;
+    opacity:0;
+    pointer-events:none;
+}
+
+.file-label{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid #d1d5db;
+    background:#fff;
+    padding:10px 12px;
+    border-radius:10px;
+    font-size:12px;
+    font-weight:800;
+    color:#374151;
+}
+
+.service-list{
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+}
 
-.app-header {
-    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-    color: white;
-    padding: 18px 25px;
-    text-align: center;
+.service-item{
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    padding:14px;
+    background:#fcfcfd;
 }
 
-.app-header h1 {
-    margin: 0;
-    font-size: 24px;
+.service-grid{
+    display:grid;
+    grid-template-columns:190px minmax(0,1fr) 42px;
+    gap:10px;
+    align-items:start;
 }
 
-.app-header p {
-    margin: 6px 0 0;
-    opacity: .85;
-    font-size: 14px;
+.service-remove{
+    height:43px;
+    border:1px solid #fecaca;
+    border-radius:10px;
+    background:#fef2f2;
+    color:#b91c1c;
+    font-weight:900;
 }
 
-/* =========================
-   MAIN LAYOUT
-========================= */
+.add-service{
+    margin-top:12px;
+    width:100%;
+    border:1px dashed #f59e0b;
+    border-radius:12px;
+    background:#fffaf2;
+    color:#9a3412;
+    padding:12px;
+    font-weight:900;
+}
 
-.main-wrapper {
-    max-width: 1400px;
-    margin: auto;
-    padding: 25px;
+.mini-actions{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
 }
 
-.editor-card {
-    background: white;
-    padding: 25px;
-    border-radius: 16px;
-    margin-bottom: 25px;
-    box-shadow: 0 5px 25px rgba(0,0,0,.08);
+.money-summary{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:10px;
 }
 
-.section-title {
-    font-size: 20px;
-    font-weight: bold;
-    color: var(--primary-dark);
-    margin: 0 0 18px;
-    border-bottom: 2px solid #ede9fe;
-    padding-bottom: 10px;
+.money-box{
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    padding:13px;
+    background:#fff;
 }
 
-/* =========================
-   FORM
-========================= */
+.money-box .k{
+    color:var(--muted);
+    font-size:10px;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+}
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+.money-box .v{
+    margin-top:4px;
+    font-size:18px;
+    font-weight:950;
 }
 
-.grid-2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+.money-box.pending{
+    background:#fff7f7;
+    border-color:#fecaca;
 }
+
+.money-box.pending .v{color:var(--red)}
 
-.full-width {
-    grid-column: 1 / -1;
+.preview-panel{
+    position:sticky;
+    top:92px;
+    min-width:0;
 }
 
-label {
-    display: block;
-    font-size: 13px;
-    font-weight: bold;
-    margin-bottom: 6px;
+.preview-toolbar{
+    background:rgba(255,255,255,.88);
+    border:1px solid rgba(226,232,240,.95);
+    border-radius:14px;
+    padding:10px;
+    margin-bottom:12px;
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+    box-shadow:0 10px 30px rgba(15,23,42,.06);
 }
 
-input,
-textarea,
-select {
-    width: 100%;
-    border: 1px solid var(--border);
-    padding: 11px;
-    border-radius: 8px;
-    font-size: 14px;
-    outline: none;
+.preview-toolbar .title{
+    font-size:12px;
+    font-weight:900;
+    color:#374151;
 }
 
-textarea {
-    resize: vertical;
-    min-height: 80px;
+.receipt-wrap{
+    display:flex;
+    justify-content:center;
+    padding:0 4px 24px;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(109,40,217,.1);
+.receipt{
+    width:100%;
+    max-width:930px;
+    background:#fff;
+    color:#111827;
+    box-shadow:0 20px 70px rgba(15,23,42,.13);
+    border:1px solid #e5e7eb;
 }
 
-/* =========================
-   SERVICES
-========================= */
+.receipt-inner{
+    padding:34px 38px 26px;
+}
 
-.service-item {
-    border: 1px solid #ddd6fe;
-    background: #faf9ff;
-    padding: 16px;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    position: relative;
+.receipt-topline{
+    height:6px;
+    margin:-34px -38px 24px;
+    background:linear-gradient(90deg,#111827 0 68%,#d97706 68% 100%);
 }
 
-.service-grid {
-    display: grid;
-    grid-template-columns: 1fr 2fr auto;
-    gap: 12px;
-    align-items: start;
+.receipt-header{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    align-items:flex-start;
+    padding-bottom:22px;
+    border-bottom:1px solid #e5e7eb;
 }
 
-.remove-service {
-    background: #fee2e2;
-    color: var(--danger);
-    border: none;
-    padding: 11px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
+.receipt-brand{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    min-width:0;
 }
 
-.add-service {
-    width: 100%;
-    border: 2px dashed var(--primary);
-    background: #f5f3ff;
-    color: var(--primary-dark);
-    padding: 14px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 15px;
+.receipt-logo{
+    width:84px;
+    height:84px;
+    object-fit:contain;
+    border:1px solid #e5e7eb;
+    border-radius:14px;
+    background:#fff;
+    padding:7px;
+    flex:none;
 }
+
+.receipt-logo.is-hidden{display:none}
 
-.add-service:hover {
-    background: #ede9fe;
+.receipt-company h2{
+    margin:0;
+    font-size:26px;
+    line-height:1.1;
+    letter-spacing:-.03em;
 }
 
-/* =========================
-   BUTTONS
-========================= */
+.receipt-company .tagline{
+    margin-top:5px;
+    color:#6b7280;
+    font-size:11px;
+}
 
-.action-bar {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 25px 0;
+.receipt-company .contact{
+    margin-top:9px;
+    color:#4b5563;
+    font-size:10px;
+    line-height:1.6;
 }
 
-button {
-    font-family: inherit;
+.receipt-meta{
+    text-align:right;
+    min-width:190px;
 }
 
-.action-btn {
-    border: none;
-    padding: 14px 22px;
-    border-radius: 9px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
+.document-badge{
+    display:inline-block;
+    padding:7px 10px;
+    border-radius:999px;
+    background:#111827;
+    color:#fff;
+    font-size:10px;
+    font-weight:900;
+    letter-spacing:.08em;
 }
 
-.preview-btn {
-    background: var(--primary);
-    color: white;
+.meta-grid{
+    margin-top:11px;
+    display:grid;
+    grid-template-columns:auto auto;
+    gap:5px 12px;
+    font-size:10px;
 }
 
-.print-btn {
-    background: #1f2937;
-    color: white;
+.meta-grid .label{
+    color:#6b7280;
 }
 
-.share-btn {
-    background: var(--success);
-    color: white;
+.meta-grid .value{
+    font-weight:900;
 }
 
-.reset-btn {
-    background: #e5e7eb;
-    color: #374151;
+.status-pill{
+    margin-top:10px;
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:999px;
+    font-size:10px;
+    font-weight:900;
+    border:1px solid #bbf7d0;
+    background:#f0fdf4;
+    color:#166534;
 }
 
-/* =========================
-   RECEIPT
-========================= */
+.status-pill.warn{
+    border-color:#fed7aa;
+    background:#fff7ed;
+    color:#9a3412;
+}
 
-#receiptContainer {
-    display: none;
+.status-pill.danger{
+    border-color:#fecaca;
+    background:#fef2f2;
+    color:#991b1b;
 }
 
-.receipt {
-    width: 100%;
-    max-width: 900px;
-    margin: auto;
-    background: white;
-    padding: 45px;
-    box-shadow: 0 5px 30px rgba(0,0,0,.12);
+.section-block{
+    margin-top:20px;
 }
 
-.receipt-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 3px solid var(--primary);
-    padding-bottom: 18px;
-    margin-bottom: 20px;
+.section-heading{
+    font-size:10px;
+    font-weight:950;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    color:#6b7280;
+    margin-bottom:9px;
 }
 
-.company-area {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.info-cards{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
 }
 
-.company-logo {
-    width: 85px;
-    height: 85px;
-    object-fit: contain;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 5px;
+.info-card{
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    overflow:hidden;
 }
 
-.company-name {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--primary-dark);
+.info-card-head{
+    padding:8px 11px;
+    background:#f8fafc;
+    border-bottom:1px solid #e5e7eb;
+    font-size:10px;
+    font-weight:950;
+    color:#374151;
 }
 
-.company-tagline {
-    font-size: 13px;
-    color: #6b7280;
-    margin-top: 4px;
+.info-card-body{
+    padding:11px;
 }
 
-.receipt-badge {
-    text-align: right;
+.info-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:6px;
+    line-height:1.45;
 }
 
-.receipt-badge h2 {
-    margin: 0;
-    color: var(--primary);
-    font-size: 25px;
+.info-row:last-child{margin-bottom:0}
+
+.info-row .key{
+    min-width:76px;
+    color:#6b7280;
+    font-size:10px;
 }
 
-.receipt-number {
-    margin-top: 8px;
-    font-size: 13px;
+.info-row .val{
+    flex:1;
+    font-size:10px;
+    font-weight:800;
+    word-break:break-word;
 }
 
-/* =========================
-   INFO BOXES
-========================= */
+.event-banner{
+    border:1px solid #fed7aa;
+    background:linear-gradient(135deg,#fffaf2,#fff7ed);
+    border-radius:14px;
+    padding:13px;
+}
 
-.info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-    margin-bottom: 22px;
+.event-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
 }
 
-.info-box {
-    border: 1px solid #d1d5db;
-    border-radius: 10px;
-    overflow: hidden;
+.event-cell{
+    min-width:0;
 }
 
-.info-box-title {
-    background: #f5f3ff;
-    color: var(--primary-dark);
-    padding: 10px 14px;
-    font-weight: bold;
+.event-cell .eyebrow{
+    color:#9a3412;
+    text-transform:uppercase;
+    font-size:9px;
+    font-weight:950;
+    letter-spacing:.08em;
 }
 
-.info-content {
-    padding: 14px;
+.event-cell .big{
+    margin-top:4px;
+    font-size:11px;
+    font-weight:900;
+    word-break:break-word;
 }
 
-.info-row {
-    margin-bottom: 8px;
-    font-size: 14px;
+.event-note{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed #fdba74;
+    color:#4b5563;
+    font-size:10px;
+    line-height:1.55;
 }
 
-.info-label {
-    font-weight: bold;
+.services{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
 }
 
-/* =========================
-   EVENT BOX
-========================= */
+.services th,
+.services td{
+    border:1px solid #e5e7eb;
+    padding:9px 10px;
+    vertical-align:top;
+    word-break:break-word;
+}
 
-.event-details {
-    border: 1px solid #ddd;
-    padding: 16px;
-    border-radius: 10px;
-    margin-bottom: 22px;
-    background: #fafafa;
+.services th{
+    background:#111827;
+    color:#fff;
+    font-size:9px;
+    text-align:left;
+    letter-spacing:.05em;
+    text-transform:uppercase;
 }
 
-.event-details h3 {
-    margin-top: 0;
-    color: var(--primary-dark);
+.services td{
+    font-size:10px;
+    line-height:1.5;
 }
+
+.services .num{width:38px;text-align:center}
+.services .type{width:27%}
 
-/* =========================
-   PAYMENT
-========================= */
+.service-total-note{
+    margin-top:7px;
+    color:#6b7280;
+    font-size:9px;
+    line-height:1.5;
+}
 
-.payment-box {
-    margin: 22px 0;
-    border: 1px solid #c7d2fe;
-    border-radius: 10px;
-    overflow: hidden;
+.special-box{
+    border:1px solid #fde68a;
+    background:#fffbeb;
+    border-radius:12px;
+    padding:12px;
 }
 
-.payment-box h3 {
-    margin: 0;
-    padding: 12px 16px;
-    background: #eef2ff;
-    color: #312e81;
+.special-box h4{
+    margin:0 0 6px;
+    font-size:10px;
+    color:#92400e;
 }
 
-.payment-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 12px 16px;
-    border-bottom: 1px solid #e5e7eb;
-    font-size: 15px;
+.special-box div{
+    font-size:10px;
+    line-height:1.6;
+    white-space:pre-wrap;
 }
 
-.payment-row:last-child {
-    border-bottom: none;
+.payment-area{
+    display:grid;
+    grid-template-columns:1.15fr .85fr;
+    gap:12px;
+    align-items:stretch;
 }
 
-.amount {
-    font-weight: bold;
+.payment-main{
+    border:1px solid #e5e7eb;
+    border-radius:12px;
+    overflow:hidden;
 }
 
-.pending {
-    color: var(--danger);
+.payment-line{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:10px 12px;
+    border-bottom:1px solid #e5e7eb;
+    font-size:10px;
 }
+
+.payment-line:last-child{border-bottom:0}
 
-/* =========================
-   SERVICES TABLE
-========================= */
+.payment-line strong{font-size:11px}
 
-.services-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 12px;
+.payment-line.total{
+    background:#f8fafc;
 }
 
-.services-table th {
-    background: var(--primary-dark);
-    color: white;
-    padding: 12px;
-    text-align: left;
-    font-size: 14px;
+.payment-line.pending{
+    background:#fff7f7;
+    color:#991b1b;
 }
 
-.services-table td {
-    padding: 12px;
-    border: 1px solid #d1d5db;
-    vertical-align: top;
-    font-size: 14px;
+.amount-words{
+    color:#6b7280;
+    font-size:9px;
+    text-align:right;
+    max-width:63%;
+    line-height:1.4;
 }
 
-.services-table tr:nth-child(even) {
-    background: #fafafa;
+.received-box{
+    border:1px solid #bbf7d0;
+    background:#f0fdf4;
+    border-radius:12px;
+    padding:14px;
 }
 
-/* =========================
-   SPECIAL REQUIREMENTS
-========================= */
+.received-box .title{
+    color:#166534;
+    font-size:9px;
+    font-weight:950;
+    text-transform:uppercase;
+    letter-spacing:.07em;
+}
 
-.requirement-box {
-    margin-top: 22px;
-    border-left: 5px solid var(--secondary);
-    background: #fffbeb;
-    padding: 16px;
+.received-box .amount{
+    margin-top:8px;
+    font-size:22px;
+    font-weight:950;
+    color:#166534;
 }
 
-.requirement-box h3 {
-    margin-top: 0;
+.received-box .mode{
+    margin-top:7px;
+    font-size:10px;
+    color:#166534;
+    line-height:1.5;
 }
 
-/* =========================
-   TERMS
-========================= */
+.terms{
+    border-top:1px solid #e5e7eb;
+    padding-top:16px;
+}
 
-.terms-box {
-    margin-top: 25px;
-    padding: 18px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
+.terms ol{
+    margin:7px 0 0;
+    padding-left:17px;
 }
 
-.terms-box h3 {
-    color: var(--primary-dark);
-    margin-top: 0;
+.terms li{
+    margin-bottom:5px;
+    color:#4b5563;
+    font-size:9px;
+    line-height:1.55;
 }
 
-.terms-box ol {
-    padding-left: 20px;
-    font-size: 13px;
-    line-height: 1.7;
+.signature{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    margin-top:44px;
 }
 
-/* =========================
-   SIGNATURE
-========================= */
+.sign-box{
+    text-align:center;
+    color:#374151;
+    font-size:9px;
+}
 
-.signature-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    margin-top: 70px;
+.sign-line{
+    border-top:1px solid #111827;
+    padding-top:7px;
+    font-weight:900;
 }
 
-.signature-box {
-    text-align: center;
+.sign-name{
+    margin-top:4px;
+    color:#6b7280;
 }
 
-.signature-line {
-    border-top: 1px solid #111;
-    margin-bottom: 8px;
+.receipt-footer{
+    margin-top:25px;
+    padding-top:12px;
+    border-top:1px solid #e5e7eb;
+    text-align:center;
+    color:#9ca3af;
+    font-size:8px;
+    line-height:1.5;
 }
 
-/* =========================
-   FOOTER
-========================= */
+.mobile-share-hint{
+    display:none;
+}
 
-.receipt-footer {
-    border-top: 1px solid #d1d5db;
-    margin-top: 35px;
-    padding-top: 15px;
-    text-align: center;
-    font-size: 12px;
-    color: #6b7280;
+.empty-note{
+    padding:14px;
+    border:1px dashed #cbd5e1;
+    border-radius:10px;
+    color:#64748b;
+    font-size:11px;
+    background:#f8fafc;
 }
 
-/* =========================
-   MOBILE
-========================= */
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:22px;
+    transform:translate(-50%,20px);
+    background:#111827;
+    color:#fff;
+    padding:11px 15px;
+    border-radius:11px;
+    box-shadow:0 15px 35px rgba(15,23,42,.22);
+    font-size:12px;
+    font-weight:800;
+    opacity:0;
+    pointer-events:none;
+    transition:.2s ease;
+    z-index:100;
+}
 
-@media(max-width: 768px) {
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
 
-    .main-wrapper {
-        padding: 12px;
+@media(max-width:1100px){
+    .workspace{
+        grid-template-columns:1fr;
     }
-
-    .editor-card {
-        padding: 16px;
-    }
-
-    .grid,
-    .grid-2,
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .service-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .receipt {
-        padding: 20px;
-    }
-
-    .receipt-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-    .receipt-badge {
-        text-align: left;
-    }
-
-    .company-name {
-        font-size: 22px;
-    }
-
-    .signature-section {
-        grid-template-columns: 1fr;
-        gap: 50px;
-    }
-
-    .payment-row {
-        flex-direction: column;
-        gap: 4px;
+    .preview-panel{
+        position:static;
     }
 }
 
-/* =========================
-   PRINT
-========================= */
-
-@media print {
-
-    body {
-        background: white;
+@media(max-width:700px){
+    .app-shell{padding:10px}
+    .app-topbar{
+        top:6px;
+        border-radius:14px;
+        padding:12px;
+        align-items:flex-start;
     }
-
-    .app-header,
-    #editor,
-    .action-bar,
-    #receiptActions {
-        display: none !important;
+    .top-actions .btn{
+        padding:9px 10px;
+        font-size:11px;
     }
-
-    #receiptContainer {
-        display: block !important;
+    .workspace{gap:14px;margin-top:14px}
+    .card{padding:15px;border-radius:14px}
+    .form-grid,
+    .form-grid.three{
+        grid-template-columns:1fr;
     }
-
-    .receipt {
-        box-shadow: none;
-        max-width: 100%;
-        padding: 20px;
+    .logo-row{grid-template-columns:1fr}
+    .logo-preview{height:92px}
+    .service-grid{
+        grid-template-columns:1fr;
     }
+    .service-remove{width:100%}
+    .money-summary{
+        grid-template-columns:1fr;
+    }
+    .preview-toolbar{
+        position:sticky;
+        top:74px;
+        z-index:25;
+    }
+    .receipt-wrap{
+        padding:0;
+    }
+    .receipt{
+        border-radius:12px;
+    }
+    .receipt-inner{
+        padding:22px 16px 18px;
+    }
+    .receipt-topline{
+        margin:-22px -16px 18px;
+    }
+    .receipt-header{
+        flex-direction:column;
+        gap:14px;
+    }
+    .receipt-meta{
+        width:100%;
+        text-align:left;
+    }
+    .meta-grid{
+        grid-template-columns:auto 1fr;
+    }
+    .info-cards{
+        grid-template-columns:1fr;
+    }
+    .event-grid{
+        grid-template-columns:1fr 1fr;
+    }
+    .payment-area{
+        grid-template-columns:1fr;
+    }
+    .signature{
+        grid-template-columns:1fr;
+        gap:44px;
+        margin-top:40px;
+    }
+    .mobile-share-hint{
+        display:block;
+        color:#64748b;
+        font-size:10px;
+    }
+}
 
-    @page {
-        size: A4;
-        margin: 12mm;
+@media print{
+    body{background:#fff}
+    .app-topbar,
+    .editor,
+    .preview-toolbar,
+    .toast{
+        display:none !important;
+    }
+    .app-shell{
+        max-width:none;
+        margin:0;
+        padding:0;
+    }
+    .workspace{
+        display:block;
+        margin:0;
+    }
+    .preview-panel{
+        display:block;
+    }
+    .receipt-wrap{
+        display:block;
+        padding:0;
+    }
+    .receipt{
+        max-width:none;
+        width:100%;
+        border:0;
+        box-shadow:none;
+    }
+    .receipt-inner{
+        padding:14px 18px 10px;
+    }
+    .receipt-topline{
+        margin:-14px -18px 14px;
+    }
+    @page{
+        size:A4;
+        margin:10mm;
+    }
+    .section-block,
+    .event-banner,
+    .payment-area,
+    .special-box,
+    .terms,
+    .signature{
+        break-inside:avoid;
+        page-break-inside:avoid;
+    }
+    .services thead{
+        display:table-header-group;
+    }
+    .services tr,
+    .services td,
+    .services th{
+        break-inside:avoid;
+        page-break-inside:avoid;
     }
 }
 </style>
 </head>
 
 <body>
-
-<!-- =========================
-     HEADER
-========================= -->
-
-<div class="app-header">
-    <h1>Ultimate Planner</h1>
-    <p>Professional Event Booking & Receipt Generator</p>
-</div>
-
-
-<div class="main-wrapper">
-
-<!-- =========================
-     EDITOR
-========================= -->
-
-<div id="editor">
-
-<div class="editor-card">
-
-<h2 class="section-title">Company Information</h2>
-
-<div class="grid">
-
-<div>
-<label>Company Name</label>
-<input id="companyName" value="Ultimate Planner">
-</div>
-
-<div>
-<label>Company Contact Number</label>
-<input id="companyPhone" placeholder="Enter company phone number">
-</div>
-
-<div>
-<label>Company Email</label>
-<input id="companyEmail" placeholder="Enter company email">
-</div>
-
-<div class="full-width">
-<label>Company Address</label>
-<textarea id="companyAddress" placeholder="Enter company address"></textarea>
-</div>
-
-<div class="full-width">
-<label>https://instagram.fccu4-3.fna.fbcdn.net/v/t51.82787-19/730004157_17956071813171342_3162059531330661234_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=instagram.fccu4-3.fna.fbcdn.net&_nc_cat=106&_nc_oc=Q6cZ2gE6QoPYSKQAh7U-Bh0-8RP9zEztx_aGPC1bGjh6xxwD99tfGsiH7dInjW7e5iohKLwPVLDCuWMZiBvN3-g-grPD&_nc_ohc=9o37-NTLgMsQ7kNvwFdPEbm&_nc_gid=Wq_zGOE5bJoOryGjss90vw&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_AQI1UQ1vlCqQsUTfHhYcViNweTbFWCGDdncfjLoi1mRUMA&oe=6AA76A9C&_nc_sid=7a9f4b</label>
-<input id="logoUrl" placeholder="Paste logo image link here">
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     RECEIPT DETAILS
-========================= -->
-
-<div class="editor-card">
-
-<h2 class="section-title">Booking & Receipt Details</h2>
-
-<div class="grid">
-
-<div>
-<label>Receipt / Booking Number</label>
-<input id="receiptNumber" placeholder="Example: UP-2026-001">
-</div>
-
-<div>
-<label>Booking Date</label>
-<input id="bookingDate" type="date">
-</div>
-
-<div>
-<label>Payment Status</label>
-
-<select id="paymentStatus">
-<option value="Advance Paid">Advance Paid</option>
-<option value="Partially Paid">Partially Paid</option>
-<option value="Fully Paid">Fully Paid</option>
-<option value="Pending">Pending</option>
-</select>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     CLIENT DETAILS
-========================= -->
-
-<div class="editor-card">
-
-<h2 class="section-title">Client Details</h2>
-
-<div class="grid">
-
-<div>
-<label>Client Full Name</label>
-<input id="clientName" placeholder="Enter client name">
-</div>
-
-<div>
-<label>Client Contact Number</label>
-<input id="clientPhone" type="tel" placeholder="Enter phone number">
-</div>
-
-<div>
-<label>Alternative Contact Number</label>
-<input id="clientAltPhone" type="tel" placeholder="Optional">
-</div>
-
-<div class="full-width">
-<label>Client Address</label>
-<textarea id="clientAddress" placeholder="Enter complete address"></textarea>
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     EVENT DETAILS
-========================= -->
-
-<div class="editor-card">
-
-<h2 class="section-title">Event Details</h2>
-
-<div class="grid">
-
-<div>
-<label>Event Type</label>
-
-<select id="eventType">
-<option>Wedding</option>
-<option>Reception</option>
-<option>Birthday Party</option>
-<option>Engagement</option>
-<option>Anniversary</option>
-<option>Corporate Event</option>
-<option>Religious Event</option>
-<option>Other</option>
-</select>
-
-</div>
-
-<div>
-<label>Function Date</label>
-<input id="functionDate" type="date">
-</div>
-
-<div>
-<label>Function Time</label>
-<input id="functionTime" type="time">
-</div>
-
-<div class="full-width">
-<label>Event Venue / Location</label>
-<textarea id="eventVenue" placeholder="Enter function venue"></textarea>
-</div>
-
-<div class="full-width">
-<label>Additional Event Information</label>
-<textarea id="eventAdditional" placeholder="Example: Bride/Groom name, theme, expected guests, etc."></textarea>
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     PAYMENT DETAILS
-========================= -->
-
-<div class="editor-card">
-
-<h2 class="section-title">Payment Details</h2>
-
-<div class="grid">
-
-<div>
-<label>Total Final Amount (₹)</label>
-<input id="totalAmount" type="number" min="0" value="0">
-</div>
-
-<div>
-<label>Advance Paid (₹)</label>
-<input id="advanceAmount" type="number" min="0" value="0">
-</div>
-
-<div>
-<label>Payment Mode</label>
-
-<select id="paymentMode">
-<option>Cash</option>
-<option>UPI</option>
-<option>Bank Transfer</option>
-<option>Cheque</option>
-<option>Other</option>
-</select>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     SERVICES
-========================= -->
-
-<div class="editor-card">
-
-<h2 class="section-title">Services & Finalized Requirements</h2>
-
-<p style="font-size:14px;color:#6b7280;">
-Add every service and clearly mention the exact requirement finalized with the client.
-</p>
-
-<div id="servicesContainer"></div>
-
-<button class="add-service" onclick="addService()">
-＋ Add New Service / Requirement
-</button>
-
-</div>
-
-
-<!-- =========================
-     SPECIAL REQUIREMENTS
-========================= -->
-
-<div class="editor-card">
-
-<h2 class="section-title">Client Special Requirements</h2>
-
-<textarea id="specialRequirements"
-placeholder="Example: Fresh flowers only. No artificial/plastic flowers. Specific colour theme required. Specific lighting, fan, decoration or stage requirements."></textarea>
-
-</div>
-
-
-<!-- =========================
-     TERMS
-========================= -->
-
-<div class="editor-card">
-
-<h2 class="section-title">Terms & Conditions</h2>
-
-<textarea id="terms" style="min-height:260px;">1. The booking will be considered confirmed only after receipt of the agreed advance payment.
-
-2. Any remaining balance payment must be cleared according to the agreed payment schedule.
-
-3. Any additional service requested after final confirmation may involve additional charges.
-
-4. The client must clearly communicate all special requirements before the event.
-
-5. Ultimate Planner will provide the services mentioned in this booking document according to the finalized agreement.
-
-6. Changes in event date, venue, design or services may affect the total cost.
-
-7. Cancellation and refund policies will be applicable according to the mutual agreement between the client and Ultimate Planner.
-
-8. Any damage caused to rented or hired event materials due to negligence may be chargeable to the client.
-
-9. The client is requested to verify all services and requirements mentioned in this document before signing.
-
-10. This document serves as a booking confirmation and payment receipt for the services agreed upon by both parties.</textarea>
-
-</div>
-
-
-<!-- =========================
-     ACTION BUTTONS
-========================= -->
-
-<div class="action-bar">
-
-<button class="action-btn preview-btn" onclick="generateReceipt()">
-Generate Professional Bill
-</button>
-
-<button class="action-btn reset-btn" onclick="resetForm()">
-Reset Form
-</button>
-
-</div>
-
-</div>
-
-
-<!-- =========================
-     RECEIPT OUTPUT
-========================= -->
-
-<div id="receiptContainer">
-
-<div id="receipt" class="receipt">
-
-<!-- HEADER -->
-
-<div class="receipt-header">
-
-<div class="company-area">
-
-<img id="rLogo" class="company-logo"
-src="https://via.placeholder.com/150?text=LOGO"
-alt="Company Logo">
-
-<div>
-
-<div id="rCompanyName" class="company-name">
-Ultimate Planner
-</div>
-
-<div class="company-tagline">
-Professional Event Planning & Management
-</div>
-
-</div>
-
-</div>
-
-
-<div class="receipt-badge">
-
-<h2>BOOKING RECEIPT</h2>
-
-<div class="receipt-number">
-Receipt No: <strong id="rReceiptNumber"></strong>
-</div>
-
-<div class="receipt-number">
-Booking Date: <strong id="rBookingDate"></strong>
-</div>
-
-</div>
-
-</div>
-
-
-<!-- CLIENT + COMPANY -->
-
-<div class="info-grid">
-
-<div class="info-box">
-
-<div class="info-box-title">
-CLIENT DETAILS
-</div>
-
-<div class="info-content">
-
-<div class="info-row">
-<span class="info-label">Name:</span>
-<span id="rClientName"></span>
-</div>
-
-<div class="info-row">
-<span class="info-label">Contact:</span>
-<span id="rClientPhone"></span>
-</div>
-
-<div class="info-row">
-<span class="info-label">Alternative Contact:</span>
-<span id="rClientAltPhone"></span>
-</div>
-
-<div class="info-row">
-<span class="info-label">Address:</span>
-<span id="rClientAddress"></span>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="info-box">
-
-<div class="info-box-title">
-ULTIMATE PLANNER
-</div>
-
-<div class="info-content">
-
-<div class="info-row">
-<span class="info-label">Phone:</span>
-<span id="rCompanyPhone"></span>
-</div>
-
-<div class="info-row">
-<span class="info-label">Email:</span>
-<span id="rCompanyEmail"></span>
-</div>
-
-<div class="info-row">
-<span class="info-label">Address:</span>
-<span id="rCompanyAddress"></span>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-<!-- EVENT DETAILS -->
-
-<div class="event-details">
-
-<h3>Event Details</h3>
-
-<div class="grid-2">
-
-<div class="info-row">
-<span class="info-label">Event Type:</span>
-<span id="rEventType"></span>
-</div>
-
-<div class="info-row">
-<span class="info-label">Function Date:</span>
-<span id="rFunctionDate"></span>
-</div>
-
-<div class="info-row">
-<span class="info-label">Function Time:</span>
-<span id="rFunctionTime"></span>
-</div>
-
-<div class="info-row">
-<span class="info-label">Venue:</span>
-<span id="rEventVenue"></span>
-</div>
-
-</div>
-
-<div style="margin-top:10px;">
-
-<span class="info-label">
-Additional Information:
-</span>
-
-<div id="rEventAdditional"></div>
-
-</div>
-
-</div>
-
-
-<!-- PAYMENT -->
-
-<div class="payment-box">
-
-<h3>Payment Summary</h3>
-
-<div class="payment-row">
-
-<span>Total Final Amount</span>
-
-<span class="amount" id="rTotalAmount">
-₹0
-</span>
-
-</div>
-
-<div class="payment-row">
-
-<span>Amount in Words</span>
-
-<span id="rTotalWords"></span>
-
-</div>
-
-<div class="payment-row">
-
-<span>Advance Paid</span>
-
-<span class="amount" id="rAdvanceAmount">
-₹0
-</span>
-
-</div>
-
-<div class="payment-row">
-
-<span>Advance Amount in Words</span>
-
-<span id="rAdvanceWords"></span>
-
-</div>
-
-<div class="payment-row">
-
-<span>Balance Pending</span>
-
-<span class="amount pending" id="rBalanceAmount">
-₹0
-</span>
-
-</div>
-
-<div class="payment-row">
-
-<span>Balance Amount in Words</span>
-
-<span id="rBalanceWords"></span>
-
-</div>
-
-<div class="payment-row">
-
-<span>Payment Mode</span>
-
-<span id="rPaymentMode"></span>
-
-</div>
-
-<div class="payment-row">
-
-<span>Payment Status</span>
-
-<strong id="rPaymentStatus"></strong>
-
-</div>
-
-</div>
-
-
-<!-- SERVICES -->
-
-<h3 style="color:#4c1d95;">
-Finalized Services & Requirements
-</h3>
-
-<table class="services-table">
-
-<thead>
-
-<tr>
-
-<th style="width:50px;">#</th>
-
-<th style="width:30%;">
-Service / Category
-</th>
-
-<th>
-Finalized Requirement / Description
-</th>
-
-</tr>
-
-</thead>
-
-<tbody id="rServices"></tbody>
-
-</table>
-
-
-<!-- SPECIAL REQUIREMENTS -->
-
-<div class="requirement-box">
-
-<h3>Important Client Requirements</h3>
-
-<div id="rSpecialRequirements"></div>
-
-</div>
-
-
-<!-- TERMS -->
-
-<div class="terms-box">
-
-<h3>Terms & Conditions</h3>
-
-<ol id="rTerms"></ol>
-
-</div>
-
-
-<!-- SIGNATURE -->
-
-<div class="signature-section">
-
-<div class="signature-box">
-
-<div class="signature-line"></div>
-
-<strong>Client Signature</strong>
-
-<div style="margin-top:8px;">
-Name: <span id="rSignatureClientName"></span>
-</div>
-
-<div style="margin-top:8px;">
-Date: <span id="rSignatureDate"></span>
-</div>
-
-</div>
-
-
-<div class="signature-box">
-
-<div class="signature-line"></div>
-
-<strong>Authorized Signature</strong>
-
-<div style="margin-top:8px;">
-For Ultimate Planner
-</div>
-
-</div>
-
-</div>
-
-
-<!-- FOOTER -->
-
-<div class="receipt-footer">
-
-<div>
-This is a computer-generated booking receipt and service agreement.
-</div>
-
-<div style="margin-top:6px;">
-Please keep this receipt safely for future reference.
-</div>
-
-</div>
-
-</div>
-
-
-<div id="receiptActions" class="action-bar">
-
-<button class="action-btn print-btn" onclick="window.print()">
-🖨 Print / Save as PDF
-</button>
-
-<button class="action-btn share-btn" onclick="shareReceipt()">
-📤 Share Bill
-</button>
-
-<button class="action-btn preview-btn" onclick="editReceipt()">
-✏ Edit Details
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-<script>
-
-/* =========================
-   DEFAULT DATE
-========================= */
-
-document.getElementById("bookingDate").value =
-new Date().toISOString().split("T")[0];
-
-
-/* =========================
-   SERVICE MANAGEMENT
-========================= */
-
-function addService(type = "", description = "") {
-
-    const container =
-    document.getElementById("servicesContainer");
-
-    const service =
-    document.createElement("div");
-
-    service.className =
-    "service-item";
-
-    service.innerHTML = `
-
-        <div class="service-grid">
-
-            <div>
-
-                <label>
-                Service / Category
-                </label>
-
-                <input
-                class="serviceType"
-                placeholder="Example: Stage Decoration"
-                value="${escapeHtml(type)}">
-
+<div class="app-shell">
+
+    <header class="app-topbar">
+        <div class="brand">
+            <div class="brand-mark">UP</div>
+            <div class="brand-copy">
+                <h1>Ultimate Planner</h1>
+                <p>Event Booking & Receipt Generator</p>
             </div>
-
-
-            <div>
-
-                <label>
-                Detailed Finalized Requirement
-                </label>
-
-                <textarea
-                class="serviceDescription"
-                placeholder="Example: 24×16 ft stage, fresh flowers, white and golden theme, no artificial flowers">${escapeHtml(description)}</textarea>
-
-            </div>
-
-
-            <div>
-
-                <label>
-                Remove
-                </label>
-
-                <button
-                type="button"
-                class="remove-service"
-                onclick="this.parentElement.parentElement.parentElement.remove()">
-
-                ✕ Remove
-
-                </button>
-
-            </div>
-
         </div>
 
-    `;
+        <div class="top-actions">
+            <button class="btn btn-dark" type="button" onclick="generateReceipt()">Preview Bill</button>
+            <button class="btn btn-accent" type="button" onclick="window.print()">Print / PDF</button>
+            <button class="btn btn-green" type="button" onclick="shareBill()">Share</button>
+        </div>
+    </header>
 
-    container.appendChild(service);
+    <main class="workspace">
 
+        <!-- ===================== EDITOR ===================== -->
+        <section class="editor" id="editor">
+
+            <div class="card">
+                <div class="card-head">
+                    <div>
+                        <h2 class="card-title">Business identity</h2>
+                        <p class="card-subtitle">These details appear on the generated booking receipt.</p>
+                    </div>
+                    <div class="section-number">01</div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label>Company name</label>
+                        <input id="companyName" value="Ultimate Planner">
+                    </div>
+
+                    <div class="field">
+                        <label>Tagline</label>
+                        <input id="companyTagline" value="Event Planning • Decoration • Management">
+                    </div>
+
+                    <div class="field">
+                        <label>Company phone</label>
+                        <input id="companyPhone" placeholder="+91 XXXXX XXXXX">
+                    </div>
+
+                    <div class="field">
+                        <label>Company email</label>
+                        <input id="companyEmail" placeholder="hello@example.com">
+                    </div>
+
+                    <div class="field full">
+                        <label>Company address</label>
+                        <textarea id="companyAddress" placeholder="Office / business address"></textarea>
+                    </div>
+
+                    <div class="field full">
+                        <label>Logo</label>
+
+                        <div class="logo-row">
+                            <div>
+                                <input id="logoUrl" placeholder="Paste direct image URL (PNG/JPG/WebP)">
+                                <div class="file-control" style="margin-top:8px">
+                                    <input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
+                                    <label class="file-label" for="logoFile">Upload logo from device</label>
+                                    <button class="btn btn-light" type="button" onclick="clearLogo()">Remove logo</button>
+                                </div>
+                                <div class="help" style="margin-top:8px">
+                                    Tip: Instagram CDN links can expire or block hotlinking. A direct image hosted in the same GitHub repository is much more reliable.
+                                </div>
+                            </div>
+
+                            <div class="logo-preview" id="logoPreview">
+                                <div class="logo-fallback">LOGO<br>PREVIEW</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <div>
+                        <h2 class="card-title">Booking & receipt</h2>
+                        <p class="card-subtitle">Use a unique reference number for every booking.</p>
+                    </div>
+                    <div class="section-number">02</div>
+                </div>
+
+                <div class="form-grid three">
+                    <div class="field">
+                        <label>Receipt / booking no.</label>
+                        <input id="receiptNumber" placeholder="UP-2026-001">
+                    </div>
+
+                    <div class="field">
+                        <label>Booking date</label>
+                        <input id="bookingDate" type="date">
+                    </div>
+
+                    <div class="field">
+                        <label>Payment status</label>
+                        <select id="paymentStatus">
+                            <option value="Advance Received">Advance Received</option>
+                            <option value="Partially Paid">Partially Paid</option>
+                            <option value="Fully Paid">Fully Paid</option>
+                            <option value="Payment Pending">Payment Pending</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <div>
+                        <h2 class="card-title">Client details</h2>
+                        <p class="card-subtitle">Keep the client's identity and contact information clear.</p>
+                    </div>
+                    <div class="section-number">03</div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="field">
+                        <label>Client name</label>
+                        <input id="clientName" placeholder="Full name">
+                    </div>
+
+                    <div class="field">
+                        <label>Contact number</label>
+                        <input id="clientPhone" type="tel" placeholder="+91 XXXXX XXXXX">
+                    </div>
+
+                    <div class="field">
+                        <label>Alternative number</label>
+                        <input id="clientAltPhone" type="tel" placeholder="Optional">
+                    </div>
+
+                    <div class="field full">
+                        <label>Client address</label>
+                        <textarea id="clientAddress" placeholder="Complete residential / correspondence address"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <div>
+                        <h2 class="card-title">Event details</h2>
+                        <p class="card-subtitle">This is the core schedule and venue information.</p>
+                    </div>
+                    <div class="section-number">04</div>
+                </div>
+
+                <div class="form-grid three">
+                    <div class="field">
+                        <label>Event type</label>
+                        <select id="eventType">
+                            <option>Wedding</option>
+                            <option>Reception</option>
+                            <option>Engagement</option>
+                            <option>Birthday Party</option>
+                            <option>Anniversary</option>
+                            <option>Corporate Event</option>
+                            <option>Religious / Cultural Event</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Function date</label>
+                        <input id="functionDate" type="date">
+                    </div>
+
+                    <div class="field">
+                        <label>Function time</label>
+                        <input id="functionTime" type="time">
+                    </div>
+
+                    <div class="field full">
+                        <label>Venue</label>
+                        <textarea id="eventVenue" placeholder="Venue name, address, hall / lawn / location"></textarea>
+                    </div>
+
+                    <div class="field full">
+                        <label>Additional event information</label>
+                        <textarea id="eventAdditional" placeholder="Theme, expected guests, bride/groom names, special schedule notes, etc."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <div>
+                        <h2 class="card-title">Payment</h2>
+                        <p class="card-subtitle">Balance is calculated automatically from total minus advance.</p>
+                    </div>
+                    <div class="section-number">05</div>
+                </div>
+
+                <div class="form-grid three">
+                    <div class="field">
+                        <label>Final agreed amount (₹)</label>
+                        <input id="totalAmount" type="number" min="0" step="1" value="0" oninput="updateMoneySummary()">
+                    </div>
+
+                    <div class="field">
+                        <label>Advance received (₹)</label>
+                        <input id="advanceAmount" type="number" min="0" step="1" value="0" oninput="updateMoneySummary()">
+                    </div>
+
+                    <div class="field">
+                        <label>Payment mode</label>
+                        <select id="paymentMode">
+                            <option>UPI</option>
+                            <option>Cash</option>
+                            <option>Bank Transfer</option>
+                            <option>Cheque</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="money-summary" style="margin-top:13px">
+                    <div class="money-box">
+                        <div class="k">Total</div>
+                        <div class="v" id="sumTotal">₹0</div>
+                    </div>
+                    <div class="money-box">
+                        <div class="k">Advance</div>
+                        <div class="v" id="sumAdvance">₹0</div>
+                    </div>
+                    <div class="money-box pending">
+                        <div class="k">Pending</div>
+                        <div class="v" id="sumBalance">₹0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <div>
+                        <h2 class="card-title">Finalized services & requirements</h2>
+                        <p class="card-subtitle">Record the exact items the client approved. This is better than using only generic service names.</p>
+                    </div>
+                    <div class="section-number">06</div>
+                </div>
+
+                <div id="serviceList" class="service-list"></div>
+
+                <button class="add-service" type="button" onclick="addService()">＋ Add service / requirement</button>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <div>
+                        <h2 class="card-title">Special client requirements</h2>
+                        <p class="card-subtitle">Use this for specifications that need extra attention during execution.</p>
+                    </div>
+                    <div class="section-number">07</div>
+                </div>
+
+                <div class="field">
+                    <label>Special requirements</label>
+                    <textarea id="specialRequirements" style="min-height:135px" placeholder="Example: Fresh flowers only. No plastic/artificial flowers. White and gold theme. 10 pedestal fans. Specific flower types. Specific stage design."></textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-head">
+                    <div>
+                        <h2 class="card-title">Terms & conditions</h2>
+                        <p class="card-subtitle">Editable business terms. Keep them aligned with your actual agreement and local legal advice.</p>
+                    </div>
+                    <div class="section-number">08</div>
+                </div>
+
+                <div class="field">
+                    <textarea id="terms" style="min-height:250px">1. The booking is confirmed subject to receipt of the agreed advance payment.
+2. The balance amount shall be paid as mutually agreed before or on the event date.
+3. Any additional service, material, quantity or design requested after final confirmation may attract additional charges.
+4. The services stated in this document represent the finalized scope communicated between the client and Ultimate Planner.
+5. Changes in event date, venue, design, quantity or scope may affect pricing and availability.
+6. Cancellation, postponement and refund terms shall be as mutually agreed between the parties.
+7. The client is responsible for checking the booking details and special requirements before signing.
+8. Any loss or damage to hired/rented event equipment attributable to the client may be chargeable.
+9. Event execution is subject to venue rules, access timings and other practical constraints outside the reasonable control of Ultimate Planner.
+10. This document serves as a booking confirmation and advance/payment receipt for the stated event services.</textarea>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="mini-actions">
+                    <button class="btn btn-accent" type="button" onclick="generateReceipt()">Generate / Refresh Bill</button>
+                    <button class="btn btn-light" type="button" onclick="saveDraft()">Save Draft</button>
+                    <button class="btn btn-light" type="button" onclick="loadDraft()">Load Draft</button>
+                    <button class="btn btn-danger" type="button" onclick="resetForm()">Reset</button>
+                </div>
+                <div class="help" style="margin-top:10px">
+                    Data is stored locally in this browser only. No server or database is required.
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ===================== PREVIEW ===================== -->
+        <section class="preview-panel">
+
+            <div class="preview-toolbar">
+                <div>
+                    <div class="title">LIVE BILL PREVIEW</div>
+                    <div class="mobile-share-hint">On mobile, use Share to send a compact receipt summary or use Print / PDF for the complete document.</div>
+                </div>
+
+                <div class="mini-actions">
+                    <button class="btn btn-accent" type="button" onclick="window.print()">Print / PDF</button>
+                    <button class="btn btn-green" type="button" onclick="shareBill()">Share</button>
+                </div>
+            </div>
+
+            <div class="receipt-wrap">
+                <article class="receipt" id="receipt">
+
+                    <div class="receipt-inner">
+
+                        <div class="receipt-topline"></div>
+
+                        <header class="receipt-header">
+                            <div class="receipt-brand">
+
+                                <img id="rLogo" class="receipt-logo is-hidden" alt="Ultimate Planner Logo">
+
+                                <div class="receipt-company">
+                                    <h2 id="rCompanyName">Ultimate Planner</h2>
+                                    <div class="tagline" id="rTagline">Event Planning • Decoration • Management</div>
+
+                                    <div class="contact">
+                                        <span id="rCompanyPhone">Phone not added</span>
+                                        <span aria-hidden="true"> • </span>
+                                        <span id="rCompanyEmail">Email not added</span>
+                                        <br>
+                                        <span id="rCompanyAddress">Business address not added</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="receipt-meta">
+                                <span class="document-badge">BOOKING RECEIPT</span>
+
+                                <div class="meta-grid">
+                                    <div class="label">Receipt No.</div>
+                                    <div class="value" id="rReceiptNumber">Not assigned</div>
+
+                                    <div class="label">Booking Date</div>
+                                    <div class="value" id="rBookingDate">-</div>
+                                </div>
+
+                                <span class="status-pill" id="rStatusPill">Advance Received</span>
+                            </div>
+                        </header>
+
+                        <section class="section-block">
+                            <div class="section-heading">Client & Business</div>
+
+                            <div class="info-cards">
+
+                                <div class="info-card">
+                                    <div class="info-card-head">CLIENT DETAILS</div>
+                                    <div class="info-card-body">
+                                        <div class="info-row">
+                                            <div class="key">Name</div>
+                                            <div class="val" id="rClientName">-</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <div class="key">Phone</div>
+                                            <div class="val" id="rClientPhone">-</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <div class="key">Alt. Phone</div>
+                                            <div class="val" id="rClientAltPhone">-</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <div class="key">Address</div>
+                                            <div class="val" id="rClientAddress">-</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="info-card">
+                                    <div class="info-card-head">BOOKING PARTY</div>
+                                    <div class="info-card-body">
+                                        <div class="info-row">
+                                            <div class="key">Company</div>
+                                            <div class="val" id="rCompanyName2">Ultimate Planner</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <div class="key">Phone</div>
+                                            <div class="val" id="rCompanyPhone2">-</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <div class="key">Email</div>
+                                            <div class="val" id="rCompanyEmail2">-</div>
+                                        </div>
+                                        <div class="info-row">
+                                            <div class="key">Address</div>
+                                            <div class="val" id="rCompanyAddress2">-</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <section class="section-block">
+                            <div class="section-heading">Event information</div>
+
+                            <div class="event-banner">
+
+                                <div class="event-grid">
+
+                                    <div class="event-cell">
+                                        <div class="eyebrow">Event</div>
+                                        <div class="big" id="rEventType">Wedding</div>
+                                    </div>
+
+                                    <div class="event-cell">
+                                        <div class="eyebrow">Function date</div>
+                                        <div class="big" id="rFunctionDate">-</div>
+                                    </div>
+
+                                    <div class="event-cell">
+                                        <div class="eyebrow">Function time</div>
+                                        <div class="big" id="rFunctionTime">-</div>
+                                    </div>
+
+                                    <div class="event-cell">
+                                        <div class="eyebrow">Venue</div>
+                                        <div class="big" id="rEventVenueShort">-</div>
+                                    </div>
+
+                                </div>
+
+                                <div class="event-note">
+                                    <strong>Additional information:</strong>
+                                    <span id="rEventAdditional">-</span>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <section class="section-block">
+                            <div class="section-heading">Finalized services & requirements</div>
+
+                            <table class="services">
+                                <thead>
+                                    <tr>
+                                        <th class="num">#</th>
+                                        <th class="type">Service / Category</th>
+                                        <th>Finalized requirement / description</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="rServices">
+                                    <tr>
+                                        <td colspan="3" style="text-align:center;color:#9ca3af">No services added yet.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="service-total-note">
+                                The above items are intended to record the scope finalized with the client. Any changes or additions should be documented separately.
+                            </div>
+                        </section>
+
+                        <section class="section-block">
+                            <div class="special-box">
+                                <h4>Important client requirements</h4>
+                                <div id="rSpecialRequirements">No additional special requirements recorded.</div>
+                            </div>
+                        </section>
+
+                        <section class="section-block">
+                            <div class="section-heading">Payment summary</div>
+
+                            <div class="payment-area">
+
+                                <div class="payment-main">
+
+                                    <div class="payment-line total">
+                                        <span>Total agreed amount</span>
+                                        <strong id="rTotalAmount">₹0</strong>
+                                    </div>
+
+                                    <div class="payment-line">
+                                        <span>Amount in words</span>
+                                        <span class="amount-words" id="rTotalWords">Rupees Zero Only</span>
+                                    </div>
+
+                                    <div class="payment-line">
+                                        <span>Advance received</span>
+                                        <strong id="rAdvanceAmount">₹0</strong>
+                                    </div>
+
+                                    <div class="payment-line">
+                                        <span>Advance in words</span>
+                                        <span class="amount-words" id="rAdvanceWords">Rupees Zero Only</span>
+                                    </div>
+
+                                    <div class="payment-line pending">
+                                        <span>Balance pending</span>
+                                        <strong id="rBalanceAmount">₹0</strong>
+                                    </div>
+
+                                    <div class="payment-line pending">
+                                        <span>Balance in words</span>
+                                        <span class="amount-words" id="rBalanceWords">Rupees Zero Only</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="received-box">
+                                    <div class="title">Payment received</div>
+                                    <div class="amount" id="rReceivedBig">₹0</div>
+                                    <div class="mode">
+                                        Mode: <strong id="rPaymentMode">UPI</strong><br>
+                                        Status: <strong id="rPaymentStatus">Advance Received</strong>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </section>
+
+                        <section class="section-block terms">
+                            <div class="section-heading">Terms & conditions</div>
+                            <ol id="rTerms"></ol>
+                        </section>
+
+                        <section class="signature">
+                            <div class="sign-box">
+                                <div class="sign-line">CLIENT SIGNATURE</div>
+                                <div class="sign-name" id="rSignatureClient">Name: ____________________</div>
+                                <div class="sign-name" id="rSignatureDate">Date: ____________________</div>
+                            </div>
+
+                            <div class="sign-box">
+                                <div class="sign-line">AUTHORIZED SIGNATURE</div>
+                                <div class="sign-name" id="rSignatureCompany">For Ultimate Planner</div>
+                                <div class="sign-name">Date: ____________________</div>
+                            </div>
+                        </section>
+
+                        <footer class="receipt-footer">
+                            This computer-generated document is intended as a booking confirmation and advance/payment receipt.
+                            Please verify all event details, service specifications and payment figures before signing.
+                        </footer>
+
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<div class="toast" id="toast">Saved</div>
+
+<script>
+"use strict";
+
+/* =========================================================
+   ULTIMATE PLANNER - SINGLE FILE EVENT BILL GENERATOR
+   ========================================================= */
+
+const $ = (id) => document.getElementById(id);
+
+const DEFAULT_LOGO_URL = "";
+
+const fieldsToSave = [
+    "companyName","companyTagline","companyPhone","companyEmail","companyAddress",
+    "logoUrl","receiptNumber","bookingDate","paymentStatus",
+    "clientName","clientPhone","clientAltPhone","clientAddress",
+    "eventType","functionDate","functionTime","eventVenue","eventAdditional",
+    "totalAmount","advanceAmount","paymentMode","specialRequirements","terms"
+];
+
+function todayISO(){
+    const d = new Date();
+    const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0,10);
 }
 
-
-/* DEFAULT SERVICES */
-
-addService(
-"Stage Decoration",
-""
-);
-
-addService(
-"Lighting",
-""
-);
-
-addService(
-"Flower Decoration",
-""
-);
-
-
-/* =========================
-   ESCAPE HTML
-========================= */
-
-function escapeHtml(text) {
-
-    if (!text) return "";
-
-    return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
+function setDefaultDates(){
+    if (!$("bookingDate").value) $("bookingDate").value = todayISO();
 }
 
-
-/* =========================
-   FORMAT CURRENCY
-========================= */
-
-function formatCurrency(amount) {
-
-    return new Intl.NumberFormat(
-        "en-IN",
-        {
-            style: "currency",
-            currency: "INR",
-            maximumFractionDigits: 0
-        }
-    ).format(amount);
-
+function showToast(message){
+    const toast = $("toast");
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(() => toast.classList.remove("show"), 1800);
 }
 
-
-/* =========================
-   NUMBER TO WORDS
-========================= */
-
-function numberToWords(num) {
-
-    num = Math.floor(Number(num));
-
-    if (num === 0) {
-        return "Rupees Zero Only";
-    }
-
-    const ones = [
-        "",
-        "One",
-        "Two",
-        "Three",
-        "Four",
-        "Five",
-        "Six",
-        "Seven",
-        "Eight",
-        "Nine",
-        "Ten",
-        "Eleven",
-        "Twelve",
-        "Thirteen",
-        "Fourteen",
-        "Fifteen",
-        "Sixteen",
-        "Seventeen",
-        "Eighteen",
-        "Nineteen"
-    ];
-
-    const tens = [
-        "",
-        "",
-        "Twenty",
-        "Thirty",
-        "Forty",
-        "Fifty",
-        "Sixty",
-        "Seventy",
-        "Eighty",
-        "Ninety"
-    ];
-
-    function convertBelowThousand(n) {
-
-        let result = "";
-
-        if (n >= 100) {
-
-            result +=
-            ones[Math.floor(n / 100)]
-            + " Hundred ";
-
-            n = n % 100;
-
-        }
-
-        if (n >= 20) {
-
-            result +=
-            tens[Math.floor(n / 10)]
-            + " ";
-
-            n = n % 10;
-
-        }
-
-        if (n > 0) {
-
-            result +=
-            ones[n]
-            + " ";
-
-        }
-
-        return result.trim();
-
-    }
-
-
-    let result = "";
-
-    if (num >= 10000000) {
-
-        result +=
-        convertBelowThousand(
-            Math.floor(num / 10000000)
-        )
-        + " Crore ";
-
-        num %= 10000000;
-
-    }
-
-
-    if (num >= 100000) {
-
-        result +=
-        convertBelowThousand(
-            Math.floor(num / 100000)
-        )
-        + " Lakh ";
-
-        num %= 100000;
-
-    }
-
-
-    if (num >= 1000) {
-
-        result +=
-        convertBelowThousand(
-            Math.floor(num / 1000)
-        )
-        + " Thousand ";
-
-        num %= 1000;
-
-    }
-
-
-    if (num > 0) {
-
-        result +=
-        convertBelowThousand(num);
-
-    }
-
-
-    return
-    "Rupees "
-    + result.trim()
-    + " Only";
-
+function escapeHTML(value){
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
 
-
-/* =========================
-   DATE FORMAT
-========================= */
-
-function formatDate(dateValue) {
-
-    if (!dateValue) return "-";
-
-    const date =
-    new Date(dateValue + "T00:00:00");
-
-    return date.toLocaleDateString(
-        "en-IN",
-        {
-            day: "2-digit",
-            month: "long",
-            year: "numeric"
-        }
-    );
-
-}
-
-
-/* =========================
-   TIME FORMAT
-========================= */
-
-function formatTime(timeValue) {
-
-    if (!timeValue) return "-";
-
-    const [hour, minute] =
-    timeValue.split(":");
-
-    let h =
-    parseInt(hour);
-
-    const ampm =
-    h >= 12
-    ? "PM"
-    : "AM";
-
-    h = h % 12;
-
-    if (h === 0)
-        h = 12;
-
-    return
-    h
-    + ":"
-    + minute
-    + " "
-    + ampm;
-
-}
-
-
-/* =========================
-   GENERATE RECEIPT
-========================= */
-
-function generateReceipt() {
-
-    const get =
-    id => document.getElementById(id).value.trim();
-
-
-    /* COMPANY */
-
-    document.getElementById(
-        "rCompanyName"
-    ).textContent =
-    get("companyName")
-    || "Ultimate Planner";
-
-
-    document.getElementById(
-        "rCompanyPhone"
-    ).textContent =
-    get("companyPhone")
-    || "-";
-
-
-    document.getElementById(
-        "rCompanyEmail"
-    ).textContent =
-    get("companyEmail")
-    || "-";
-
-
-    document.getElementById(
-        "rCompanyAddress"
-    ).textContent =
-    get("companyAddress")
-    || "-";
-
-
-    /* LOGO */
-
-    const logo =
-    get("logoUrl");
-
-    if (logo) {
-
-        document.getElementById(
-            "rLogo"
-        ).src = logo;
-
-    }
-
-
-    /* RECEIPT */
-
-    document.getElementById(
-        "rReceiptNumber"
-    ).textContent =
-    get("receiptNumber")
-    || "Not Assigned";
-
-
-    document.getElementById(
-        "rBookingDate"
-    ).textContent =
-    formatDate(
-        get("bookingDate")
-    );
-
-
-    /* CLIENT */
-
-    document.getElementById(
-        "rClientName"
-    ).textContent =
-    get("clientName")
-    || "-";
-
-
-    document.getElementById(
-        "rClientPhone"
-    ).textContent =
-    get("clientPhone")
-    || "-";
-
-
-    document.getElementById(
-        "rClientAltPhone"
-    ).textContent =
-    get("clientAltPhone")
-    || "-";
-
-
-    document.getElementById(
-        "rClientAddress"
-    ).textContent =
-    get("clientAddress")
-    || "-";
-
-
-    /* EVENT */
-
-    document.getElementById(
-        "rEventType"
-    ).textContent =
-    get("eventType");
-
-
-    document.getElementById(
-        "rFunctionDate"
-    ).textContent =
-    formatDate(
-        get("functionDate")
-    );
-
-
-    document.getElementById(
-        "rFunctionTime"
-    ).textContent =
-    formatTime(
-        get("functionTime")
-    );
-
-
-    document.getElementById(
-        "rEventVenue"
-    ).textContent =
-    get("eventVenue")
-    || "-";
-
-
-    document.getElementById(
-        "rEventAdditional"
-    ).textContent =
-    get("eventAdditional")
-    || "-";
-
-
-    /* PAYMENT */
-
-    const total =
-    Number(
-        document.getElementById(
-            "totalAmount"
-        ).value
-    ) || 0;
-
-
-    const advance =
-    Number(
-        document.getElementById(
-            "advanceAmount"
-        ).value
-    ) || 0;
-
-
-    const balance =
-    Math.max(
-        total - advance,
-        0
-    );
-
-
-    document.getElementById(
-        "rTotalAmount"
-    ).textContent =
-    formatCurrency(total);
-
-
-    document.getElementById(
-        "rAdvanceAmount"
-    ).textContent =
-    formatCurrency(advance);
-
-
-    document.getElementById(
-        "rBalanceAmount"
-    ).textContent =
-    formatCurrency(balance);
-
-
-    document.getElementById(
-        "rTotalWords"
-    ).textContent =
-    numberToWords(total);
-
-
-    document.getElementById(
-        "rAdvanceWords"
-    ).textContent =
-    numberToWords(advance);
-
-
-    document.getElementById(
-        "rBalanceWords"
-    ).textContent =
-    numberToWords(balance);
-
-
-    document.getElementById(
-        "rPaymentMode"
-    ).textContent =
-    get("paymentMode");
-
-
-    document.getElementById(
-        "rPaymentStatus"
-    ).textContent =
-    get("paymentStatus");
-
-
-    /* SERVICES */
-
-    const serviceRows =
-    document.querySelectorAll(
-        ".service-item"
-    );
-
-
-    const servicesOutput =
-    document.getElementById(
-        "rServices"
-    );
-
-
-    servicesOutput.innerHTML = "";
-
-
-    let count = 1;
-
-
-    serviceRows.forEach(
-        service => {
-
-            const type =
-            service
-            .querySelector(
-                ".serviceType"
-            )
-            .value
-            .trim();
-
-
-            const description =
-            service
-            .querySelector(
-                ".serviceDescription"
-            )
-            .value
-            .trim();
-
-
-            if (
-                type ||
-                description
-            ) {
-
-                const row =
-                document.createElement(
-                    "tr"
-                );
-
-
-                row.innerHTML =
-                `
-
-                    <td>
-                    ${count}
-                    </td>
-
-                    <td>
-                    ${escapeHtml(type || "-")}
-                    </td>
-
-                    <td>
-                    ${escapeHtml(description || "-")}
-                    </td>
-
-                `;
-
-
-                servicesOutput
-                .appendChild(row);
-
-
-                count++;
-
-            }
-
-        }
-    );
-
-
-    if (count === 1) {
-
-        servicesOutput.innerHTML =
-        `
-
-        <tr>
-
-        <td colspan="3"
-        style="text-align:center;">
-        No specific services added.
-        </td>
-
-        </tr>
-
-        `;
-
-    }
-
-
-    /* SPECIAL REQUIREMENTS */
-
-    document.getElementById(
-        "rSpecialRequirements"
-    ).textContent =
-    get("specialRequirements")
-    || "No additional special requirements mentioned.";
-
-
-    /* TERMS */
-
-    const terms =
-    get("terms")
-    .split("\n")
-    .filter(
-        term =>
-        term.trim() !== ""
-    );
-
-
-    const termsOutput =
-    document.getElementById(
-        "rTerms"
-    );
-
-
-    termsOutput.innerHTML = "";
-
-
-    terms.forEach(
-        term => {
-
-            const li =
-            document.createElement(
-                "li"
-            );
-
-            li.textContent =
-            term
-            .replace(
-                /^\d+\.\s*/,
-                ""
-            );
-
-            termsOutput
-            .appendChild(li);
-
-        }
-    );
-
-
-    /* SIGNATURE */
-
-    document.getElementById(
-        "rSignatureClientName"
-    ).textContent =
-    get("clientName")
-    || "________________";
-
-
-    document.getElementById(
-        "rSignatureDate"
-    ).textContent =
-    formatDate(
-        get("bookingDate")
-    );
-
-
-    /* SHOW RECEIPT */
-
-    document.getElementById(
-        "editor"
-    ).style.display =
-    "none";
-
-
-    document.getElementById(
-        "receiptContainer"
-    ).style.display =
-    "block";
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+function formatDate(value){
+    if(!value) return "-";
+    const date = new Date(value + "T00:00:00");
+    if(Number.isNaN(date.getTime())) return "-";
+    return date.toLocaleDateString("en-IN",{
+        day:"2-digit",
+        month:"short",
+        year:"numeric"
     });
-
 }
 
-
-/* =========================
-   EDIT RECEIPT
-========================= */
-
-function editReceipt() {
-
-    document.getElementById(
-        "editor"
-    ).style.display =
-    "block";
-
-
-    document.getElementById(
-        "receiptContainer"
-    ).style.display =
-    "none";
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
+function formatTime(value){
+    if(!value) return "-";
+    const parts = value.split(":");
+    if(parts.length < 2) return value;
+    let hour = parseInt(parts[0],10);
+    const minute = parts[1];
+    if(Number.isNaN(hour)) return value;
+    const suffix = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
+    return `${hour}:${minute} ${suffix}`;
 }
 
+function formatINR(amount){
+    const number = Math.max(0, Number(amount) || 0);
+    return new Intl.NumberFormat("en-IN",{
+        style:"currency",
+        currency:"INR",
+        maximumFractionDigits:0
+    }).format(number);
+}
 
-/* =========================
-   RESET FORM
-========================= */
+/* ---------------- NUMBER TO WORDS ---------------- */
 
-function resetForm() {
+const ONES = [
+    "","One","Two","Three","Four","Five","Six","Seven","Eight","Nine",
+    "Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen",
+    "Seventeen","Eighteen","Nineteen"
+];
 
-    if (
-        !confirm(
-            "Are you sure you want to reset all details?"
-        )
-    ) {
+const TENS = [
+    "","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"
+];
+
+function belowThousand(n){
+    let out = "";
+
+    if(n >= 100){
+        out += ONES[Math.floor(n/100)] + " Hundred";
+        n %= 100;
+        if(n) out += " ";
+    }
+
+    if(n >= 20){
+        out += TENS[Math.floor(n/10)];
+        n %= 10;
+        if(n) out += " " + ONES[n];
+    }else if(n > 0){
+        out += ONES[n];
+    }
+
+    return out;
+}
+
+function numberToIndianWords(value){
+    let num = Math.floor(Number(value) || 0);
+
+    if(num === 0) return "Rupees Zero Only";
+
+    const crore = Math.floor(num / 10000000);
+    num %= 10000000;
+
+    const lakh = Math.floor(num / 100000);
+    num %= 100000;
+
+    const thousand = Math.floor(num / 1000);
+    num %= 1000;
+
+    const parts = [];
+
+    if(crore) parts.push(belowThousand(crore) + " Crore");
+    if(lakh) parts.push(belowThousand(lakh) + " Lakh");
+    if(thousand) parts.push(belowThousand(thousand) + " Thousand");
+    if(num) parts.push(belowThousand(num));
+
+    return "Rupees " + parts.join(" ") + " Only";
+}
+
+/* ---------------- LOGO ---------------- */
+
+function setLogoPreview(src){
+    const preview = $("logoPreview");
+
+    if(!src){
+        preview.innerHTML = `<div class="logo-fallback">LOGO<br>PREVIEW</div>`;
         return;
     }
 
-
-    document
-    .querySelectorAll(
-        "#editor input, #editor textarea"
-    )
-    .forEach(
-        input => {
-
-            if (
-                input.id !== "companyName"
-            ) {
-
-                input.value = "";
-
-            }
-
-        }
-    );
-
-
-    document.getElementById(
-        "companyName"
-    ).value =
-    "Ultimate Planner";
-
-
-    document.getElementById(
-        "bookingDate"
-    ).value =
-    new Date()
-    .toISOString()
-    .split("T")[0];
-
-
-    document.getElementById(
-        "totalAmount"
-    ).value =
-    0;
-
-
-    document.getElementById(
-        "advanceAmount"
-    ).value =
-    0;
-
-
-    document.getElementById(
-        "servicesContainer"
-    ).innerHTML =
-    "";
-
-
-    addService(
-        "Stage Decoration",
-        ""
-    );
-
-
-    addService(
-        "Lighting",
-        ""
-    );
-
-
-    addService(
-        "Flower Decoration",
-        ""
-    );
-
+    preview.innerHTML = `
+        <img src="${escapeHTML(src)}" alt="Logo preview"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+        <div class="logo-fallback" style="display:none">LOGO<br>COULD NOT LOAD</div>
+    `;
 }
 
+function clearLogo(){
+    $("logoUrl").value = "";
+    localStorage.removeItem("ultimatePlannerLogoData");
+    setLogoPreview("");
+    updateLogoOnReceipt("");
+    showToast("Logo removed");
+}
 
-/* =========================
-   SHARE RECEIPT
-========================= */
+function updateLogoOnReceipt(src){
+    const img = $("rLogo");
 
-async function shareReceipt() {
+    if(!src){
+        img.removeAttribute("src");
+        img.classList.add("is-hidden");
+        return;
+    }
 
-    const receiptNo =
-    document.getElementById(
-        "rReceiptNumber"
-    ).textContent;
+    img.src = src;
+    img.classList.remove("is-hidden");
 
+    img.onerror = () => {
+        img.classList.add("is-hidden");
+        showToast("Logo URL could not be loaded");
+    };
+}
 
-    const client =
-    document.getElementById(
-        "rClientName"
-    ).textContent;
+$("logoUrl").addEventListener("input", () => {
+    const src = $("logoUrl").value.trim();
+    setLogoPreview(src);
+    updateLogoOnReceipt(src);
+});
 
+$("logoFile").addEventListener("change", (event) => {
+    const file = event.target.files?.[0];
+    if(!file) return;
 
-    const total =
-    document.getElementById(
-        "rTotalAmount"
-    ).textContent;
+    if(!file.type.startsWith("image/")){
+        showToast("Please select an image");
+        return;
+    }
 
+    const reader = new FileReader();
 
-    const text =
-`
-Ultimate Planner
+    reader.onload = () => {
+        const data = String(reader.result || "");
+        localStorage.setItem("ultimatePlannerLogoData", data);
+        $("logoUrl").value = "";
+        setLogoPreview(data);
+        updateLogoOnReceipt(data);
+        showToast("Logo uploaded");
+    };
 
-Booking Receipt: ${receiptNo}
+    reader.readAsDataURL(file);
+});
 
-Client: ${client}
+/* ---------------- SERVICES ---------------- */
 
-Total Amount: ${total}
+let serviceCounter = 0;
 
-Please refer to the complete booking receipt for finalized services and requirements.
-`;
+function addService(type="", description=""){
+    serviceCounter++;
 
+    const item = document.createElement("div");
+    item.className = "service-item";
+    item.dataset.id = String(serviceCounter);
 
-    if (
-        navigator.share
-    ) {
+    item.innerHTML = `
+        <div class="service-grid">
 
-        try {
+            <div class="field">
+                <label>Service / category</label>
+                <input class="serviceType" placeholder="e.g. Stage Decoration" value="${escapeHTML(type)}">
+            </div>
 
+            <div class="field">
+                <label>Exact finalized requirement</label>
+                <textarea class="serviceDescription" placeholder="e.g. 24×16 ft stage, white & gold theme, fresh flowers only">${escapeHTML(description)}</textarea>
+            </div>
+
+            <button class="service-remove" type="button" title="Remove service" aria-label="Remove service"
+                onclick="removeService(this)">×</button>
+
+        </div>
+    `;
+
+    $("serviceList").appendChild(item);
+}
+
+function removeService(button){
+    const item = button.closest(".service-item");
+    if(item) item.remove();
+}
+
+function collectServices(){
+    return [...document.querySelectorAll(".service-item")].map(item => {
+        return {
+            type: item.querySelector(".serviceType")?.value.trim() || "",
+            description: item.querySelector(".serviceDescription")?.value.trim() || ""
+        };
+    }).filter(x => x.type || x.description);
+}
+
+function renderServices(){
+    const target = $("rServices");
+    const services = collectServices();
+
+    target.innerHTML = "";
+
+    if(!services.length){
+        target.innerHTML = `
+            <tr>
+                <td colspan="3" style="text-align:center;color:#9ca3af">
+                    No services added yet.
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    services.forEach((service,index) => {
+        const tr = document.createElement("tr");
+
+        const td1 = document.createElement("td");
+        td1.className = "num";
+        td1.textContent = String(index + 1);
+
+        const td2 = document.createElement("td");
+        td2.textContent = service.type || "-";
+
+        const td3 = document.createElement("td");
+        td3.textContent = service.description || "-";
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+
+        target.appendChild(tr);
+    });
+}
+
+/* ---------------- PAYMENT ---------------- */
+
+function getBalance(){
+    const total = Number($("totalAmount").value) || 0;
+    const advance = Number($("advanceAmount").value) || 0;
+    return Math.max(total - advance, 0);
+}
+
+function updateMoneySummary(){
+    const total = Number($("totalAmount").value) || 0;
+    const advance = Number($("advanceAmount").value) || 0;
+    const balance = Math.max(total - advance,0);
+
+    $("sumTotal").textContent = formatINR(total);
+    $("sumAdvance").textContent = formatINR(advance);
+    $("sumBalance").textContent = formatINR(balance);
+}
+
+/* ---------------- STATUS ---------------- */
+
+function updateStatusPill(status){
+    const pill = $("rStatusPill");
+    pill.textContent = status;
+    pill.className = "status-pill";
+
+    if(status === "Payment Pending"){
+        pill.classList.add("danger");
+    }else if(status === "Partially Paid"){
+        pill.classList.add("warn");
+    }else if(status === "Fully Paid"){
+        /* default green */
+    }
+}
+
+/* ---------------- GENERATE ---------------- */
+
+function generateReceipt(){
+    const companyName = $("companyName").value.trim() || "Ultimate Planner";
+    const tagline = $("companyTagline").value.trim() || "";
+    const companyPhone = $("companyPhone").value.trim() || "-";
+    const companyEmail = $("companyEmail").value.trim() || "-";
+    const companyAddress = $("companyAddress").value.trim() || "-";
+
+    const receiptNumber = $("receiptNumber").value.trim() || "Not assigned";
+    const bookingDate = $("bookingDate").value;
+    const paymentStatus = $("paymentStatus").value;
+
+    const clientName = $("clientName").value.trim() || "-";
+    const clientPhone = $("clientPhone").value.trim() || "-";
+    const clientAltPhone = $("clientAltPhone").value.trim() || "-";
+    const clientAddress = $("clientAddress").value.trim() || "-";
+
+    const eventType = $("eventType").value || "-";
+    const functionDate = $("functionDate").value;
+    const functionTime = $("functionTime").value;
+    const venue = $("eventVenue").value.trim() || "-";
+    const additional = $("eventAdditional").value.trim() || "-";
+
+    const total = Number($("totalAmount").value) || 0;
+    const advance = Number($("advanceAmount").value) || 0;
+    const balance = Math.max(total - advance,0);
+    const paymentMode = $("paymentMode").value || "-";
+
+    const special = $("specialRequirements").value.trim()
+        || "No additional special requirements recorded.";
+
+    $("rCompanyName").textContent = companyName;
+    $("rCompanyName2").textContent = companyName;
+    $("rTagline").textContent = tagline;
+
+    $("rCompanyPhone").textContent = companyPhone;
+    $("rCompanyPhone2").textContent = companyPhone;
+
+    $("rCompanyEmail").textContent = companyEmail;
+    $("rCompanyEmail2").textContent = companyEmail;
+
+    $("rCompanyAddress").textContent = companyAddress;
+    $("rCompanyAddress2").textContent = companyAddress;
+
+    $("rReceiptNumber").textContent = receiptNumber;
+    $("rBookingDate").textContent = formatDate(bookingDate);
+
+    $("rClientName").textContent = clientName;
+    $("rClientPhone").textContent = clientPhone;
+    $("rClientAltPhone").textContent = clientAltPhone;
+    $("rClientAddress").textContent = clientAddress;
+
+    $("rEventType").textContent = eventType;
+    $("rFunctionDate").textContent = formatDate(functionDate);
+    $("rFunctionTime").textContent = formatTime(functionTime);
+    $("rEventVenueShort").textContent = venue;
+    $("rEventAdditional").textContent = additional;
+
+    $("rTotalAmount").textContent = formatINR(total);
+    $("rTotalWords").textContent = numberToIndianWords(total);
+
+    $("rAdvanceAmount").textContent = formatINR(advance);
+    $("rAdvanceWords").textContent = numberToIndianWords(advance);
+
+    $("rBalanceAmount").textContent = formatINR(balance);
+    $("rBalanceWords").textContent = numberToIndianWords(balance);
+
+    $("rReceivedBig").textContent = formatINR(advance);
+    $("rPaymentMode").textContent = paymentMode;
+    $("rPaymentStatus").textContent = paymentStatus;
+
+    $("rSpecialRequirements").textContent = special;
+
+    updateStatusPill(paymentStatus);
+    renderServices();
+    renderTerms();
+
+    $("rSignatureClient").textContent =
+        "Name: " + (clientName === "-" ? "____________________" : clientName);
+
+    $("rSignatureDate").textContent =
+        "Date: " + (bookingDate ? formatDate(bookingDate) : "____________________");
+
+    $("rSignatureCompany").textContent = "For " + companyName;
+
+    updateMoneySummary();
+}
+
+function renderTerms(){
+    const target = $("rTerms");
+    const raw = $("terms").value || "";
+
+    target.innerHTML = "";
+
+    raw.split(/\n+/)
+        .map(x => x.trim())
+        .filter(Boolean)
+        .forEach(line => {
+            const li = document.createElement("li");
+            li.textContent = line.replace(/^\d+\.\s*/,"");
+            target.appendChild(li);
+        });
+}
+
+/* ---------------- DRAFT STORAGE ---------------- */
+
+function getFormData(){
+    const data = {};
+
+    fieldsToSave.forEach(id => {
+        const el = $(id);
+        if(el) data[id] = el.value;
+    });
+
+    data.services = collectServices();
+
+    const logoData = localStorage.getItem("ultimatePlannerLogoData");
+    if(logoData) data.logoData = logoData;
+
+    return data;
+}
+
+function applyFormData(data){
+    if(!data || typeof data !== "object") return;
+
+    fieldsToSave.forEach(id => {
+        if(data[id] !== undefined && $(id)){
+            $(id).value = data[id];
+        }
+    });
+
+    $("serviceList").innerHTML = "";
+
+    (Array.isArray(data.services) ? data.services : [])
+        .forEach(item => addService(item.type || "", item.description || ""));
+
+    if(Array.isArray(data.services) && data.services.length === 0){
+        addDefaultServices();
+    }
+
+    if(data.logoData){
+        localStorage.setItem("ultimatePlannerLogoData", data.logoData);
+        setLogoPreview(data.logoData);
+        updateLogoOnReceipt(data.logoData);
+    }else if($("logoUrl").value.trim()){
+        setLogoPreview($("logoUrl").value.trim());
+        updateLogoOnReceipt($("logoUrl").value.trim());
+    }
+
+    updateMoneySummary();
+    generateReceipt();
+}
+
+function saveDraft(){
+    try{
+        localStorage.setItem(
+            "ultimatePlannerDraft",
+            JSON.stringify(getFormData())
+        );
+        showToast("Draft saved in this browser");
+    }catch(error){
+        showToast("Could not save draft");
+    }
+}
+
+function loadDraft(){
+    try{
+        const raw = localStorage.getItem("ultimatePlannerDraft");
+        if(!raw){
+            showToast("No saved draft found");
+            return;
+        }
+
+        applyFormData(JSON.parse(raw));
+        showToast("Draft loaded");
+    }catch(error){
+        showToast("Saved draft is invalid");
+    }
+}
+
+/* ---------------- RESET ---------------- */
+
+function addDefaultServices(){
+    addService("Stage Decoration","");
+    addService("Lighting","");
+    addService("Flower Decoration","");
+}
+
+function resetForm(){
+    const ok = confirm("Reset all booking details?");
+    if(!ok) return;
+
+    fieldsToSave.forEach(id => {
+        const el = $(id);
+        if(!el) return;
+        if(id === "companyName"){
+            el.value = "Ultimate Planner";
+        }else if(id === "companyTagline"){
+            el.value = "Event Planning • Decoration • Management";
+        }else if(id === "bookingDate"){
+            el.value = todayISO();
+        }else if(id === "eventType"){
+            el.value = "Wedding";
+        }else if(id === "paymentStatus"){
+            el.value = "Advance Received";
+        }else if(id === "paymentMode"){
+            el.value = "UPI";
+        }else if(id === "totalAmount" || id === "advanceAmount"){
+            el.value = "0";
+        }else if(id === "terms"){
+            /* keep default terms */
+        }else{
+            el.value = "";
+        }
+    });
+
+    $("logoFile").value = "";
+    localStorage.removeItem("ultimatePlannerLogoData");
+    $("serviceList").innerHTML = "";
+    addDefaultServices();
+
+    setLogoPreview("");
+    updateLogoOnReceipt("");
+    updateMoneySummary();
+    generateReceipt();
+
+    showToast("Form reset");
+}
+
+/* ---------------- SHARE ---------------- */
+
+function buildShareText(){
+    const receiptNo = $("rReceiptNumber").textContent;
+    const client = $("rClientName").textContent;
+    const eventType = $("rEventType").textContent;
+    const eventDate = $("rFunctionDate").textContent;
+    const venue = $("rEventVenueShort").textContent;
+    const total = $("rTotalAmount").textContent;
+    const advance = $("rAdvanceAmount").textContent;
+    const balance = $("rBalanceAmount").textContent;
+
+    return [
+        "ULTIMATE PLANNER",
+        "Booking Receipt",
+        "",
+        `Receipt No: ${receiptNo}`,
+        `Client: ${client}`,
+        `Event: ${eventType}`,
+        `Function Date: ${eventDate}`,
+        `Venue: ${venue}`,
+        `Total Amount: ${total}`,
+        `Advance Received: ${advance}`,
+        `Balance Pending: ${balance}`,
+        "",
+        "Please refer to the complete booking receipt for finalized services and requirements."
+    ].join("\n");
+}
+
+async function shareBill(){
+    generateReceipt();
+
+    const text = buildShareText();
+
+    if(navigator.share){
+        try{
             await navigator.share({
-                title:
-                "Ultimate Planner Booking Receipt",
-                text:
+                title:"Ultimate Planner Booking Receipt",
                 text
             });
-
+            showToast("Share panel opened");
+            return;
+        }catch(error){
+            if(error?.name === "AbortError") return;
         }
-        catch (error) {
-
-            console.log(
-                "Sharing cancelled or failed"
-            );
-
-        }
-
-    }
-    else {
-
-        try {
-
-            await navigator.clipboard.writeText(
-                text
-            );
-
-            alert(
-                "Receipt summary copied. You can paste and share it through WhatsApp or other apps."
-            );
-
-        }
-        catch (error) {
-
-            alert(
-                "Sharing is not supported in this browser. Please use Print / Save as PDF."
-            );
-
-        }
-
     }
 
+    try{
+        await navigator.clipboard.writeText(text);
+        showToast("Receipt summary copied");
+    }catch(error){
+        window.prompt("Copy this receipt summary:", text);
+    }
 }
 
-</script>
+/* ---------------- INIT ---------------- */
 
+function init(){
+    setDefaultDates();
+
+    if(!localStorage.getItem("ultimatePlannerDraft")){
+        addDefaultServices();
+    }else{
+        const raw = localStorage.getItem("ultimatePlannerDraft");
+        try{
+            const draft = JSON.parse(raw);
+            if(draft?.services){
+                applyFormData(draft);
+            }else{
+                addDefaultServices();
+            }
+        }catch(error){
+            addDefaultServices();
+        }
+    }
+
+    const savedLogo = localStorage.getItem("ultimatePlannerLogoData");
+
+    if(savedLogo){
+        setLogoPreview(savedLogo);
+        updateLogoOnReceipt(savedLogo);
+    }else if(DEFAULT_LOGO_URL){
+        $("logoUrl").value = DEFAULT_LOGO_URL;
+        setLogoPreview(DEFAULT_LOGO_URL);
+        updateLogoOnReceipt(DEFAULT_LOGO_URL);
+    }
+
+    generateReceipt();
+
+    /* Auto-refresh preview for quick editing */
+    document.querySelectorAll("#editor input, #editor textarea, #editor select")
+        .forEach(el => {
+            el.addEventListener("input", () => {
+                generateReceipt();
+            });
+            el.addEventListener("change", () => {
+                generateReceipt();
+            });
+        });
+}
+
+init();
+</script>
 </body>
 </html>
