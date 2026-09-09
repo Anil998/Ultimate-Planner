@@ -1221,7 +1221,8 @@ button{cursor:pointer}
 }
 
 @media print{
-    body{background:#fff}
+    body{background:#fff !important}
+    *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
     .app-topbar,
     .editor,
     .preview-toolbar,
@@ -1295,8 +1296,8 @@ button{cursor:pointer}
         </div>
 
         <div class="top-actions">
-            <button class="btn btn-dark" type="button" onclick="generateReceipt()">Preview Bill</button>
-            <button class="btn btn-accent" type="button" onclick="window.print()">Print / PDF</button>
+            <button class="btn btn-dark" type="button" onclick="openPreview()">Preview Bill</button>
+            <button class="btn btn-accent" type="button" onclick="printBill()">Print / PDF</button>
             <button class="btn btn-green" type="button" onclick="shareBill()">Share</button>
         </div>
     </header>
@@ -1318,7 +1319,7 @@ button{cursor:pointer}
                 <div class="form-grid">
                     <div class="field">
                         <label>Company name</label>
-                        <input id="companyName" value="Ultimate Planner">
+                        <input id="companyName" value="Ultimate Planner" readonly aria-readonly="true">
                     </div>
 
                     <div class="field">
@@ -1346,14 +1347,12 @@ button{cursor:pointer}
 
                         <div class="logo-row">
                             <div>
-                                <input id="logoUrl" placeholder="Paste direct image URL (PNG/JPG/WebP)">
+                                <input id="logoUrl" readonly aria-readonly="true" placeholder="Company logo is configured in the code">
                                 <div class="file-control" style="margin-top:8px">
-                                    <input id="logoFile" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml">
-                                    <label class="file-label" for="logoFile">Upload logo from device</label>
-                                    <button class="btn btn-light" type="button" onclick="clearLogo()">Remove logo</button>
+                                    <button class="btn btn-light" type="button" onclick="clearLogo()">Reload fixed logo</button>
                                 </div>
                                 <div class="help" style="margin-top:8px">
-                                    Tip: Instagram CDN links can expire or block hotlinking. A direct image hosted in the same GitHub repository is much more reliable.
+                                    The company logo is fixed in the code. A permanent direct PNG/JPG/WebP URL is recommended for reliable GitHub Pages loading.
                                 </div>
                             </div>
 
@@ -1599,7 +1598,7 @@ button{cursor:pointer}
                 </div>
 
                 <div class="mini-actions">
-                    <button class="btn btn-accent" type="button" onclick="window.print()">Print / PDF</button>
+                    <button class="btn btn-accent" type="button" onclick="printBill()">Print / PDF</button>
                     <button class="btn btn-green" type="button" onclick="shareBill()">Share</button>
                 </div>
             </div>
@@ -1858,7 +1857,7 @@ button{cursor:pointer}
 
 const $ = (id) => document.getElementById(id);
 
-const DEFAULT_LOGO_URL = "";
+const DEFAULT_LOGO_URL = "https://instagram.fccu4-3.fna.fbcdn.net/v/t51.82787-19/730004157_17956071813171342_3162059531330661234_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=instagram.fccu4-3.fna.fbcdn.net&_nc_cat=106&_nc_oc=Q6cZ2gE6QoPYSKQAh7U-Bh0-8RP9zEztx_aGPC1bGjh6xxwD99tfGsiH7dInjW7e5iohKLwPVLDCuWMZiBvN3-g-grPD&_nc_ohc=9o37-NTLgMsQ7kNvwFdPEbm&_nc_gid=Wq_zGOE5bJoOryGjss90vw&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_AQI1UQ1vlCqQsUTfHhYcViNweTbFWCGDdncfjLoi1mRUMA&oe=6AA76A9C&_nc_sid=7a9f4b";
 
 const fieldsToSave = [
     "companyName","companyTagline","companyPhone","companyEmail","companyAddress",
@@ -2001,11 +2000,11 @@ function setLogoPreview(src){
 }
 
 function clearLogo(){
-    $("logoUrl").value = "";
     localStorage.removeItem("ultimatePlannerLogoData");
-    setLogoPreview("");
-    updateLogoOnReceipt("");
-    showToast("Logo removed");
+    $("logoUrl").value = DEFAULT_LOGO_URL;
+    setLogoPreview(DEFAULT_LOGO_URL);
+    updateLogoOnReceipt(DEFAULT_LOGO_URL);
+    showToast("Fixed company logo restored");
 }
 
 function updateLogoOnReceipt(src){
@@ -2027,33 +2026,12 @@ function updateLogoOnReceipt(src){
 }
 
 $("logoUrl").addEventListener("input", () => {
-    const src = $("logoUrl").value.trim();
-    setLogoPreview(src);
-    updateLogoOnReceipt(src);
+    $("logoUrl").value = DEFAULT_LOGO_URL;
+    setLogoPreview(DEFAULT_LOGO_URL);
+    updateLogoOnReceipt(DEFAULT_LOGO_URL);
 });
 
-$("logoFile").addEventListener("change", (event) => {
-    const file = event.target.files?.[0];
-    if(!file) return;
 
-    if(!file.type.startsWith("image/")){
-        showToast("Please select an image");
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-        const data = String(reader.result || "");
-        localStorage.setItem("ultimatePlannerLogoData", data);
-        $("logoUrl").value = "";
-        setLogoPreview(data);
-        updateLogoOnReceipt(data);
-        showToast("Logo uploaded");
-    };
-
-    reader.readAsDataURL(file);
-});
 
 /* ---------------- SERVICES ---------------- */
 
@@ -2263,6 +2241,18 @@ function generateReceipt(){
     updateMoneySummary();
 }
 
+function openPreview(){
+    generateReceipt();
+    const panel = document.querySelector(".preview-panel");
+    if(panel) panel.scrollIntoView({behavior:"smooth", block:"start"});
+    showToast("Bill preview updated");
+}
+
+function printBill(){
+    generateReceipt();
+    setTimeout(() => window.print(), 80);
+}
+
 function renderTerms(){
     const target = $("rTerms");
     const raw = $("terms").value || "";
@@ -2391,7 +2381,6 @@ function resetForm(){
         }
     });
 
-    $("logoFile").value = "";
     localStorage.removeItem("ultimatePlannerLogoData");
     $("serviceList").innerHTML = "";
     addDefaultServices();
@@ -2435,27 +2424,29 @@ function buildShareText(){
 
 async function shareBill(){
     generateReceipt();
-
     const text = buildShareText();
+    const url = window.location.href;
 
     if(navigator.share){
         try{
             await navigator.share({
                 title:"Ultimate Planner Booking Receipt",
-                text
+                text,
+                url
             });
             showToast("Share panel opened");
             return;
         }catch(error){
-            if(error?.name === "AbortError") return;
+            if(error && error.name === "AbortError") return;
         }
     }
 
+    const fallback = text + "\n\n" + url;
     try{
-        await navigator.clipboard.writeText(text);
-        showToast("Receipt summary copied");
+        await navigator.clipboard.writeText(fallback);
+        showToast("Receipt details copied");
     }catch(error){
-        window.prompt("Copy this receipt summary:", text);
+        window.prompt("Copy this receipt information:", fallback);
     }
 }
 
@@ -2480,16 +2471,9 @@ function init(){
         }
     }
 
-    const savedLogo = localStorage.getItem("ultimatePlannerLogoData");
-
-    if(savedLogo){
-        setLogoPreview(savedLogo);
-        updateLogoOnReceipt(savedLogo);
-    }else if(DEFAULT_LOGO_URL){
-        $("logoUrl").value = DEFAULT_LOGO_URL;
-        setLogoPreview(DEFAULT_LOGO_URL);
-        updateLogoOnReceipt(DEFAULT_LOGO_URL);
-    }
+    $("logoUrl").value = DEFAULT_LOGO_URL;
+    setLogoPreview(DEFAULT_LOGO_URL);
+    updateLogoOnReceipt(DEFAULT_LOGO_URL);
 
     generateReceipt();
 
