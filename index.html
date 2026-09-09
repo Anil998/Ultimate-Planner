@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ultimate Planner | Booking Receipt Generator</title>
+
+<style>
+:root {
+    --primary: #6d28d9;
+    --primary-dark: #4c1d95;
+    --secondary: #f59e0b;
+    --dark: #1f2937;
+    --light: #f8fafc;
+    --border: #d1d5db;
+    --danger: #dc2626;
+    --success: #16a34a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #eef2f7;
+    color: #1f2937;
+}
+
+/* =========================
+   APP HEADER
+========================= */
+
+.app-header {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: white;
+    padding: 18px 25px;
+    text-align: center;
+}
+
+.app-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.app-header p {
+    margin: 6px 0 0;
+    opacity: .85;
+    font-size: 14px;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.main-wrapper {
+    max-width: 1400px;
+    margin: auto;
+    padding: 25px;
+}
+
+.editor-card {
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 25px rgba(0,0,0,.08);
+}
+
+.section-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--primary-dark);
+    margin: 0 0 18px;
+    border-bottom: 2px solid #ede9fe;
+    padding-bottom: 10px;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    border: 1px solid var(--border);
+    padding: 11px;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(109,40,217,.1);
+}
+
+/* =========================
+   SERVICES
+========================= */
+
+.service-item {
+    border: 1px solid #ddd6fe;
+    background: #faf9ff;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr auto;
+    gap: 12px;
+    align-items: start;
+}
+
+.remove-service {
+    background: #fee2e2;
+    color: var(--danger);
+    border: none;
+    padding: 11px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.add-service {
+    width: 100%;
+    border: 2px dashed var(--primary);
+    background: #f5f3ff;
+    color: var(--primary-dark);
+    padding: 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.add-service:hover {
+    background: #ede9fe;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.action-bar {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 25px 0;
+}
+
+button {
+    font-family: inherit;
+}
+
+.action-btn {
+    border: none;
+    padding: 14px 22px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.preview-btn {
+    background: var(--primary);
+    color: white;
+}
+
+.print-btn {
+    background: #1f2937;
+    color: white;
+}
+
+.share-btn {
+    background: var(--success);
+    color: white;
+}
+
+.reset-btn {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+/* =========================
+   RECEIPT
+========================= */
+
+#receiptContainer {
+    display: none;
+}
+
+.receipt {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    background: white;
+    padding: 45px;
+    box-shadow: 0 5px 30px rgba(0,0,0,.12);
+}
+
+.receipt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+}
+
+.company-area {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.company-logo {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.company-name {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--primary-dark);
+}
+
+.company-tagline {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.receipt-badge {
+    text-align: right;
+}
+
+.receipt-badge h2 {
+    margin: 0;
+    color: var(--primary);
+    font-size: 25px;
+}
+
+.receipt-number {
+    margin-top: 8px;
+    font-size: 13px;
+}
+
+/* =========================
+   INFO BOXES
+========================= */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.info-box {
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.info-box-title {
+    background: #f5f3ff;
+    color: var(--primary-dark);
+    padding: 10px 14px;
+    font-weight: bold;
+}
+
+.info-content {
+    padding: 14px;
+}
+
+.info-row {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.info-label {
+    font-weight: bold;
+}
+
+/* =========================
+   EVENT BOX
+========================= */
+
+.event-details {
+    border: 1px solid #ddd;
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 22px;
+    background: #fafafa;
+}
+
+.event-details h3 {
+    margin-top: 0;
+    color: var(--primary-dark);
+}
+
+/* =========================
+   PAYMENT
+========================= */
+
+.payment-box {
+    margin: 22px 0;
+    border: 1px solid #c7d2fe;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.payment-box h3 {
+    margin: 0;
+    padding: 12px 16px;
+    background: #eef2ff;
+    color: #312e81;
+}
+
+.payment-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 15px;
+}
+
+.payment-row:last-child {
+    border-bottom: none;
+}
+
+.amount {
+    font-weight: bold;
+}
+
+.pending {
+    color: var(--danger);
+}
+
+/* =========================
+   SERVICES TABLE
+========================= */
+
+.services-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+
+.services-table th {
+    background: var(--primary-dark);
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.services-table td {
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    vertical-align: top;
+    font-size: 14px;
+}
+
+.services-table tr:nth-child(even) {
+    background: #fafafa;
+}
+
+/* =========================
+   SPECIAL REQUIREMENTS
+========================= */
+
+.requirement-box {
+    margin-top: 22px;
+    border-left: 5px solid var(--secondary);
+    background: #fffbeb;
+    padding: 16px;
+}
+
+.requirement-box h3 {
+    margin-top: 0;
+}
+
+/* =========================
+   TERMS
+========================= */
+
+.terms-box {
+    margin-top: 25px;
+    padding: 18px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.terms-box h3 {
+    color: var(--primary-dark);
+    margin-top: 0;
+}
+
+.terms-box ol {
+    padding-left: 20px;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* =========================
+   SIGNATURE
+========================= */
+
+.signature-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 70px;
+}
+
+.signature-box {
+    text-align: center;
+}
+
+.signature-line {
+    border-top: 1px solid #111;
+    margin-bottom: 8px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.receipt-footer {
+    border-top: 1px solid #d1d5db;
+    margin-top: 35px;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width: 768px) {
+
+    .main-wrapper {
+        padding: 12px;
+    }
+
+    .editor-card {
+        padding: 16px;
+    }
+
+    .grid,
+    .grid-2,
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .receipt {
+        padding: 20px;
+    }
+
+    .receipt-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .receipt-badge {
+        text-align: left;
+    }
+
+    .company-name {
+        font-size: 22px;
+    }
+
+    .signature-section {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+
+    .payment-row {
+        flex-direction: column;
+        gap: 4px;
+    }
+}
+
+/* =========================
+   PRINT
+========================= */
+
+@media print {
+
+    body {
+        background: white;
+    }
+
+    .app-header,
+    #editor,
+    .action-bar,
+    #receiptActions {
+        display: none !important;
+    }
+
+    #receiptContainer {
+        display: block !important;
+    }
+
+    .receipt {
+        box-shadow: none;
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    @page {
+        size: A4;
+        margin: 12mm;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<div class="app-header">
+    <h1>Ultimate Planner</h1>
+    <p>Professional Event Booking & Receipt Generator</p>
+</div>
+
+
+<div class="main-wrapper">
+
+<!-- =========================
+     EDITOR
+========================= -->
+
+<div id="editor">
+
+<div class="editor-card">
+
+<h2 class="section-title">Company Information</h2>
+
+<div class="grid">
+
+<div>
+<label>Company Name</label>
+<input id="companyName" value="Ultimate Planner">
+</div>
+
+<div>
+<label>Company Contact Number</label>
+<input id="companyPhone" placeholder="Enter company phone number">
+</div>
+
+<div>
+<label>Company Email</label>
+<input id="companyEmail" placeholder="Enter company email">
+</div>
+
+<div class="full-width">
+<label>Company Address</label>
+<textarea id="companyAddress" placeholder="Enter company address"></textarea>
+</div>
+
+<div class="full-width">
+<label>Company Logo Image URL</label>
+<input id="logoUrl" placeholder="Paste logo image link here">
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     RECEIPT DETAILS
+========================= -->
+
+<div class="editor-card">
+
+<h2 class="section-title">Booking & Receipt Details</h2>
+
+<div class="grid">
+
+<div>
+<label>Receipt / Booking Number</label>
+<input id="receiptNumber" placeholder="Example: UP-2026-001">
+</div>
+
+<div>
+<label>Booking Date</label>
+<input id="bookingDate" type="date">
+</div>
+
+<div>
+<label>Payment Status</label>
+
+<select id="paymentStatus">
+<option value="Advance Paid">Advance Paid</option>
+<option value="Partially Paid">Partially Paid</option>
+<option value="Fully Paid">Fully Paid</option>
+<option value="Pending">Pending</option>
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     CLIENT DETAILS
+========================= -->
+
+<div class="editor-card">
+
+<h2 class="section-title">Client Details</h2>
+
+<div class="grid">
+
+<div>
+<label>Client Full Name</label>
+<input id="clientName" placeholder="Enter client name">
+</div>
+
+<div>
+<label>Client Contact Number</label>
+<input id="clientPhone" type="tel" placeholder="Enter phone number">
+</div>
+
+<div>
+<label>Alternative Contact Number</label>
+<input id="clientAltPhone" type="tel" placeholder="Optional">
+</div>
+
+<div class="full-width">
+<label>Client Address</label>
+<textarea id="clientAddress" placeholder="Enter complete address"></textarea>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     EVENT DETAILS
+========================= -->
+
+<div class="editor-card">
+
+<h2 class="section-title">Event Details</h2>
+
+<div class="grid">
+
+<div>
+<label>Event Type</label>
+
+<select id="eventType">
+<option>Wedding</option>
+<option>Reception</option>
+<option>Birthday Party</option>
+<option>Engagement</option>
+<option>Anniversary</option>
+<option>Corporate Event</option>
+<option>Religious Event</option>
+<option>Other</option>
+</select>
+
+</div>
+
+<div>
+<label>Function Date</label>
+<input id="functionDate" type="date">
+</div>
+
+<div>
+<label>Function Time</label>
+<input id="functionTime" type="time">
+</div>
+
+<div class="full-width">
+<label>Event Venue / Location</label>
+<textarea id="eventVenue" placeholder="Enter function venue"></textarea>
+</div>
+
+<div class="full-width">
+<label>Additional Event Information</label>
+<textarea id="eventAdditional" placeholder="Example: Bride/Groom name, theme, expected guests, etc."></textarea>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     PAYMENT DETAILS
+========================= -->
+
+<div class="editor-card">
+
+<h2 class="section-title">Payment Details</h2>
+
+<div class="grid">
+
+<div>
+<label>Total Final Amount (₹)</label>
+<input id="totalAmount" type="number" min="0" value="0">
+</div>
+
+<div>
+<label>Advance Paid (₹)</label>
+<input id="advanceAmount" type="number" min="0" value="0">
+</div>
+
+<div>
+<label>Payment Mode</label>
+
+<select id="paymentMode">
+<option>Cash</option>
+<option>UPI</option>
+<option>Bank Transfer</option>
+<option>Cheque</option>
+<option>Other</option>
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     SERVICES
+========================= -->
+
+<div class="editor-card">
+
+<h2 class="section-title">Services & Finalized Requirements</h2>
+
+<p style="font-size:14px;color:#6b7280;">
+Add every service and clearly mention the exact requirement finalized with the client.
+</p>
+
+<div id="servicesContainer"></div>
+
+<button class="add-service" onclick="addService()">
+＋ Add New Service / Requirement
+</button>
+
+</div>
+
+
+<!-- =========================
+     SPECIAL REQUIREMENTS
+========================= -->
+
+<div class="editor-card">
+
+<h2 class="section-title">Client Special Requirements</h2>
+
+<textarea id="specialRequirements"
+placeholder="Example: Fresh flowers only. No artificial/plastic flowers. Specific colour theme required. Specific lighting, fan, decoration or stage requirements."></textarea>
+
+</div>
+
+
+<!-- =========================
+     TERMS
+========================= -->
+
+<div class="editor-card">
+
+<h2 class="section-title">Terms & Conditions</h2>
+
+<textarea id="terms" style="min-height:260px;">1. The booking will be considered confirmed only after receipt of the agreed advance payment.
+
+2. Any remaining balance payment must be cleared according to the agreed payment schedule.
+
+3. Any additional service requested after final confirmation may involve additional charges.
+
+4. The client must clearly communicate all special requirements before the event.
+
+5. Ultimate Planner will provide the services mentioned in this booking document according to the finalized agreement.
+
+6. Changes in event date, venue, design or services may affect the total cost.
+
+7. Cancellation and refund policies will be applicable according to the mutual agreement between the client and Ultimate Planner.
+
+8. Any damage caused to rented or hired event materials due to negligence may be chargeable to the client.
+
+9. The client is requested to verify all services and requirements mentioned in this document before signing.
+
+10. This document serves as a booking confirmation and payment receipt for the services agreed upon by both parties.</textarea>
+
+</div>
+
+
+<!-- =========================
+     ACTION BUTTONS
+========================= -->
+
+<div class="action-bar">
+
+<button class="action-btn preview-btn" onclick="generateReceipt()">
+Generate Professional Bill
+</button>
+
+<button class="action-btn reset-btn" onclick="resetForm()">
+Reset Form
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+     RECEIPT OUTPUT
+========================= -->
+
+<div id="receiptContainer">
+
+<div id="receipt" class="receipt">
+
+<!-- HEADER -->
+
+<div class="receipt-header">
+
+<div class="company-area">
+
+<img id="rLogo" class="company-logo"
+src="https://via.placeholder.com/150?text=LOGO"
+alt="Company Logo">
+
+<div>
+
+<div id="rCompanyName" class="company-name">
+Ultimate Planner
+</div>
+
+<div class="company-tagline">
+Professional Event Planning & Management
+</div>
+
+</div>
+
+</div>
+
+
+<div class="receipt-badge">
+
+<h2>BOOKING RECEIPT</h2>
+
+<div class="receipt-number">
+Receipt No: <strong id="rReceiptNumber"></strong>
+</div>
+
+<div class="receipt-number">
+Booking Date: <strong id="rBookingDate"></strong>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- CLIENT + COMPANY -->
+
+<div class="info-grid">
+
+<div class="info-box">
+
+<div class="info-box-title">
+CLIENT DETAILS
+</div>
+
+<div class="info-content">
+
+<div class="info-row">
+<span class="info-label">Name:</span>
+<span id="rClientName"></span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Contact:</span>
+<span id="rClientPhone"></span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Alternative Contact:</span>
+<span id="rClientAltPhone"></span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Address:</span>
+<span id="rClientAddress"></span>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="info-box">
+
+<div class="info-box-title">
+ULTIMATE PLANNER
+</div>
+
+<div class="info-content">
+
+<div class="info-row">
+<span class="info-label">Phone:</span>
+<span id="rCompanyPhone"></span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Email:</span>
+<span id="rCompanyEmail"></span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Address:</span>
+<span id="rCompanyAddress"></span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- EVENT DETAILS -->
+
+<div class="event-details">
+
+<h3>Event Details</h3>
+
+<div class="grid-2">
+
+<div class="info-row">
+<span class="info-label">Event Type:</span>
+<span id="rEventType"></span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Function Date:</span>
+<span id="rFunctionDate"></span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Function Time:</span>
+<span id="rFunctionTime"></span>
+</div>
+
+<div class="info-row">
+<span class="info-label">Venue:</span>
+<span id="rEventVenue"></span>
+</div>
+
+</div>
+
+<div style="margin-top:10px;">
+
+<span class="info-label">
+Additional Information:
+</span>
+
+<div id="rEventAdditional"></div>
+
+</div>
+
+</div>
+
+
+<!-- PAYMENT -->
+
+<div class="payment-box">
+
+<h3>Payment Summary</h3>
+
+<div class="payment-row">
+
+<span>Total Final Amount</span>
+
+<span class="amount" id="rTotalAmount">
+₹0
+</span>
+
+</div>
+
+<div class="payment-row">
+
+<span>Amount in Words</span>
+
+<span id="rTotalWords"></span>
+
+</div>
+
+<div class="payment-row">
+
+<span>Advance Paid</span>
+
+<span class="amount" id="rAdvanceAmount">
+₹0
+</span>
+
+</div>
+
+<div class="payment-row">
+
+<span>Advance Amount in Words</span>
+
+<span id="rAdvanceWords"></span>
+
+</div>
+
+<div class="payment-row">
+
+<span>Balance Pending</span>
+
+<span class="amount pending" id="rBalanceAmount">
+₹0
+</span>
+
+</div>
+
+<div class="payment-row">
+
+<span>Balance Amount in Words</span>
+
+<span id="rBalanceWords"></span>
+
+</div>
+
+<div class="payment-row">
+
+<span>Payment Mode</span>
+
+<span id="rPaymentMode"></span>
+
+</div>
+
+<div class="payment-row">
+
+<span>Payment Status</span>
+
+<strong id="rPaymentStatus"></strong>
+
+</div>
+
+</div>
+
+
+<!-- SERVICES -->
+
+<h3 style="color:#4c1d95;">
+Finalized Services & Requirements
+</h3>
+
+<table class="services-table">
+
+<thead>
+
+<tr>
+
+<th style="width:50px;">#</th>
+
+<th style="width:30%;">
+Service / Category
+</th>
+
+<th>
+Finalized Requirement / Description
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="rServices"></tbody>
+
+</table>
+
+
+<!-- SPECIAL REQUIREMENTS -->
+
+<div class="requirement-box">
+
+<h3>Important Client Requirements</h3>
+
+<div id="rSpecialRequirements"></div>
+
+</div>
+
+
+<!-- TERMS -->
+
+<div class="terms-box">
+
+<h3>Terms & Conditions</h3>
+
+<ol id="rTerms"></ol>
+
+</div>
+
+
+<!-- SIGNATURE -->
+
+<div class="signature-section">
+
+<div class="signature-box">
+
+<div class="signature-line"></div>
+
+<strong>Client Signature</strong>
+
+<div style="margin-top:8px;">
+Name: <span id="rSignatureClientName"></span>
+</div>
+
+<div style="margin-top:8px;">
+Date: <span id="rSignatureDate"></span>
+</div>
+
+</div>
+
+
+<div class="signature-box">
+
+<div class="signature-line"></div>
+
+<strong>Authorized Signature</strong>
+
+<div style="margin-top:8px;">
+For Ultimate Planner
+</div>
+
+</div>
+
+</div>
+
+
+<!-- FOOTER -->
+
+<div class="receipt-footer">
+
+<div>
+This is a computer-generated booking receipt and service agreement.
+</div>
+
+<div style="margin-top:6px;">
+Please keep this receipt safely for future reference.
+</div>
+
+</div>
+
+</div>
+
+
+<div id="receiptActions" class="action-bar">
+
+<button class="action-btn print-btn" onclick="window.print()">
+🖨 Print / Save as PDF
+</button>
+
+<button class="action-btn share-btn" onclick="shareReceipt()">
+📤 Share Bill
+</button>
+
+<button class="action-btn preview-btn" onclick="editReceipt()">
+✏ Edit Details
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =========================
+   DEFAULT DATE
+========================= */
+
+document.getElementById("bookingDate").value =
+new Date().toISOString().split("T")[0];
+
+
+/* =========================
+   SERVICE MANAGEMENT
+========================= */
+
+function addService(type = "", description = "") {
+
+    const container =
+    document.getElementById("servicesContainer");
+
+    const service =
+    document.createElement("div");
+
+    service.className =
+    "service-item";
+
+    service.innerHTML = `
+
+        <div class="service-grid">
+
+            <div>
+
+                <label>
+                Service / Category
+                </label>
+
+                <input
+                class="serviceType"
+                placeholder="Example: Stage Decoration"
+                value="${escapeHtml(type)}">
+
+            </div>
+
+
+            <div>
+
+                <label>
+                Detailed Finalized Requirement
+                </label>
+
+                <textarea
+                class="serviceDescription"
+                placeholder="Example: 24×16 ft stage, fresh flowers, white and golden theme, no artificial flowers">${escapeHtml(description)}</textarea>
+
+            </div>
+
+
+            <div>
+
+                <label>
+                Remove
+                </label>
+
+                <button
+                type="button"
+                class="remove-service"
+                onclick="this.parentElement.parentElement.parentElement.remove()">
+
+                ✕ Remove
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+    container.appendChild(service);
+
+}
+
+
+/* DEFAULT SERVICES */
+
+addService(
+"Stage Decoration",
+""
+);
+
+addService(
+"Lighting",
+""
+);
+
+addService(
+"Flower Decoration",
+""
+);
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(text) {
+
+    if (!text) return "";
+
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================
+   FORMAT CURRENCY
+========================= */
+
+function formatCurrency(amount) {
+
+    return new Intl.NumberFormat(
+        "en-IN",
+        {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0
+        }
+    ).format(amount);
+
+}
+
+
+/* =========================
+   NUMBER TO WORDS
+========================= */
+
+function numberToWords(num) {
+
+    num = Math.floor(Number(num));
+
+    if (num === 0) {
+        return "Rupees Zero Only";
+    }
+
+    const ones = [
+        "",
+        "One",
+        "Two",
+        "Three",
+        "Four",
+        "Five",
+        "Six",
+        "Seven",
+        "Eight",
+        "Nine",
+        "Ten",
+        "Eleven",
+        "Twelve",
+        "Thirteen",
+        "Fourteen",
+        "Fifteen",
+        "Sixteen",
+        "Seventeen",
+        "Eighteen",
+        "Nineteen"
+    ];
+
+    const tens = [
+        "",
+        "",
+        "Twenty",
+        "Thirty",
+        "Forty",
+        "Fifty",
+        "Sixty",
+        "Seventy",
+        "Eighty",
+        "Ninety"
+    ];
+
+    function convertBelowThousand(n) {
+
+        let result = "";
+
+        if (n >= 100) {
+
+            result +=
+            ones[Math.floor(n / 100)]
+            + " Hundred ";
+
+            n = n % 100;
+
+        }
+
+        if (n >= 20) {
+
+            result +=
+            tens[Math.floor(n / 10)]
+            + " ";
+
+            n = n % 10;
+
+        }
+
+        if (n > 0) {
+
+            result +=
+            ones[n]
+            + " ";
+
+        }
+
+        return result.trim();
+
+    }
+
+
+    let result = "";
+
+    if (num >= 10000000) {
+
+        result +=
+        convertBelowThousand(
+            Math.floor(num / 10000000)
+        )
+        + " Crore ";
+
+        num %= 10000000;
+
+    }
+
+
+    if (num >= 100000) {
+
+        result +=
+        convertBelowThousand(
+            Math.floor(num / 100000)
+        )
+        + " Lakh ";
+
+        num %= 100000;
+
+    }
+
+
+    if (num >= 1000) {
+
+        result +=
+        convertBelowThousand(
+            Math.floor(num / 1000)
+        )
+        + " Thousand ";
+
+        num %= 1000;
+
+    }
+
+
+    if (num > 0) {
+
+        result +=
+        convertBelowThousand(num);
+
+    }
+
+
+    return
+    "Rupees "
+    + result.trim()
+    + " Only";
+
+}
+
+
+/* =========================
+   DATE FORMAT
+========================= */
+
+function formatDate(dateValue) {
+
+    if (!dateValue) return "-";
+
+    const date =
+    new Date(dateValue + "T00:00:00");
+
+    return date.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================
+   TIME FORMAT
+========================= */
+
+function formatTime(timeValue) {
+
+    if (!timeValue) return "-";
+
+    const [hour, minute] =
+    timeValue.split(":");
+
+    let h =
+    parseInt(hour);
+
+    const ampm =
+    h >= 12
+    ? "PM"
+    : "AM";
+
+    h = h % 12;
+
+    if (h === 0)
+        h = 12;
+
+    return
+    h
+    + ":"
+    + minute
+    + " "
+    + ampm;
+
+}
+
+
+/* =========================
+   GENERATE RECEIPT
+========================= */
+
+function generateReceipt() {
+
+    const get =
+    id => document.getElementById(id).value.trim();
+
+
+    /* COMPANY */
+
+    document.getElementById(
+        "rCompanyName"
+    ).textContent =
+    get("companyName")
+    || "Ultimate Planner";
+
+
+    document.getElementById(
+        "rCompanyPhone"
+    ).textContent =
+    get("companyPhone")
+    || "-";
+
+
+    document.getElementById(
+        "rCompanyEmail"
+    ).textContent =
+    get("companyEmail")
+    || "-";
+
+
+    document.getElementById(
+        "rCompanyAddress"
+    ).textContent =
+    get("companyAddress")
+    || "-";
+
+
+    /* LOGO */
+
+    const logo =
+    get("logoUrl");
+
+    if (logo) {
+
+        document.getElementById(
+            "rLogo"
+        ).src = logo;
+
+    }
+
+
+    /* RECEIPT */
+
+    document.getElementById(
+        "rReceiptNumber"
+    ).textContent =
+    get("receiptNumber")
+    || "Not Assigned";
+
+
+    document.getElementById(
+        "rBookingDate"
+    ).textContent =
+    formatDate(
+        get("bookingDate")
+    );
+
+
+    /* CLIENT */
+
+    document.getElementById(
+        "rClientName"
+    ).textContent =
+    get("clientName")
+    || "-";
+
+
+    document.getElementById(
+        "rClientPhone"
+    ).textContent =
+    get("clientPhone")
+    || "-";
+
+
+    document.getElementById(
+        "rClientAltPhone"
+    ).textContent =
+    get("clientAltPhone")
+    || "-";
+
+
+    document.getElementById(
+        "rClientAddress"
+    ).textContent =
+    get("clientAddress")
+    || "-";
+
+
+    /* EVENT */
+
+    document.getElementById(
+        "rEventType"
+    ).textContent =
+    get("eventType");
+
+
+    document.getElementById(
+        "rFunctionDate"
+    ).textContent =
+    formatDate(
+        get("functionDate")
+    );
+
+
+    document.getElementById(
+        "rFunctionTime"
+    ).textContent =
+    formatTime(
+        get("functionTime")
+    );
+
+
+    document.getElementById(
+        "rEventVenue"
+    ).textContent =
+    get("eventVenue")
+    || "-";
+
+
+    document.getElementById(
+        "rEventAdditional"
+    ).textContent =
+    get("eventAdditional")
+    || "-";
+
+
+    /* PAYMENT */
+
+    const total =
+    Number(
+        document.getElementById(
+            "totalAmount"
+        ).value
+    ) || 0;
+
+
+    const advance =
+    Number(
+        document.getElementById(
+            "advanceAmount"
+        ).value
+    ) || 0;
+
+
+    const balance =
+    Math.max(
+        total - advance,
+        0
+    );
+
+
+    document.getElementById(
+        "rTotalAmount"
+    ).textContent =
+    formatCurrency(total);
+
+
+    document.getElementById(
+        "rAdvanceAmount"
+    ).textContent =
+    formatCurrency(advance);
+
+
+    document.getElementById(
+        "rBalanceAmount"
+    ).textContent =
+    formatCurrency(balance);
+
+
+    document.getElementById(
+        "rTotalWords"
+    ).textContent =
+    numberToWords(total);
+
+
+    document.getElementById(
+        "rAdvanceWords"
+    ).textContent =
+    numberToWords(advance);
+
+
+    document.getElementById(
+        "rBalanceWords"
+    ).textContent =
+    numberToWords(balance);
+
+
+    document.getElementById(
+        "rPaymentMode"
+    ).textContent =
+    get("paymentMode");
+
+
+    document.getElementById(
+        "rPaymentStatus"
+    ).textContent =
+    get("paymentStatus");
+
+
+    /* SERVICES */
+
+    const serviceRows =
+    document.querySelectorAll(
+        ".service-item"
+    );
+
+
+    const servicesOutput =
+    document.getElementById(
+        "rServices"
+    );
+
+
+    servicesOutput.innerHTML = "";
+
+
+    let count = 1;
+
+
+    serviceRows.forEach(
+        service => {
+
+            const type =
+            service
+            .querySelector(
+                ".serviceType"
+            )
+            .value
+            .trim();
+
+
+            const description =
+            service
+            .querySelector(
+                ".serviceDescription"
+            )
+            .value
+            .trim();
+
+
+            if (
+                type ||
+                description
+            ) {
+
+                const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+                row.innerHTML =
+                `
+
+                    <td>
+                    ${count}
+                    </td>
+
+                    <td>
+                    ${escapeHtml(type || "-")}
+                    </td>
+
+                    <td>
+                    ${escapeHtml(description || "-")}
+                    </td>
+
+                `;
+
+
+                servicesOutput
+                .appendChild(row);
+
+
+                count++;
+
+            }
+
+        }
+    );
+
+
+    if (count === 1) {
+
+        servicesOutput.innerHTML =
+        `
+
+        <tr>
+
+        <td colspan="3"
+        style="text-align:center;">
+        No specific services added.
+        </td>
+
+        </tr>
+
+        `;
+
+    }
+
+
+    /* SPECIAL REQUIREMENTS */
+
+    document.getElementById(
+        "rSpecialRequirements"
+    ).textContent =
+    get("specialRequirements")
+    || "No additional special requirements mentioned.";
+
+
+    /* TERMS */
+
+    const terms =
+    get("terms")
+    .split("\n")
+    .filter(
+        term =>
+        term.trim() !== ""
+    );
+
+
+    const termsOutput =
+    document.getElementById(
+        "rTerms"
+    );
+
+
+    termsOutput.innerHTML = "";
+
+
+    terms.forEach(
+        term => {
+
+            const li =
+            document.createElement(
+                "li"
+            );
+
+            li.textContent =
+            term
+            .replace(
+                /^\d+\.\s*/,
+                ""
+            );
+
+            termsOutput
+            .appendChild(li);
+
+        }
+    );
+
+
+    /* SIGNATURE */
+
+    document.getElementById(
+        "rSignatureClientName"
+    ).textContent =
+    get("clientName")
+    || "________________";
+
+
+    document.getElementById(
+        "rSignatureDate"
+    ).textContent =
+    formatDate(
+        get("bookingDate")
+    );
+
+
+    /* SHOW RECEIPT */
+
+    document.getElementById(
+        "editor"
+    ).style.display =
+    "none";
+
+
+    document.getElementById(
+        "receiptContainer"
+    ).style.display =
+    "block";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =========================
+   EDIT RECEIPT
+========================= */
+
+function editReceipt() {
+
+    document.getElementById(
+        "editor"
+    ).style.display =
+    "block";
+
+
+    document.getElementById(
+        "receiptContainer"
+    ).style.display =
+    "none";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =========================
+   RESET FORM
+========================= */
+
+function resetForm() {
+
+    if (
+        !confirm(
+            "Are you sure you want to reset all details?"
+        )
+    ) {
+        return;
+    }
+
+
+    document
+    .querySelectorAll(
+        "#editor input, #editor textarea"
+    )
+    .forEach(
+        input => {
+
+            if (
+                input.id !== "companyName"
+            ) {
+
+                input.value = "";
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "companyName"
+    ).value =
+    "Ultimate Planner";
+
+
+    document.getElementById(
+        "bookingDate"
+    ).value =
+    new Date()
+    .toISOString()
+    .split("T")[0];
+
+
+    document.getElementById(
+        "totalAmount"
+    ).value =
+    0;
+
+
+    document.getElementById(
+        "advanceAmount"
+    ).value =
+    0;
+
+
+    document.getElementById(
+        "servicesContainer"
+    ).innerHTML =
+    "";
+
+
+    addService(
+        "Stage Decoration",
+        ""
+    );
+
+
+    addService(
+        "Lighting",
+        ""
+    );
+
+
+    addService(
+        "Flower Decoration",
+        ""
+    );
+
+}
+
+
+/* =========================
+   SHARE RECEIPT
+========================= */
+
+async function shareReceipt() {
+
+    const receiptNo =
+    document.getElementById(
+        "rReceiptNumber"
+    ).textContent;
+
+
+    const client =
+    document.getElementById(
+        "rClientName"
+    ).textContent;
+
+
+    const total =
+    document.getElementById(
+        "rTotalAmount"
+    ).textContent;
+
+
+    const text =
+`
+Ultimate Planner
+
+Booking Receipt: ${receiptNo}
+
+Client: ${client}
+
+Total Amount: ${total}
+
+Please refer to the complete booking receipt for finalized services and requirements.
+`;
+
+
+    if (
+        navigator.share
+    ) {
+
+        try {
+
+            await navigator.share({
+                title:
+                "Ultimate Planner Booking Receipt",
+                text:
+                text
+            });
+
+        }
+        catch (error) {
+
+            console.log(
+                "Sharing cancelled or failed"
+            );
+
+        }
+
+    }
+    else {
+
+        try {
+
+            await navigator.clipboard.writeText(
+                text
+            );
+
+            alert(
+                "Receipt summary copied. You can paste and share it through WhatsApp or other apps."
+            );
+
+        }
+        catch (error) {
+
+            alert(
+                "Sharing is not supported in this browser. Please use Print / Save as PDF."
+            );
+
+        }
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
