@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#0f172a">
 <title>Ultimate Planner | Event Invoice & Booking Receipt</title>
 
-<!-- Client-Side Real PDF Engine -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- Native Pure Vector PDF Libraries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
 <style>
 :root{
@@ -59,17 +59,18 @@ button{cursor:pointer}
 
 .brand{display:flex;align-items:center;gap:10px}
 .brand-mark{
-    width:38px;
-    height:38px;
+    width:40px;
+    height:40px;
     border-radius:8px;
-    background:linear-gradient(135deg,#f59e0b,#b45309);
+    background:#fff;
     display:grid;
     place-items:center;
     font-weight:900;
     font-size:15px;
-    color:#fff;
+    color:#b45309;
     overflow:hidden;
     flex-shrink:0;
+    border:1px solid #fed7aa;
 }
 .brand-mark img{width:100%;height:100%;object-fit:cover}
 .brand-copy h1{font-size:16px;font-weight:800;letter-spacing:-0.02em}
@@ -204,9 +205,7 @@ button{cursor:pointer}
     border:1px solid #e2e8f0;
 }
 
-/* =========================================================
-   STRICT SINGLE PAGE INVOICE CANVAS (A4 PROPORTION)
-   ========================================================= */
+/* SCREEN RECEIPT PREVIEW */
 .receipt-wrap{
     display:flex;
     justify-content:center;
@@ -385,55 +384,8 @@ button{cursor:pointer}
     .r-signatures{gap:16px;margin-top:16px}
 }
 
-/* =========================================================
-   STRICT PRINT STYLESHEET (NO EXTRA BLANK PAGE)
-   ========================================================= */
 @media print{
-    html, body{
-        background:#ffffff !important;
-        color:#000000 !important;
-        padding:0 !important;
-        margin:0 !important;
-        width:100% !important;
-        height:auto !important;
-        min-height:unset !important;
-        font-size:9pt !important;
-    }
-    * { 
-        -webkit-print-color-adjust:exact !important; 
-        print-color-adjust:exact !important; 
-        box-shadow:none !important;
-    }
-    .app-topbar, .editor, .preview-head, .toast, button{
-        display:none !important;
-    }
-    .app-shell, .workspace, .preview-panel, .receipt-wrap{
-        display:block !important;
-        width:100% !important;
-        margin:0 !important;
-        padding:0 !important;
-    }
-    .receipt{
-        display:block !important;
-        border:0 !important;
-        padding:0 !important;
-        margin:0 !important;
-        width:100% !important;
-        page-break-inside:avoid !important;
-        break-inside:avoid !important;
-    }
-    .r-topline{margin:0 0 10px 0 !important}
-    .r-box-grid{display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px !important}
-    .r-split{display:grid !important;grid-template-columns:1.2fr 0.8fr !important;gap:10px !important}
-    .r-table{display:table !important}
-    .r-table thead{display:table-header-group !important}
-    .r-table tr{display:table-row !important}
-    .r-table th,.r-table td{display:table-cell !important}
-
-    @page{
-        size:A4 portrait;
-        margin:8mm 8mm 6mm 8mm;
-    }
+    body{display:none} /* Direct users to pure PDF generator for guaranteed 1-page output */
 }
 </style>
 </head>
@@ -455,8 +407,8 @@ button{cursor:pointer}
         </div>
 
         <div class="top-actions">
-            <button class="btn btn-green" type="button" onclick="generateAndSharePDF()">📤 Share PDF to WhatsApp</button>
-            <button class="btn btn-accent" type="button" onclick="printOrDownloadPDF()">📄 Download PDF</button>
+            <button class="btn btn-green" type="button" onclick="sharePDFToWhatsApp()">📤 Share PDF to WhatsApp</button>
+            <button class="btn btn-accent" type="button" onclick="downloadVectorPDF()">📄 Download PDF</button>
         </div>
     </header>
 
@@ -489,11 +441,11 @@ button{cursor:pointer}
                     </div>
                     <div class="field full">
                         <label>Address</label>
-                        <textarea id="companyAddress" placeholder="Business address / City"></textarea>
+                        <textarea id="companyAddress" placeholder="Bhubaneswar, Odisha"></textarea>
                     </div>
                     <div class="field full">
-                        <label>Logo Direct URL</label>
-                        <input id="logoUrl" type="url" placeholder="https://...">
+                        <label>Logo Source</label>
+                        <input id="logoUrl" type="url" placeholder="Paste direct image URL">
                     </div>
                 </div>
             </div>
@@ -540,7 +492,7 @@ button{cursor:pointer}
                     </div>
                     <div class="field full">
                         <label>Client Location / Address</label>
-                        <input id="clientAddress" placeholder="Address / Location">
+                        <input id="clientAddress" placeholder="Address / City">
                     </div>
                 </div>
             </div>
@@ -654,8 +606,8 @@ button{cursor:pointer}
             <div class="preview-head">
                 <strong style="font-size:11px;color:#475569">LIVE BILL PREVIEW</strong>
                 <div style="display:flex;gap:5px">
-                    <button class="btn btn-green" type="button" onclick="generateAndSharePDF()">📤 WhatsApp PDF</button>
-                    <button class="btn btn-accent" type="button" onclick="printOrDownloadPDF()">📄 PDF</button>
+                    <button class="btn btn-green" type="button" onclick="sharePDFToWhatsApp()">📤 WhatsApp PDF</button>
+                    <button class="btn btn-accent" type="button" onclick="downloadVectorPDF()">📄 Download PDF</button>
                 </div>
             </div>
 
@@ -665,7 +617,7 @@ button{cursor:pointer}
 
                     <header class="r-header">
                         <div class="r-brand-info">
-                            <img id="rLogo" class="r-logo is-hidden" alt="Logo" crossorigin="anonymous">
+                            <img id="rLogo" class="r-logo" alt="Logo">
                             <div>
                                 <h2 id="rCompanyName">Ultimate Planner</h2>
                                 <div class="tagline" id="rTagline">Event Planning • Decoration • Management</div>
@@ -780,6 +732,8 @@ const DEFAULT_TAGLINE = "Event Planning • Decoration • Management";
 const DEFAULT_PHONE = "+91 7537936973";
 const DEFAULT_LOGO = "https://lh3.googleusercontent.com/pw/AP1GczNknWNBppAZ_tf9H4nukzScsw8aPMiUyY8dRWaSy_JyuTS3lBjPoQVvNsmgVU8P-S9fJH6w61VMMNckROuDndlAQ9QGn0k-zEdBD8whW7Cqc3PKU9TgevPjCn0VMZ32N3llvgV_Xr1svbDQr6MEQ4E=w878-h878-s-no-gm?authuser=0";
 
+let cachedLogoBase64 = null;
+
 const FIELDS = [
     "companyName","companyTagline","companyPhone","companyEmail","companyAddress","logoUrl",
     "receiptNumber","bookingDate","paymentStatus","clientName","clientPhone","clientAddress",
@@ -820,26 +774,30 @@ function inWords(num){
     return str;
 }
 
-/* LOGO HANDLER */
-function setLogo(url){
-    const rLogo = $("rLogo");
-    const topImg = $("topbarLogoImg");
-    const fallback = $("topbarFallback");
-
-    if(!url){
-        rLogo.classList.add("is-hidden");
-        topImg.style.display = "none";
-        fallback.style.display = "block";
-        return;
-    }
-    rLogo.src = url;
-    rLogo.classList.remove("is-hidden");
-    rLogo.onerror = () => rLogo.classList.add("is-hidden");
-
-    topImg.src = url;
-    topImg.style.display = "block";
-    fallback.style.display = "none";
-    topImg.onerror = () => { topImg.style.display = "none"; fallback.style.display = "block"; };
+/* PRE-BUFFER LOGO AS BASE64 TO AVOID CORS BLOCKING IN PDF */
+function preloadLogo(url){
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.onload = function(){
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth || 400;
+        canvas.height = img.naturalHeight || 400;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        try {
+            cachedLogoBase64 = canvas.toDataURL("image/png");
+            $("rLogo").src = cachedLogoBase64;
+            $("topbarLogoImg").src = cachedLogoBase64;
+            $("topbarLogoImg").style.display = "block";
+            $("topbarFallback").style.display = "none";
+        } catch(e) {
+            console.warn("CORS prevented Base64 extraction:", e);
+        }
+    };
+    img.onerror = function(){
+        cachedLogoBase64 = null;
+    };
+    img.src = url;
 }
 
 /* SERVICES ENGINE */
@@ -863,7 +821,7 @@ function getServices(){
     })).filter(s => s.type || s.desc);
 }
 
-/* RENDER BILL */
+/* RENDER HTML PREVIEW */
 function renderReceipt(){
     const name = $("companyName").value.trim() || DEFAULT_NAME;
     $("rCompanyName").textContent = name;
@@ -935,81 +893,303 @@ function renderReceipt(){
 }
 
 /* =========================================================
-   GENERATE TRUE A4 SINGLE-PAGE PDF BLOB
+   PURE VECTOR PDF GENERATOR (NO CANVAS STRETCHING, SHARP TEXT)
    ========================================================= */
-async function buildPDFBlob(){
-    renderReceipt();
-    const receiptEl = $("receipt");
-
-    const canvas = await html2canvas(receiptEl, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-        logging: false
+function buildNativeVectorPDF(){
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: "a4"
     });
 
-    const imgData = canvas.toDataURL("image/jpeg", 0.95);
-    const { jsPDF } = window.jspdf;
-    
-    // A4 dimensions: 210mm x 297mm
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = 210;
-    const pageHeight = 297;
-    const margin = 10;
-    const printableWidth = pdfWidth - (margin * 2);
-    const printableHeight = (canvas.height * printableWidth) / canvas.width;
+    const pageWidth = 210;
+    const margin = 14;
+    const contentWidth = pageWidth - (margin * 2);
 
-    // Center on single A4 sheet without page spillover
-    pdf.addImage(imgData, "JPEG", margin, margin, printableWidth, Math.min(printableHeight, pageHeight - (margin * 2)));
+    // Accent top bar
+    doc.setFillColor(15, 23, 42); // Navy
+    doc.rect(margin, 10, contentWidth * 0.72, 2.5, "F");
+    doc.setFillColor(217, 119, 6); // Amber
+    doc.rect(margin + (contentWidth * 0.72), 10, contentWidth * 0.28, 2.5, "F");
 
-    const fileName = `Receipt_${$("receiptNumber").value.trim() || "UP"}.pdf`;
-    const blob = pdf.output("blob");
+    let y = 20;
 
-    return { blob, fileName, pdf };
+    // Direct Logo Embedding (Never stretches or disappears)
+    if(cachedLogoBase64){
+        try{
+            doc.addImage(cachedLogoBase64, "PNG", margin, y, 20, 20);
+        }catch(e){
+            console.warn("Logo injection skipped:", e);
+        }
+    }
+
+    const brandX = cachedLogoBase64 ? margin + 24 : margin;
+
+    // Company Header
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(18);
+    doc.setTextColor(15, 23, 42);
+    doc.text($("companyName").value.trim() || DEFAULT_NAME, brandX, y + 5);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.5);
+    doc.setTextColor(217, 119, 6);
+    doc.text($("companyTagline").value.trim() || DEFAULT_TAGLINE, brandX, y + 10);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(71, 85, 105);
+    doc.text(`Phone: ${$("companyPhone").value.trim() || DEFAULT_PHONE} | Email: ${$("companyEmail").value.trim() || "N/A"}`, brandX, y + 14.5);
+    doc.text(`Address: ${$("companyAddress").value.trim() || "Bhubaneswar, Odisha"}`, brandX, y + 18.5);
+
+    // Invoice Meta Right Box
+    doc.setFillColor(15, 23, 42);
+    doc.roundedRect(pageWidth - margin - 44, y, 44, 7, 1, 1, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.setTextColor(255, 255, 255);
+    doc.text("BOOKING RECEIPT", pageWidth - margin - 22, y + 4.5, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(71, 85, 105);
+    doc.text(`Receipt:`, pageWidth - margin - 44, y + 12);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(15, 23, 42);
+    doc.text($("receiptNumber").value.trim() || "DRAFT", pageWidth - margin, y + 12, { align: "right" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(71, 85, 105);
+    doc.text(`Date:`, pageWidth - margin - 44, y + 16);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(15, 23, 42);
+    doc.text(formatDate($("bookingDate").value), pageWidth - margin, y + 16, { align: "right" });
+
+    // Status Pill
+    const status = $("paymentStatus").value;
+    doc.setFillColor(status === "Payment Pending" ? 254 : status === "Partially Paid" ? 255 : 220, status === "Payment Pending" ? 242 : status === "Partially Paid" ? 247 : 252, status === "Payment Pending" ? 242 : status === "Partially Paid" ? 237 : 231);
+    doc.roundedRect(pageWidth - margin - 35, y + 18.5, 35, 5, 1, 1, "F");
+    doc.setFontSize(7.5);
+    doc.setTextColor(status === "Payment Pending" ? 185 : status === "Partially Paid" ? 194 : 21, status === "Payment Pending" ? 28 : status === "Partially Paid" ? 65 : 128, status === "Payment Pending" ? 28 : status === "Partially Paid" ? 12 : 61);
+    doc.text(status.toUpperCase(), pageWidth - margin - 17.5, y + 22, { align: "center" });
+
+    // Horizontal Divider
+    y += 26;
+    doc.setDrawColor(226, 232, 240);
+    doc.setLineWidth(0.4);
+    doc.line(margin, y, pageWidth - margin, y);
+
+    // Two Column Details Box (Client & Event)
+    y += 4;
+    const colWidth = (contentWidth - 6) / 2;
+
+    // Client Card
+    doc.setFillColor(248, 250, 252);
+    doc.roundedRect(margin, y, colWidth, 23, 1.5, 1.5, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.setTextColor(100, 116, 139);
+    doc.text("CLIENT INFORMATION", margin + 4, y + 4.5);
+
+    doc.setFontSize(8);
+    doc.text("Name:", margin + 4, y + 9.5);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(15, 23, 42);
+    doc.text($("clientName").value.trim() || "-", margin + 24, y + 9.5);
+
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 116, 139);
+    doc.text("Contact:", margin + 4, y + 14);
+    doc.setTextColor(15, 23, 42);
+    doc.text($("clientPhone").value.trim() || "-", margin + 24, y + 14);
+
+    doc.setTextColor(100, 116, 139);
+    doc.text("Address:", margin + 4, y + 18.5);
+    doc.setTextColor(15, 23, 42);
+    doc.text($("clientAddress").value.trim() || "-", margin + 24, y + 18.5);
+
+    // Event Card
+    const col2X = margin + colWidth + 6;
+    doc.setFillColor(248, 250, 252);
+    doc.roundedRect(col2X, y, colWidth, 23, 1.5, 1.5, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.setTextColor(100, 116, 139);
+    doc.text("EVENT LOGISTICS", col2X + 4, y + 4.5);
+
+    doc.setFontSize(8);
+    doc.text("Event Type:", col2X + 4, y + 9.5);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(15, 23, 42);
+    doc.text($("eventType").value, col2X + 24, y + 9.5);
+
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(100, 116, 139);
+    doc.text("Event Date:", col2X + 4, y + 14);
+    doc.setTextColor(15, 23, 42);
+    doc.text(formatDate($("functionDate").value), col2X + 24, y + 14);
+
+    doc.setTextColor(100, 116, 139);
+    doc.text("Venue:", col2X + 4, y + 18.5);
+    doc.setTextColor(15, 23, 42);
+    doc.text($("eventVenue").value.trim() || "-", col2X + 24, y + 18.5);
+
+    // Services AutoTable
+    y += 26;
+    const services = getServices();
+    const tableRows = services.length ? services.map((s, idx) => [idx + 1, s.type || "-", s.desc || "-"]) : [[1, "Allied Event Operations", "Complete event coordination as per discussion"]];
+
+    doc.autoTable({
+        startY: y,
+        head: [["#", "SERVICE CATEGORY", "FINALIZED REQUIREMENTS & SPECIFICATIONS"]],
+        body: tableRows,
+        margin: { left: margin, right: margin },
+        theme: "plain",
+        headStyles: {
+            fillColor: [15, 23, 42],
+            textColor: 255,
+            fontSize: 7.5,
+            fontStyle: "bold",
+            cellPadding: 2.2
+        },
+        bodyStyles: {
+            textColor: [15, 23, 42],
+            fontSize: 8,
+            cellPadding: 2.2,
+            lineColor: [226, 232, 240],
+            lineWidth: 0.2
+        },
+        columnStyles: {
+            0: { cellWidth: 10, halign: "center" },
+            1: { cellWidth: 46, fontStyle: "bold" },
+            2: { cellWidth: "auto" }
+        }
+    });
+
+    y = doc.lastAutoTable.finalY + 4;
+
+    // Calculation & Terms
+    const splitColWidth = (contentWidth - 6) / 2;
+    const calcX = margin + splitColWidth + 6;
+
+    // Left: Instructions & Terms
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.setTextColor(100, 116, 139);
+    doc.text("SPECIAL INSTRUCTIONS & TERMS", margin, y + 3);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7.5);
+    doc.setTextColor(71, 85, 105);
+    const splitInstructions = doc.splitTextToSize($("specialRequirements").value.trim() || "No extra requirements recorded.", splitColWidth);
+    doc.text(splitInstructions, margin, y + 7.5);
+
+    const termsLines = ($("terms").value || "").split(/\n+/).slice(0, 4);
+    let termY = y + 7.5 + (splitInstructions.length * 3.5);
+    doc.setFontSize(7);
+    doc.setTextColor(100, 116, 139);
+    termsLines.forEach(line => {
+        doc.text("• " + line.replace(/^\d+\.\s*/, ""), margin, termY);
+        termY += 3.2;
+    });
+
+    // Right: Calculation Table
+    let total = Math.max(0, Number($("totalAmount").value) || 0);
+    let adv = Math.max(0, Number($("advanceAmount").value) || 0);
+    if(adv > total) adv = total;
+    const bal = total - adv;
+
+    doc.setFillColor(248, 250, 252);
+    doc.rect(calcX, y, splitColWidth, 24, "F");
+    doc.setDrawColor(226, 232, 240);
+    doc.setLineWidth(0.3);
+    doc.rect(calcX, y, splitColWidth, 24, "S");
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8);
+    doc.setTextColor(15, 23, 42);
+    doc.text("Total Agreed Amount:", calcX + 3, y + 5);
+    doc.text(formatINR(total), calcX + splitColWidth - 3, y + 5, { align: "right" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(6.5);
+    doc.setTextColor(100, 116, 139);
+    doc.text(inWords(total), calcX + 3, y + 8.5);
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(21, 128, 61);
+    doc.text(`Advance Paid (${$("paymentMode").value}):`, calcX + 3, y + 14);
+    doc.setFont("helvetica", "bold");
+    doc.text(formatINR(adv), calcX + splitColWidth - 3, y + 14, { align: "right" });
+
+    doc.setDrawColor(226, 232, 240);
+    doc.line(calcX, y + 17, calcX + splitColWidth, y + 17);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(185, 28, 28);
+    doc.text("Balance Pending:", calcX + 3, y + 21.5);
+    doc.text(formatINR(bal), calcX + splitColWidth - 3, y + 21.5, { align: "right" });
+
+    // Signatures
+    const signY = 265;
+    doc.setDrawColor(15, 23, 42);
+    doc.setLineWidth(0.4);
+    doc.line(margin + 6, signY, margin + 55, signY);
+    doc.line(pageWidth - margin - 55, signY, pageWidth - margin - 6, signY);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.setTextColor(15, 23, 42);
+    doc.text("CLIENT SIGNATURE", margin + 30.5, signY + 3.5, { align: "center" });
+    doc.text(`FOR ${($("companyName").value.trim() || DEFAULT_NAME).toUpperCase()}`, pageWidth - margin - 30.5, signY + 3.5, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(6.5);
+    doc.setTextColor(100, 116, 139);
+    doc.text($("clientName").value.trim() || "Customer Signature", margin + 30.5, signY + 6.5, { align: "center" });
+    doc.text("Authorized Signatory", pageWidth - margin - 30.5, signY + 6.5, { align: "center" });
+
+    return doc;
 }
 
 /* =========================================================
-   SHARE TRUE PDF DIRECTLY (WhatsApp / System Share Sheet)
+   SHARE VECTOR PDF DIRECTLY TO WHATSAPP
    ========================================================= */
-async function generateAndSharePDF(){
-    showToast("Generating PDF for WhatsApp...");
-    try {
-        const { blob, fileName } = await buildPDFBlob();
-        const pdfFile = new File([blob], fileName, { type: "application/pdf" });
+async function sharePDFToWhatsApp(){
+    showToast("Compiling official PDF...");
+    const doc = buildNativeVectorPDF();
+    const fileName = `Bill_${$("receiptNumber").value.trim() || "UP"}.pdf`;
+    const pdfBlob = doc.output("blob");
+    const pdfFile = new File([pdfBlob], fileName, { type: "application/pdf" });
 
-        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+    if(navigator.canShare && navigator.canShare({ files: [pdfFile] })){
+        try{
             await navigator.share({
                 files: [pdfFile],
-                title: `${$("companyName").value} Receipt`,
-                text: `Please find the event booking receipt (${fileName}) attached.`
+                title: `${$("companyName").value} Official Bill`,
+                text: `Official Event Booking Receipt (${fileName}) from ${$("companyName").value}.`
             });
             showToast("PDF shared successfully");
-        } else {
-            // If browser blocks direct file sharing, download PDF automatically
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = fileName;
-            link.click();
-            showToast("PDF downloaded! Attach file in WhatsApp.");
-        }
-    } catch (err) {
-        if (err.name !== "AbortError") {
-            showToast("Falling back to print PDF...");
-            window.print();
+            return;
+        }catch(e){
+            if(e.name === "AbortError") return;
         }
     }
+
+    // Direct download fallback if browser does not support file sharing
+    doc.save(fileName);
+    showToast("PDF downloaded! Attach it in WhatsApp.");
 }
 
-/* DOWNLOAD PDF DIRECTLY */
-async function printOrDownloadPDF(){
-    showToast("Preparing PDF...");
-    try {
-        const { pdf, fileName } = await buildPDFBlob();
-        pdf.save(fileName);
-        showToast("PDF downloaded successfully");
-    } catch (e) {
-        window.print();
-    }
+/* DOWNLOAD TRUE VECTOR PDF */
+function downloadVectorPDF(){
+    const doc = buildNativeVectorPDF();
+    const fileName = `Bill_${$("receiptNumber").value.trim() || "UP"}.pdf`;
+    doc.save(fileName);
+    showToast("PDF saved cleanly");
 }
 
 /* STORAGE */
@@ -1029,7 +1209,7 @@ function loadDraft(){
         FIELDS.forEach(k => { if(data[k] !== undefined && $(k)) $(k).value = data[k]; });
         $("serviceList").innerHTML = "";
         (data.services || []).forEach(s => addService(s.type, s.desc));
-        setLogo($("logoUrl").value);
+        preloadLogo($("logoUrl").value.trim() || DEFAULT_LOGO);
         renderReceipt();
         showToast("Draft loaded");
     }catch(e){ showToast("Failed to load draft"); }
@@ -1050,7 +1230,7 @@ function resetAll(){
     $("serviceList").innerHTML = "";
     addService("Stage & Mandap Decoration", "Theme finalized as discussed");
     addService("Lighting Setup", "Warm-white ambient setup");
-    setLogo(DEFAULT_LOGO);
+    preloadLogo(DEFAULT_LOGO);
     renderReceipt();
     showToast("Form reset");
 }
@@ -1063,7 +1243,7 @@ function init(){
     $("receiptNumber").value = `UP-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}-${String(Date.now()).slice(-4)}`;
     
     $("logoUrl").value = DEFAULT_LOGO;
-    setLogo(DEFAULT_LOGO);
+    preloadLogo(DEFAULT_LOGO);
 
     addService("Stage & Mandap Setup", "Fresh flower backdrop");
     addService("Ambient Lighting", "Full venue par-can and focus lights");
@@ -1076,7 +1256,7 @@ function init(){
         }
     });
 
-    $("logoUrl").addEventListener("input", (e) => setLogo(e.target.value.trim()));
+    $("logoUrl").addEventListener("change", (e) => preloadLogo(e.target.value.trim()));
     renderReceipt();
 }
 
