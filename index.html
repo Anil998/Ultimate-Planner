@@ -1280,6 +1280,19 @@ button{cursor:pointer}
         page-break-inside:avoid;
     }
 }
+
+@media (max-width: 700px){
+    .btn, .file-label, .add-service, .service-remove{
+        min-height:44px;
+    }
+    input, textarea, select, button{
+        touch-action:manipulation;
+    }
+    .receipt{
+        box-shadow:0 8px 30px rgba(15,23,42,.10);
+    }
+}
+
 </style>
 </head>
 
@@ -1347,12 +1360,12 @@ button{cursor:pointer}
 
                         <div class="logo-row">
                             <div>
-                                <input id="logoUrl" readonly aria-readonly="true" placeholder="Company logo is configured in the code">
+                                <input id="logoUrl" type="url" inputmode="url" autocomplete="url" placeholder="https://example.com/logo.png">
                                 <div class="file-control" style="margin-top:8px">
                                     <button class="btn btn-light" type="button" onclick="clearLogo()">Reload fixed logo</button>
                                 </div>
                                 <div class="help" style="margin-top:8px">
-                                    The company logo is fixed in the code. A permanent direct PNG/JPG/WebP URL is recommended for reliable GitHub Pages loading.
+                                    Paste a stable direct PNG/JPG/WebP logo URL in the field above, or leave it blank. Instagram/CDN profile-image URLs may expire.
                                 </div>
                             </div>
 
@@ -1486,12 +1499,12 @@ button{cursor:pointer}
                 <div class="form-grid three">
                     <div class="field">
                         <label>Final agreed amount (₹)</label>
-                        <input id="totalAmount" type="number" min="0" step="1" value="0" oninput="updateMoneySummary()">
+                        <input id="totalAmount" type="number" inputmode="decimal" min="0" step="1" value="0" oninput="updateMoneySummary()">
                     </div>
 
                     <div class="field">
                         <label>Advance received (₹)</label>
-                        <input id="advanceAmount" type="number" min="0" step="1" value="0" oninput="updateMoneySummary()">
+                        <input id="advanceAmount" type="number" inputmode="decimal" min="0" step="1" value="0" oninput="updateMoneySummary()">
                     </div>
 
                     <div class="field">
@@ -1857,7 +1870,7 @@ button{cursor:pointer}
 
 const $ = (id) => document.getElementById(id);
 
-const DEFAULT_LOGO_URL = "https://instagram.fccu4-3.fna.fbcdn.net/v/t51.82787-19/730004157_17956071813171342_3162059531330661234_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=instagram.fccu4-3.fna.fbcdn.net&_nc_cat=106&_nc_oc=Q6cZ2gE6QoPYSKQAh7U-Bh0-8RP9zEztx_aGPC1bGjh6xxwD99tfGsiH7dInjW7e5iohKLwPVLDCuWMZiBvN3-g-grPD&_nc_ohc=9o37-NTLgMsQ7kNvwFdPEbm&_nc_gid=Wq_zGOE5bJoOryGjss90vw&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_AQI1UQ1vlCqQsUTfHhYcViNweTbFWCGDdncfjLoi1mRUMA&oe=6AA76A9C&_nc_sid=7a9f4b";
+const DEFAULT_LOGO_URL = "";
 
 const fieldsToSave = [
     "companyName","companyTagline","companyPhone","companyEmail","companyAddress",
@@ -2004,7 +2017,7 @@ function clearLogo(){
     $("logoUrl").value = DEFAULT_LOGO_URL;
     setLogoPreview(DEFAULT_LOGO_URL);
     updateLogoOnReceipt(DEFAULT_LOGO_URL);
-    showToast("Fixed company logo restored");
+    showToast(DEFAULT_LOGO_URL ? "Default logo restored" : "Logo cleared");
 }
 
 function updateLogoOnReceipt(src){
@@ -2025,11 +2038,6 @@ function updateLogoOnReceipt(src){
     };
 }
 
-$("logoUrl").addEventListener("input", () => {
-    $("logoUrl").value = DEFAULT_LOGO_URL;
-    setLogoPreview(DEFAULT_LOGO_URL);
-    updateLogoOnReceipt(DEFAULT_LOGO_URL);
-});
 
 
 
@@ -2120,16 +2128,41 @@ function renderServices(){
 
 /* ---------------- PAYMENT ---------------- */
 
+
+function getNumericAmount(id){
+    const el = $(id);
+    if(!el) return 0;
+    const value = Number(el.value);
+    return Number.isFinite(value) && value >= 0 ? value : 0;
+}
+
+function normalizePaymentAmounts(){
+    const totalEl = $("totalAmount");
+    const advanceEl = $("advanceAmount");
+    if(!totalEl || !advanceEl) return {total:0, advance:0, balance:0};
+
+    let total = getNumericAmount("totalAmount");
+    let advance = getNumericAmount("advanceAmount");
+
+    // Advance can never exceed the final agreed amount.
+    if(advance > total){
+        advance = total;
+        advanceEl.value = String(total);
+    }
+
+    // Keep fields clean if the user pasted a negative/invalid value.
+    totalEl.value = String(total);
+    advanceEl.value = String(advance);
+
+    return {total, advance, balance: Math.max(total - advance, 0)};
+}
+
 function getBalance(){
-    const total = Number($("totalAmount").value) || 0;
-    const advance = Number($("advanceAmount").value) || 0;
-    return Math.max(total - advance, 0);
+    return normalizePaymentAmounts().balance;
 }
 
 function updateMoneySummary(){
-    const total = Number($("totalAmount").value) || 0;
-    const advance = Number($("advanceAmount").value) || 0;
-    const balance = Math.max(total - advance,0);
+    const {total, advance, balance} = normalizePaymentAmounts();
 
     $("sumTotal").textContent = formatINR(total);
     $("sumAdvance").textContent = formatINR(advance);
@@ -2163,7 +2196,14 @@ function generateReceipt(){
 
     const receiptNumber = $("receiptNumber").value.trim() || "Not assigned";
     const bookingDate = $("bookingDate").value;
-    const paymentStatus = $("paymentStatus").value;
+    let paymentStatus = $("paymentStatus").value;
+    if(total > 0 && advance >= total){
+        paymentStatus = "Fully Paid";
+    }else if(advance > 0 && advance < total){
+        if(paymentStatus === "Fully Paid") paymentStatus = "Partially Paid";
+    }else if(total > 0 && advance === 0 && paymentStatus === "Advance Received"){
+        paymentStatus = "Payment Pending";
+    }
 
     const clientName = $("clientName").value.trim() || "-";
     const clientPhone = $("clientPhone").value.trim() || "-";
@@ -2176,9 +2216,7 @@ function generateReceipt(){
     const venue = $("eventVenue").value.trim() || "-";
     const additional = $("eventAdditional").value.trim() || "-";
 
-    const total = Number($("totalAmount").value) || 0;
-    const advance = Number($("advanceAmount").value) || 0;
-    const balance = Math.max(total - advance,0);
+    const {total, advance, balance} = normalizePaymentAmounts();
     const paymentMode = $("paymentMode").value || "-";
 
     const special = $("specialRequirements").value.trim()
@@ -2307,11 +2345,14 @@ function applyFormData(data){
 
     if(data.logoData){
         localStorage.setItem("ultimatePlannerLogoData", data.logoData);
+        $("logoUrl").value = data.logoData;
         setLogoPreview(data.logoData);
         updateLogoOnReceipt(data.logoData);
-    }else if($("logoUrl").value.trim()){
-        setLogoPreview($("logoUrl").value.trim());
-        updateLogoOnReceipt($("logoUrl").value.trim());
+    }else{
+        localStorage.removeItem("ultimatePlannerLogoData");
+        const logo = $("logoUrl").value.trim();
+        setLogoPreview(logo);
+        updateLogoOnReceipt(logo);
     }
 
     updateMoneySummary();
@@ -2382,6 +2423,7 @@ function resetForm(){
     });
 
     localStorage.removeItem("ultimatePlannerLogoData");
+    $("logoUrl").value = DEFAULT_LOGO_URL;
     $("serviceList").innerHTML = "";
     addDefaultServices();
 
@@ -2441,7 +2483,9 @@ async function shareBill(){
         }
     }
 
-    const fallback = text + "\n\n" + url;
+    const fallback = url && !url.startsWith("file:")
+        ? text + "\n\n" + url
+        : text;
     try{
         await navigator.clipboard.writeText(fallback);
         showToast("Receipt details copied");
@@ -2450,10 +2494,23 @@ async function shareBill(){
     }
 }
 
+
+function ensureReceiptNumber(){
+    const el = $("receiptNumber");
+    if(!el || el.value.trim()) return;
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth()+1).padStart(2,"0");
+    const d = String(now.getDate()).padStart(2,"0");
+    const suffix = String(Date.now()).slice(-5);
+    el.value = `UP-${y}${m}${d}-${suffix}`;
+}
+
 /* ---------------- INIT ---------------- */
 
 function init(){
     setDefaultDates();
+    ensureReceiptNumber();
 
     if(!localStorage.getItem("ultimatePlannerDraft")){
         addDefaultServices();
