@@ -3,8 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#111827">
-<title>Ultimate Planner | Professional Event Billing</title>
+<meta name="theme-color" content="#0f172a">
+<title>Ultimate Planner | Event Invoice & Booking Receipt</title>
+
+<!-- html2canvas for compiling client-side receipt files for direct WhatsApp/App sharing -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 :root{
@@ -12,22 +15,20 @@
     --muted:#64748b;
     --line:#e2e8f0;
     --soft:#f8fafc;
-    --paper:#ffffff;
     --accent:#b45309;
-    --accent-gold:#d97706;
+    --gold:#d97706;
     --navy:#0f172a;
-    --green:#166534;
-    --red:#991b1b;
-    --radius:12px;
+    --green:#15803d;
+    --red:#b91c1c;
+    --radius:10px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
-body{
+html,body{
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     color:var(--ink);
     background:#f1f5f9;
     min-height:100vh;
-    padding-bottom:50px;
     -webkit-tap-highlight-color:transparent;
 }
 
@@ -37,110 +38,111 @@ button{cursor:pointer}
 .app-shell{
     max-width:1400px;
     margin:0 auto;
-    padding:14px;
+    padding:12px;
 }
 
 /* TOPBAR */
 .app-topbar{
-    background:#111827;
+    background:#0f172a;
     color:#fff;
-    border-radius:14px;
-    padding:14px 18px;
+    border-radius:12px;
+    padding:12px 16px;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:12px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.15);
+    gap:10px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.12);
     position:sticky;
-    top:10px;
+    top:8px;
     z-index:40;
 }
 
-.brand{display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px}
 .brand-mark{
-    width:40px;
-    height:40px;
-    border-radius:10px;
+    width:38px;
+    height:38px;
+    border-radius:8px;
     background:linear-gradient(135deg,#f59e0b,#b45309);
     display:grid;
     place-items:center;
     font-weight:900;
-    font-size:16px;
+    font-size:15px;
     color:#fff;
     overflow:hidden;
     flex-shrink:0;
 }
 .brand-mark img{width:100%;height:100%;object-fit:cover}
-.brand-copy h1{font-size:17px;font-weight:800;letter-spacing:-0.02em}
+.brand-copy h1{font-size:16px;font-weight:800;letter-spacing:-0.02em}
 .brand-copy p{font-size:11px;color:#94a3b8}
 
-.top-actions{display:flex;gap:8px;align-items:center}
+.top-actions{display:flex;gap:6px;align-items:center}
 .btn{
     border:0;
-    border-radius:8px;
-    padding:10px 14px;
+    border-radius:7px;
+    padding:9px 12px;
     font-weight:700;
     font-size:12px;
     transition:0.15s ease;
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:6px;
+    gap:5px;
     white-space:nowrap;
 }
 .btn:active{transform:scale(0.97)}
 .btn-dark{background:#fff;color:#0f172a}
 .btn-accent{background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff}
-.btn-green{background:#25D366;color:#fff}
+.btn-green{background:#16a34a;color:#fff}
+.btn-wa{background:#25D366;color:#fff}
 .btn-light{background:#f1f5f9;color:#334155;border:1px solid #cbd5e1}
 .btn-danger{background:#fee2e2;color:#991b1b}
 
-/* WORKSPACE LAYOUT */
+/* WORKSPACE */
 .workspace{
     display:grid;
-    grid-template-columns:460px minmax(0,1fr);
-    gap:20px;
-    margin-top:16px;
+    grid-template-columns:440px minmax(0,1fr);
+    gap:16px;
+    margin-top:14px;
     align-items:start;
 }
 
-.editor{display:flex;flex-direction:column;gap:14px}
+.editor{display:flex;flex-direction:column;gap:12px}
 .card{
     background:#ffffff;
     border:1px solid #e2e8f0;
     border-radius:var(--radius);
-    padding:16px;
-    box-shadow:0 4px 12px rgba(15,23,42,0.04);
+    padding:14px;
+    box-shadow:0 2px 6px rgba(15,23,42,0.03);
 }
 .card-head{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:12px;
+    margin-bottom:10px;
     border-bottom:1px solid #f1f5f9;
-    padding-bottom:8px;
+    padding-bottom:6px;
 }
-.card-title{font-size:14px;font-weight:800;color:#0f172a}
+.card-title{font-size:13px;font-weight:800;color:#0f172a}
 .section-num{
-    font-size:11px;
+    font-size:10px;
     font-weight:800;
     color:var(--accent);
     background:#fffbeb;
-    padding:2px 8px;
-    border-radius:6px;
+    padding:2px 6px;
+    border-radius:4px;
 }
 
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .full{grid-column:1/-1}
 
-.field{display:flex;flex-direction:column;gap:4px}
+.field{display:flex;flex-direction:column;gap:3px}
 .field label{font-size:10px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:0.04em}
 .field input,.field textarea,.field select{
     width:100%;
     border:1px solid #cbd5e1;
-    border-radius:8px;
-    padding:9px 11px;
-    font-size:13px;
+    border-radius:6px;
+    padding:8px 10px;
+    font-size:12px;
     color:#0f172a;
     background:#fff;
 }
@@ -149,75 +151,85 @@ button{cursor:pointer}
     border-color:#d97706;
     box-shadow:0 0 0 2px rgba(217,119,6,0.15);
 }
-.field textarea{min-height:70px;resize:vertical}
+.field textarea{min-height:54px;resize:vertical}
 
-.services-editor{display:flex;flex-direction:column;gap:8px}
+.services-editor{display:flex;flex-direction:column;gap:6px}
 .service-item{
     background:#f8fafc;
     border:1px solid #e2e8f0;
-    border-radius:8px;
-    padding:10px;
+    border-radius:6px;
+    padding:8px;
     display:grid;
-    grid-template-columns:140px 1fr 34px;
-    gap:8px;
+    grid-template-columns:130px 1fr 30px;
+    gap:6px;
     align-items:start;
 }
 .service-remove{
-    height:36px;
+    height:32px;
     border:1px solid #fecaca;
     background:#fff;
     color:#ef4444;
-    border-radius:6px;
+    border-radius:5px;
     font-weight:900;
-    font-size:16px;
+    font-size:15px;
 }
 
 /* MONEY SUMMARIES */
 .money-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
-    gap:8px;
-    margin-top:10px;
+    gap:6px;
+    margin-top:8px;
 }
 .money-cell{
     border:1px solid #e2e8f0;
-    padding:10px;
-    border-radius:8px;
+    padding:8px;
+    border-radius:6px;
     background:#f8fafc;
 }
-.money-cell span{font-size:10px;font-weight:700;color:#64748b;display:block}
-.money-cell strong{font-size:15px;font-weight:900;color:#0f172a;margin-top:3px;display:block}
+.money-cell span{font-size:9px;font-weight:800;color:#64748b;display:block}
+.money-cell strong{font-size:14px;font-weight:900;color:#0f172a;margin-top:2px;display:block}
 .money-cell.pending{background:#fef2f2;border-color:#fecaca}
 .money-cell.pending strong{color:#b91c1c}
 
 /* PREVIEW BOX */
-.preview-panel{position:sticky;top:84px}
+.preview-panel{position:sticky;top:74px}
 .preview-head{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:10px;
+    margin-bottom:8px;
     background:#fff;
-    padding:10px 14px;
-    border-radius:10px;
+    padding:8px 12px;
+    border-radius:8px;
     border:1px solid #e2e8f0;
 }
 
-/* BILL / INVOICE A4 DESIGN */
+/* =========================================================
+   A4 STRICT BILL SPECIFICATION (Forces Clean 1-Page Layout)
+   ========================================================= */
+.receipt-wrap{
+    display:flex;
+    justify-content:center;
+}
+
 .receipt{
     background:#ffffff;
     border:1px solid #cbd5e1;
-    border-radius:8px;
-    padding:32px 36px;
-    box-shadow:0 12px 30px rgba(0,0,0,0.06);
+    border-radius:6px;
+    padding:24px 28px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.05);
     color:#0f172a;
-    font-size:12px;
+    font-size:11px;
+    width:100%;
+    max-width:820px;
+    box-sizing:border-box;
 }
 
 .r-topline{
-    height:5px;
+    height:4px;
     background:linear-gradient(90deg,#0f172a 75%,#d97706 75%);
-    margin:-32px -36px 24px;
+    margin:-24px -28px 18px;
 }
 
 .r-header{
@@ -225,42 +237,43 @@ button{cursor:pointer}
     justify-content:space-between;
     align-items:flex-start;
     border-bottom:2px solid #0f172a;
-    padding-bottom:16px;
+    padding-bottom:12px;
 }
 
-.r-brand-info{display:flex;gap:14px;align-items:center}
+.r-brand-info{display:flex;gap:12px;align-items:center}
 .r-logo{
-    width:70px;
-    height:70px;
+    width:62px;
+    height:62px;
     object-fit:contain;
-    border-radius:8px;
+    border-radius:6px;
     border:1px solid #e2e8f0;
-    padding:4px;
+    padding:3px;
     background:#fff;
+    flex-shrink:0;
 }
 .r-logo.is-hidden{display:none}
-.r-brand-info h2{font-size:22px;font-weight:900;letter-spacing:-0.02em;color:#0f172a}
-.r-brand-info .tagline{font-size:11px;font-weight:600;color:#d97706;margin-top:2px}
-.r-brand-info .contact{font-size:10px;color:#475569;margin-top:4px;line-height:1.4}
+.r-brand-info h2{font-size:20px;font-weight:900;letter-spacing:-0.02em;color:#0f172a;line-height:1.1}
+.r-brand-info .tagline{font-size:10px;font-weight:700;color:#d97706;margin-top:2px}
+.r-brand-info .contact{font-size:9.5px;color:#475569;margin-top:3px;line-height:1.35}
 
 .r-meta{text-align:right}
 .r-meta .badge{
     display:inline-block;
     background:#0f172a;
     color:#fff;
-    padding:4px 10px;
-    font-size:10px;
+    padding:3px 8px;
+    font-size:9.5px;
     font-weight:800;
     border-radius:4px;
-    letter-spacing:0.06em;
+    letter-spacing:0.05em;
 }
-.r-meta-rows{margin-top:8px;font-size:11px;line-height:1.5}
+.r-meta-rows{margin-top:6px;font-size:10px;line-height:1.45}
 .r-status{
     display:inline-block;
-    margin-top:6px;
-    font-size:10px;
+    margin-top:4px;
+    font-size:9.5px;
     font-weight:800;
-    padding:2px 8px;
+    padding:2px 7px;
     border-radius:4px;
     background:#dcfce7;
     color:#15803d;
@@ -269,35 +282,35 @@ button{cursor:pointer}
 .r-status.warn{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
 .r-status.danger{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
 
-.r-section{margin-top:16px}
+.r-section{margin-top:12px}
 .r-title{
-    font-size:10px;
+    font-size:9.5px;
     font-weight:900;
     text-transform:uppercase;
     letter-spacing:0.06em;
     color:#64748b;
-    margin-bottom:6px;
+    margin-bottom:5px;
     border-bottom:1px solid #f1f5f9;
-    padding-bottom:3px;
+    padding-bottom:2px;
 }
 
-.r-box-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.r-card{border:1px solid #e2e8f0;border-radius:6px;padding:8px 10px;background:#f8fafc}
-.r-card strong{font-size:10px;color:#475569;display:block;margin-bottom:4px;text-transform:uppercase}
-.r-card .row{display:flex;justify-content:space-between;font-size:11px;margin-bottom:2px}
+.r-box-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.r-card{border:1px solid #e2e8f0;border-radius:5px;padding:6px 8px;background:#f8fafc}
+.r-card strong{font-size:9.5px;color:#475569;display:block;margin-bottom:3px;text-transform:uppercase}
+.r-card .row{display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px}
 .r-card .row span:first-child{color:#64748b}
 .r-card .row span:last-child{font-weight:700}
 
 .r-table{
     width:100%;
     border-collapse:collapse;
-    margin-top:6px;
+    margin-top:4px;
 }
 .r-table th{
     background:#0f172a;
     color:#fff;
-    padding:7px 10px;
-    font-size:10px;
+    padding:6px 8px;
+    font-size:9px;
     font-weight:800;
     text-align:left;
     text-transform:uppercase;
@@ -305,118 +318,133 @@ button{cursor:pointer}
 }
 .r-table td{
     border:1px solid #e2e8f0;
-    padding:7px 10px;
-    font-size:11px;
+    padding:5px 8px;
+    font-size:10px;
     vertical-align:top;
+    line-height:1.35;
 }
 .r-table tr:nth-child(even){background:#f8fafc}
 
-.r-split{display:grid;grid-template-columns:1.2fr 0.8fr;gap:12px;margin-top:16px;align-items:start}
-.r-calc-table{width:100%;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;border-collapse:collapse}
-.r-calc-table td{padding:7px 10px;font-size:11px;border-bottom:1px solid #f1f5f9}
+.r-split{display:grid;grid-template-columns:1.2fr 0.8fr;gap:10px;margin-top:12px;align-items:start}
+.r-calc-table{width:100%;border:1px solid #e2e8f0;border-radius:5px;overflow:hidden;border-collapse:collapse}
+.r-calc-table td{padding:5px 8px;font-size:10px;border-bottom:1px solid #f1f5f9}
 .r-calc-table tr.total{background:#f8fafc;font-weight:800}
 .r-calc-table tr.pending{color:#b91c1c;background:#fff5f5;font-weight:900}
-.r-words{font-size:9px;color:#64748b;font-style:italic}
+.r-words{font-size:8.5px;color:#64748b;font-style:italic;line-height:1.3}
 
-.r-instructions{border:1px dashed #cbd5e1;border-radius:6px;padding:8px;font-size:10px;color:#475569;line-height:1.4}
-.r-terms{font-size:9px;color:#64748b;padding-left:14px;line-height:1.4;margin-top:4px}
+.r-instructions{border:1px dashed #cbd5e1;border-radius:5px;padding:6px;font-size:9.5px;color:#475569;line-height:1.35}
+.r-terms{font-size:8.5px;color:#64748b;padding-left:14px;line-height:1.35;margin-top:3px}
 
 .r-signatures{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:40px;
-    margin-top:36px;
+    gap:30px;
+    margin-top:24px;
     text-align:center;
 }
-.r-sign-line{border-top:1px solid #0f172a;padding-top:4px;font-weight:800;font-size:10px}
-.r-sign-sub{font-size:9px;color:#64748b;margin-top:2px}
+.r-sign-line{border-top:1px solid #0f172a;padding-top:3px;font-weight:800;font-size:9.5px}
+.r-sign-sub{font-size:8.5px;color:#64748b;margin-top:1px}
 
 /* TOAST */
 .toast{
     position:fixed;
-    bottom:16px;
+    bottom:14px;
     left:50%;
     transform:translateX(-50%);
     background:#0f172a;
     color:#fff;
-    padding:8px 16px;
-    border-radius:8px;
-    font-size:12px;
+    padding:7px 14px;
+    border-radius:6px;
+    font-size:11px;
     font-weight:700;
     opacity:0;
     pointer-events:none;
     transition:0.2s;
     z-index:99;
 }
-.toast.show{opacity:1;bottom:24px}
+.toast.show{opacity:1;bottom:20px}
 
-/* MOBILE RESPONSIVE TWEAKS */
+/* MOBILE SCREEN DISPLAY */
 @media(max-width:960px){
     .workspace{grid-template-columns:1fr}
-    .preview-panel{position:static;margin-top:14px}
+    .preview-panel{position:static;margin-top:12px}
 }
 
 @media(max-width:600px){
-    .app-shell{padding:8px}
-    .app-topbar{flex-direction:column;align-items:stretch;gap:10px}
+    .app-shell{padding:6px}
+    .app-topbar{flex-direction:column;align-items:stretch;gap:8px}
     .top-actions{display:grid;grid-template-columns:repeat(3,1fr)}
-    .top-actions .btn{padding:8px 6px;font-size:11px}
+    .top-actions .btn{padding:7px 4px;font-size:10px}
     .form-grid{grid-template-columns:1fr}
-    .service-item{grid-template-columns:1fr 34px}
+    .service-item{grid-template-columns:1fr 30px}
     .service-item textarea{grid-column:1/-1}
-    .receipt{padding:18px 14px}
-    .r-topline{margin:-18px -14px 14px}
-    .r-header{flex-direction:column;gap:10px}
+    .receipt{padding:14px 12px}
+    .r-topline{margin:-14px -12px 10px}
+    .r-header{flex-direction:column;gap:8px}
     .r-meta{text-align:left}
     .r-box-grid,.r-split{grid-template-columns:1fr}
-    .r-signatures{gap:20px;margin-top:24px}
+    .r-signatures{gap:16px;margin-top:18px}
 }
 
-/* HIGH DEFINITION CLEAN PRINT / PDF SPEC */
+/* =========================================================
+   STRICT 1-PAGE ZERO-SPILL PRINT STYLESHEET (A4 STRICT)
+   ========================================================= */
 @media print{
-    html,body{
+    html, body{
         background:#ffffff !important;
-        color:#000 !important;
+        color:#000000 !important;
         padding:0 !important;
         margin:0 !important;
-        font-size:10.5pt !important;
+        width:100% !important;
+        height:auto !important;
+        min-height:unset !important;
+        font-size:9pt !important;
     }
-    * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
-    
-    /* Strict Hiding of UI Components */
-    .app-topbar, .editor, .preview-head, .toast, .add-service{
+    * { 
+        -webkit-print-color-adjust:exact !important; 
+        print-color-adjust:exact !important; 
+        box-shadow:none !important;
+        text-shadow:none !important;
+    }
+
+    /* Total wipeout of UI wrapper constraints */
+    .app-topbar, .editor, .preview-head, .toast, .add-service, button{
         display:none !important;
     }
 
     .app-shell, .workspace, .preview-panel, .receipt-wrap{
         display:block !important;
         width:100% !important;
+        max-width:100% !important;
         margin:0 !important;
         padding:0 !important;
     }
 
+    /* Force Table layout on print even if triggered from mobile browser */
     .receipt{
+        display:block !important;
         border:0 !important;
-        box-shadow:none !important;
         padding:0 !important;
+        margin:0 !important;
         width:100% !important;
         max-width:100% !important;
-        page-break-after:avoid;
+        page-break-inside:avoid !important;
+        break-inside:avoid !important;
     }
 
-    .r-topline{margin:0 0 16px 0 !important}
-
-    /* Force Table layout on print even if printed from mobile */
-    .r-box-grid{display:grid !important;grid-template-columns:1fr 1fr !important;gap:14px !important}
-    .r-split{display:grid !important;grid-template-columns:1.2fr 0.8fr !important;gap:14px !important}
+    .r-topline{margin:0 0 12px 0 !important}
+    .r-box-grid{display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px !important}
+    .r-split{display:grid !important;grid-template-columns:1.2fr 0.8fr !important;gap:10px !important}
     .r-table{width:100% !important;display:table !important}
     .r-table thead{display:table-header-group !important}
     .r-table tr{display:table-row !important}
     .r-table th,.r-table td{display:table-cell !important}
+    .r-signatures{margin-top:20px !important}
 
+    /* Explicit A4 Single Sheet Margins to kill trailing blank page */
     @page{
         size:A4 portrait;
-        margin:12mm 12mm 10mm 12mm;
+        margin:8mm 8mm 6mm 8mm;
     }
 }
 </style>
@@ -439,9 +467,9 @@ button{cursor:pointer}
         </div>
 
         <div class="top-actions">
-            <button class="btn btn-dark" type="button" onclick="scrollPreview()">Preview</button>
-            <button class="btn btn-green" type="button" onclick="sendWhatsApp()">💬 WhatsApp</button>
-            <button class="btn btn-accent" type="button" onclick="printBill()">Print / PDF</button>
+            <button class="btn btn-green" type="button" onclick="shareReceiptVisual()">📤 Share Bill</button>
+            <button class="btn btn-wa" type="button" onclick="sendWhatsAppText()">💬 WhatsApp</button>
+            <button class="btn btn-accent" type="button" onclick="printBill()">🖨️ PDF Bill</button>
         </div>
     </header>
 
@@ -474,7 +502,7 @@ button{cursor:pointer}
                     </div>
                     <div class="field full">
                         <label>Address</label>
-                        <textarea id="companyAddress" placeholder="Office / Venue Address"></textarea>
+                        <textarea id="companyAddress" placeholder="Office / Business address"></textarea>
                     </div>
                     <div class="field full">
                         <label>Logo Direct URL</label>
@@ -517,15 +545,15 @@ button{cursor:pointer}
                 <div class="form-grid">
                     <div class="field">
                         <label>Client Name</label>
-                        <input id="clientName" placeholder="Customer Name">
+                        <input id="clientName" placeholder="Full name">
                     </div>
                     <div class="field">
                         <label>Client Phone</label>
-                        <input id="clientPhone" type="tel" placeholder="+91 ...">
+                        <input id="clientPhone" type="tel" placeholder="+91 XXXXX XXXXX">
                     </div>
                     <div class="field full">
-                        <label>Client Address / City</label>
-                        <input id="clientAddress" placeholder="Location">
+                        <label>Client Location / Address</label>
+                        <input id="clientAddress" placeholder="Address">
                     </div>
                 </div>
             </div>
@@ -564,7 +592,7 @@ button{cursor:pointer}
                     <span class="section-num">05</span>
                 </div>
                 <div id="serviceList" class="services-editor"></div>
-                <button class="btn btn-light full" style="margin-top:10px;width:100%" type="button" onclick="addService()">＋ Add Service Item</button>
+                <button class="btn btn-light full" style="margin-top:8px;width:100%" type="button" onclick="addService()">＋ Add Service Item</button>
             </div>
 
             <div class="card">
@@ -610,23 +638,23 @@ button{cursor:pointer}
 
             <div class="card">
                 <div class="card-head">
-                    <span class="card-title">Special Requirements & Terms</span>
+                    <span class="card-title">Instructions & Terms</span>
                     <span class="section-num">07</span>
                 </div>
                 <div class="field">
                     <label>Specific Instructions</label>
-                    <textarea id="specialRequirements" placeholder="e.g. Fresh orchid flowers only, 7 PM ready."></textarea>
+                    <textarea id="specialRequirements" placeholder="e.g. Fresh orchid flowers only, stage clearance at 7 PM."></textarea>
                 </div>
-                <div class="field" style="margin-top:8px">
+                <div class="field" style="margin-top:6px">
                     <label>Terms & Conditions</label>
-                    <textarea id="terms" style="min-height:100px">1. Advance amount is non-refundable upon confirmation.
-2. Balance payment must be cleared on or before the event date.
-3. Extra requirements requested on-site will be billed additionally.
-4. Physical damages to decor/lighting equipment by guests are chargeable.</textarea>
+                    <textarea id="terms" style="min-height:80px">1. Advance payment confirms event date & equipment allocation.
+2. The balance amount shall be cleared on or before the event date.
+3. Extra requirements requested on-site attract additional charges.
+4. Client shall be responsible for venue permissions and safe access.</textarea>
                 </div>
             </div>
 
-            <div style="display:flex;gap:8px">
+            <div style="display:flex;gap:6px">
                 <button class="btn btn-dark" style="flex:1" type="button" onclick="saveDraft()">Save Draft</button>
                 <button class="btn btn-light" style="flex:1" type="button" onclick="loadDraft()">Load Draft</button>
                 <button class="btn btn-danger" type="button" onclick="resetAll()">Reset</button>
@@ -637,10 +665,10 @@ button{cursor:pointer}
         <!-- ================= PREVIEW PANEL ================= -->
         <section class="preview-panel">
             <div class="preview-head">
-                <strong style="font-size:12px;color:#475569">LIVE RECEIPT PREVIEW</strong>
-                <div style="display:flex;gap:6px">
-                    <button class="btn btn-green" type="button" onclick="sendWhatsApp()">WhatsApp</button>
-                    <button class="btn btn-accent" type="button" onclick="printBill()">Print / PDF</button>
+                <strong style="font-size:11px;color:#475569">LIVE BILL PREVIEW</strong>
+                <div style="display:flex;gap:5px">
+                    <button class="btn btn-green" type="button" onclick="shareReceiptVisual()">📤 Share</button>
+                    <button class="btn btn-accent" type="button" onclick="printBill()">🖨️ PDF</button>
                 </div>
             </div>
 
@@ -663,7 +691,7 @@ button{cursor:pointer}
                         </div>
 
                         <div class="r-meta">
-                            <div class="badge">BOOKING CONFIRMATION</div>
+                            <div class="badge">BOOKING RECEIPT</div>
                             <div class="r-meta-rows">
                                 <div><strong>Receipt:</strong> <span id="rReceiptNo">-</span></div>
                                 <div><strong>Date:</strong> <span id="rBookingDate">-</span></div>
@@ -677,11 +705,11 @@ button{cursor:pointer}
                             <div class="r-card">
                                 <strong>Client Details</strong>
                                 <div class="row"><span>Name:</span><span id="rClientName">-</span></div>
-                                <div class="row"><span>Contact:</span><span id="rClientPhone">-</span></div>
+                                <div class="row"><span>Phone:</span><span id="rClientPhone">-</span></div>
                                 <div class="row"><span>Location:</span><span id="rClientAddress">-</span></div>
                             </div>
                             <div class="r-card">
-                                <strong>Event Details</strong>
+                                <strong>Event Schedule</strong>
                                 <div class="row"><span>Event:</span><span id="rEventType">-</span></div>
                                 <div class="row"><span>Function Date:</span><span id="rFunctionDate">-</span></div>
                                 <div class="row"><span>Venue:</span><span id="rVenue">-</span></div>
@@ -690,17 +718,17 @@ button{cursor:pointer}
                     </section>
 
                     <section class="r-section">
-                        <div class="r-title">Booked Services & Scope</div>
+                        <div class="r-title">Booked Services & Requirement Scope</div>
                         <table class="r-table">
                             <thead>
                                 <tr>
-                                    <th style="width:36px">#</th>
-                                    <th style="width:160px">Service Item</th>
-                                    <th>Specifications & Scope</th>
+                                    <th style="width:32px">#</th>
+                                    <th style="width:150px">Service Item</th>
+                                    <th>Finalized Requirement / Scope</th>
                                 </tr>
                             </thead>
                             <tbody id="rServicesBody">
-                                <tr><td colspan="3" style="text-align:center;color:#94a3b8">No services entered.</td></tr>
+                                <tr><td colspan="3" style="text-align:center;color:#94a3b8">No services listed yet.</td></tr>
                             </tbody>
                         </table>
                     </section>
@@ -708,9 +736,9 @@ button{cursor:pointer}
                     <section class="r-split">
                         <div>
                             <div class="r-title">Special Instructions</div>
-                            <div class="r-instructions" id="rSpecialReq">None specified.</div>
+                            <div class="r-instructions" id="rSpecialReq">None recorded.</div>
 
-                            <div class="r-title" style="margin-top:10px">Terms & Conditions</div>
+                            <div class="r-title" style="margin-top:8px">Terms & Conditions</div>
                             <ol class="r-terms" id="rTermsList"></ol>
                         </div>
 
@@ -739,7 +767,7 @@ button{cursor:pointer}
                     <section class="r-signatures">
                         <div>
                             <div class="r-sign-line">CLIENT SIGNATURE</div>
-                            <div class="r-sign-sub" id="rSignClient">Authorized Signatory</div>
+                            <div class="r-sign-sub" id="rSignClient">Customer Signature</div>
                         </div>
                         <div>
                             <div class="r-sign-line" id="rSignCompanyTitle">FOR ULTIMATE PLANNER</div>
@@ -790,7 +818,7 @@ function formatDate(val){
     return Number.isNaN(d.getTime()) ? "-" : d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
 }
 
-/* NUMBERS TO WORDS (INDIAN NUMBERING SYSTEM) */
+/* NUMBERS TO INDIAN WORDS */
 function inWords(num){
     const a = ['','One ','Two ','Three ','Four ', 'Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
     const b = ['', '', 'Twenty','Thirty','Forty','Fifty', 'Sixty','Seventy','Eighty','Ninety'];
@@ -827,13 +855,13 @@ function setLogo(url){
     topImg.onerror = () => { topImg.style.display = "none"; fallback.style.display = "block"; };
 }
 
-/* SERVICE ITEMS */
+/* SERVICES ENGINE */
 function addService(type = "", desc = ""){
     const item = document.createElement("div");
     item.className = "service-item";
     item.innerHTML = `
-        <input class="sType" placeholder="Service (e.g. Mandap)" value="${type}">
-        <textarea class="sDesc" placeholder="Dimensions, color, flower type...">${desc}</textarea>
+        <input class="sType" placeholder="Service (e.g. Stage)" value="${type}">
+        <textarea class="sDesc" placeholder="Dimensions, color, theme...">${desc}</textarea>
         <button class="service-remove" type="button" onclick="this.parentElement.remove(); renderReceipt();">×</button>
     `;
     $("serviceList").appendChild(item);
@@ -848,7 +876,7 @@ function getServices(){
     })).filter(s => s.type || s.desc);
 }
 
-/* RENDER BILL ENGINE */
+/* RENDER BILL */
 function renderReceipt(){
     const name = $("companyName").value.trim() || DEFAULT_NAME;
     $("rCompanyName").textContent = name;
@@ -860,7 +888,7 @@ function renderReceipt(){
     $("rEmail").textContent = $("companyEmail").value.trim() || "-";
     $("rAddress").textContent = $("companyAddress").value.trim() || "-";
 
-    $("rReceiptNo").textContent = $("receiptNumber").value.trim() || "-";
+    $("rReceiptNo").textContent = $("receiptNumber").value.trim() || "DRAFT";
     $("rBookingDate").textContent = formatDate($("bookingDate").value);
 
     const st = $("paymentStatus").value;
@@ -871,18 +899,18 @@ function renderReceipt(){
     $("rClientName").textContent = $("clientName").value.trim() || "-";
     $("rClientPhone").textContent = $("clientPhone").value.trim() || "-";
     $("rClientAddress").textContent = $("clientAddress").value.trim() || "-";
-    $("rSignClient").textContent = $("clientName").value.trim() || "Client Signature";
+    $("rSignClient").textContent = $("clientName").value.trim() || "Customer Signature";
 
     $("rEventType").textContent = $("eventType").value;
     $("rFunctionDate").textContent = formatDate($("functionDate").value);
     $("rVenue").textContent = $("eventVenue").value.trim() || "-";
 
-    // Services Table
+    // Services
     const svcs = getServices();
     const tbody = $("rServicesBody");
     tbody.innerHTML = "";
     if(!svcs.length){
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#94a3b8">No items listed.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#94a3b8">No services entered.</td></tr>`;
     }else{
         svcs.forEach((s, idx) => {
             const tr = document.createElement("tr");
@@ -891,7 +919,7 @@ function renderReceipt(){
         });
     }
 
-    // Money Calculation
+    // Calculations
     let total = Math.max(0, Number($("totalAmount").value) || 0);
     let adv = Math.max(0, Number($("advanceAmount").value) || 0);
     if(adv > total) adv = total;
@@ -907,7 +935,7 @@ function renderReceipt(){
     $("rPayMode").textContent = $("paymentMode").value;
     $("rTotalWords").textContent = total > 0 ? inWords(total) : "Rupees Zero Only";
 
-    $("rSpecialReq").textContent = $("specialRequirements").value.trim() || "None specified.";
+    $("rSpecialReq").textContent = $("specialRequirements").value.trim() || "None recorded.";
 
     // Terms
     const tList = $("rTermsList");
@@ -919,20 +947,78 @@ function renderReceipt(){
     });
 }
 
-function scrollPreview(){
-    renderReceipt();
-    document.querySelector(".preview-panel").scrollIntoView({behavior:"smooth"});
-}
-
+/* =========================================================
+   CLEAN 1-PAGE A4 PRINT/PDF TRIGGER
+   ========================================================= */
 function printBill(){
     renderReceipt();
-    setTimeout(() => window.print(), 100);
+    // Brief timeout ensures render cycle finishes before print dialog locks thread
+    setTimeout(() => {
+        window.print();
+    }, 120);
 }
 
-/* SMART MOBILE SHARING (DIRECT WHATSAPP & CLIPBOARD) */
-function generateShareText(){
+/* =========================================================
+   DIRECT BILL COMPILER (Sends actual file to WhatsApp / Apps)
+   ========================================================= */
+async function shareReceiptVisual(){
+    renderReceipt();
+    showToast("Generating receipt visual...");
+    
+    const receiptElement = $("receipt");
+    
+    try {
+        const canvas = await html2canvas(receiptElement, {
+            scale: 2, // High resolution output
+            useCORS: true,
+            backgroundColor: "#ffffff",
+            logging: false
+        });
+
+        canvas.toBlob(async (blob) => {
+            if (!blob) {
+                sendWhatsAppText();
+                return;
+            }
+
+            const fileName = `Receipt_${$("receiptNumber").value.trim() || "Booking"}.png`;
+            const file = new File([blob], fileName, { type: "image/png" });
+
+            // Trigger system share with the actual rendered receipt file
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: `Receipt - ${$("companyName").value}`,
+                        text: `Booking receipt for ${$("clientName").value || "Client"}.`
+                    });
+                    showToast("Receipt sent successfully");
+                    return;
+                } catch (err) {
+                    if (err.name !== "AbortError") sendWhatsAppText();
+                }
+            } else {
+                // Fallback: Download file directly on devices not supporting file web sharing
+                const link = document.createElement("a");
+                link.download = fileName;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                showToast("Receipt saved. Sending WhatsApp summary...");
+                setTimeout(sendWhatsAppText, 1000);
+            }
+        }, "image/png");
+
+    } catch (e) {
+        console.error(e);
+        sendWhatsAppText();
+    }
+}
+
+/* DIRECT WHATSAPP TEXT FALLBACK */
+function sendWhatsAppText(){
+    renderReceipt();
     const name = $("companyName").value.trim() || DEFAULT_NAME;
-    const rc = $("receiptNumber").value.trim() || "N/A";
+    const rc = $("receiptNumber").value.trim() || "DRAFT";
     const cl = $("clientName").value.trim() || "Customer";
     const dt = formatDate($("functionDate").value);
     const vn = $("eventVenue").value.trim() || "Venue to be decided";
@@ -940,26 +1026,24 @@ function generateShareText(){
     const adv = formatINR($("advanceAmount").value);
     const bal = formatINR(Math.max(0, Number($("totalAmount").value) - Number($("advanceAmount").value)));
 
-    return `*BOOKING RECEIPT - ${name.toUpperCase()}*\n` +
-           `--------------------------------\n` +
-           `📄 *Receipt No:* ${rc}\n` +
-           `👤 *Client Name:* ${cl}\n` +
-           `🎉 *Event:* ${$("eventType").value}\n` +
-           `📅 *Date:* ${dt}\n` +
-           `📍 *Venue:* ${vn}\n` +
-           `--------------------------------\n` +
-           `💰 *Total Agreed:* ${tot}\n` +
-           `✅ *Advance Paid:* ${adv}\n` +
-           `⚠️ *Balance Pending:* ${bal}\n` +
-           `--------------------------------\n` +
-           `_Thank you for choosing ${name}!_`;
-}
+    const text = 
+`*BOOKING CONFIRMATION & RECEIPT*
+*${name.toUpperCase()}*
+--------------------------------
+📄 *Receipt No:* ${rc}
+👤 *Client Name:* ${cl}
+🎉 *Event:* ${$("eventType").value}
+📅 *Event Date:* ${dt}
+📍 *Venue:* ${vn}
+--------------------------------
+💰 *Agreed Amount:* ${tot}
+✅ *Advance Received:* ${adv}
+⚠️ *Balance Pending:* ${bal}
+--------------------------------
+_Thank you for choosing ${name}!_`;
 
-function sendWhatsApp(){
-    renderReceipt();
     const phone = ($("clientPhone").value || "").replace(/\D/g, "");
-    const msg = encodeURIComponent(generateShareText());
-    const waUrl = phone.length >= 10 ? `https://wa.me/${phone}?text=${msg}` : `https://wa.me/?text=${msg}`;
+    const waUrl = phone.length >= 10 ? `https://wa.me/${phone}?text=${encodeURIComponent(text)}` : `https://wa.me/?text=${encodeURIComponent(text)}`;
     window.open(waUrl, "_blank");
 }
 
@@ -969,7 +1053,7 @@ function saveDraft(){
     FIELDS.forEach(k => { if($(k)) data[k] = $(k).value; });
     data.services = getServices();
     localStorage.setItem("up_bill_data", JSON.stringify(data));
-    showToast("Draft saved on device");
+    showToast("Draft saved locally");
 }
 
 function loadDraft(){
@@ -1000,7 +1084,7 @@ function resetAll(){
     });
     $("serviceList").innerHTML = "";
     addService("Stage & Mandap Decoration", "Theme finalized as discussed");
-    addService("Lighting Setup", "Warm-white ambient lighting");
+    addService("Lighting Setup", "Warm-white ambient setup");
     setLogo(DEFAULT_LOGO);
     renderReceipt();
     showToast("Form reset");
@@ -1016,7 +1100,7 @@ function init(){
     $("logoUrl").value = DEFAULT_LOGO;
     setLogo(DEFAULT_LOGO);
 
-    addService("Stage & Mandap Setup", "Fresh flowers and backdrop");
+    addService("Stage & Mandap Setup", "Fresh flower backdrop");
     addService("Ambient Lighting", "Full venue par-can and focus lights");
 
     FIELDS.forEach(id => {
