@@ -6,8 +6,9 @@
 <meta name="theme-color" content="#0f172a">
 <title>Ultimate Planner | Event Invoice & Booking Receipt</title>
 
-<!-- html2canvas for compiling client-side receipt files for direct WhatsApp/App sharing -->
+<!-- Client-Side Real PDF Engine -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <style>
 :root{
@@ -17,7 +18,6 @@
     --soft:#f8fafc;
     --accent:#b45309;
     --gold:#d97706;
-    --navy:#0f172a;
     --green:#15803d;
     --red:#b91c1c;
     --radius:10px;
@@ -36,7 +36,7 @@ input,textarea,select,button{font:inherit}
 button{cursor:pointer}
 
 .app-shell{
-    max-width:1400px;
+    max-width:1440px;
     margin:0 auto;
     padding:12px;
 }
@@ -79,28 +79,27 @@ button{cursor:pointer}
 .btn{
     border:0;
     border-radius:7px;
-    padding:9px 12px;
+    padding:9px 13px;
     font-weight:700;
     font-size:12px;
     transition:0.15s ease;
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    gap:5px;
+    gap:6px;
     white-space:nowrap;
 }
 .btn:active{transform:scale(0.97)}
 .btn-dark{background:#fff;color:#0f172a}
 .btn-accent{background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff}
 .btn-green{background:#16a34a;color:#fff}
-.btn-wa{background:#25D366;color:#fff}
 .btn-light{background:#f1f5f9;color:#334155;border:1px solid #cbd5e1}
 .btn-danger{background:#fee2e2;color:#991b1b}
 
 /* WORKSPACE */
 .workspace{
     display:grid;
-    grid-template-columns:440px minmax(0,1fr);
+    grid-template-columns:430px minmax(0,1fr);
     gap:16px;
     margin-top:14px;
     align-items:start;
@@ -151,7 +150,7 @@ button{cursor:pointer}
     border-color:#d97706;
     box-shadow:0 0 0 2px rgba(217,119,6,0.15);
 }
-.field textarea{min-height:54px;resize:vertical}
+.field textarea{min-height:52px;resize:vertical}
 
 .services-editor{display:flex;flex-direction:column;gap:6px}
 .service-item{
@@ -160,7 +159,7 @@ button{cursor:pointer}
     border-radius:6px;
     padding:8px;
     display:grid;
-    grid-template-columns:130px 1fr 30px;
+    grid-template-columns:125px 1fr 30px;
     gap:6px;
     align-items:start;
 }
@@ -206,7 +205,7 @@ button{cursor:pointer}
 }
 
 /* =========================================================
-   A4 STRICT BILL SPECIFICATION (Forces Clean 1-Page Layout)
+   STRICT SINGLE PAGE INVOICE CANVAS (A4 PROPORTION)
    ========================================================= */
 .receipt-wrap{
     display:flex;
@@ -218,18 +217,18 @@ button{cursor:pointer}
     border:1px solid #cbd5e1;
     border-radius:6px;
     padding:24px 28px;
-    box-shadow:0 6px 20px rgba(0,0,0,0.05);
+    box-shadow:0 6px 20px rgba(0,0,0,0.06);
     color:#0f172a;
     font-size:11px;
     width:100%;
-    max-width:820px;
+    max-width:800px;
     box-sizing:border-box;
 }
 
 .r-topline{
     height:4px;
-    background:linear-gradient(90deg,#0f172a 75%,#d97706 75%);
-    margin:-24px -28px 18px;
+    background:linear-gradient(90deg,#0f172a 72%,#d97706 72%);
+    margin:-24px -28px 16px;
 }
 
 .r-header{
@@ -242,12 +241,12 @@ button{cursor:pointer}
 
 .r-brand-info{display:flex;gap:12px;align-items:center}
 .r-logo{
-    width:62px;
-    height:62px;
+    width:64px;
+    height:64px;
     object-fit:contain;
     border-radius:6px;
     border:1px solid #e2e8f0;
-    padding:3px;
+    padding:2px;
     background:#fff;
     flex-shrink:0;
 }
@@ -267,13 +266,13 @@ button{cursor:pointer}
     border-radius:4px;
     letter-spacing:0.05em;
 }
-.r-meta-rows{margin-top:6px;font-size:10px;line-height:1.45}
+.r-meta-rows{margin-top:5px;font-size:10px;line-height:1.4}
 .r-status{
     display:inline-block;
     margin-top:4px;
-    font-size:9.5px;
+    font-size:9px;
     font-weight:800;
-    padding:2px 7px;
+    padding:2px 6px;
     border-radius:4px;
     background:#dcfce7;
     color:#15803d;
@@ -282,14 +281,14 @@ button{cursor:pointer}
 .r-status.warn{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
 .r-status.danger{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
 
-.r-section{margin-top:12px}
+.r-section{margin-top:10px}
 .r-title{
     font-size:9.5px;
     font-weight:900;
     text-transform:uppercase;
     letter-spacing:0.06em;
     color:#64748b;
-    margin-bottom:5px;
+    margin-bottom:4px;
     border-bottom:1px solid #f1f5f9;
     padding-bottom:2px;
 }
@@ -309,7 +308,7 @@ button{cursor:pointer}
 .r-table th{
     background:#0f172a;
     color:#fff;
-    padding:6px 8px;
+    padding:5px 8px;
     font-size:9px;
     font-weight:800;
     text-align:left;
@@ -325,7 +324,7 @@ button{cursor:pointer}
 }
 .r-table tr:nth-child(even){background:#f8fafc}
 
-.r-split{display:grid;grid-template-columns:1.2fr 0.8fr;gap:10px;margin-top:12px;align-items:start}
+.r-split{display:grid;grid-template-columns:1.2fr 0.8fr;gap:10px;margin-top:10px;align-items:start}
 .r-calc-table{width:100%;border:1px solid #e2e8f0;border-radius:5px;overflow:hidden;border-collapse:collapse}
 .r-calc-table td{padding:5px 8px;font-size:10px;border-bottom:1px solid #f1f5f9}
 .r-calc-table tr.total{background:#f8fafc;font-weight:800}
@@ -339,13 +338,13 @@ button{cursor:pointer}
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:30px;
-    margin-top:24px;
+    margin-top:20px;
     text-align:center;
 }
 .r-sign-line{border-top:1px solid #0f172a;padding-top:3px;font-weight:800;font-size:9.5px}
 .r-sign-sub{font-size:8.5px;color:#64748b;margin-top:1px}
 
-/* TOAST */
+/* TOAST NOTIFICATION */
 .toast{
     position:fixed;
     bottom:14px;
@@ -364,7 +363,7 @@ button{cursor:pointer}
 }
 .toast.show{opacity:1;bottom:20px}
 
-/* MOBILE SCREEN DISPLAY */
+/* MOBILE SCREEN STYLING */
 @media(max-width:960px){
     .workspace{grid-template-columns:1fr}
     .preview-panel{position:static;margin-top:12px}
@@ -373,8 +372,8 @@ button{cursor:pointer}
 @media(max-width:600px){
     .app-shell{padding:6px}
     .app-topbar{flex-direction:column;align-items:stretch;gap:8px}
-    .top-actions{display:grid;grid-template-columns:repeat(3,1fr)}
-    .top-actions .btn{padding:7px 4px;font-size:10px}
+    .top-actions{display:grid;grid-template-columns:repeat(2,1fr)}
+    .top-actions .btn{padding:8px 4px;font-size:11px}
     .form-grid{grid-template-columns:1fr}
     .service-item{grid-template-columns:1fr 30px}
     .service-item textarea{grid-column:1/-1}
@@ -383,11 +382,11 @@ button{cursor:pointer}
     .r-header{flex-direction:column;gap:8px}
     .r-meta{text-align:left}
     .r-box-grid,.r-split{grid-template-columns:1fr}
-    .r-signatures{gap:16px;margin-top:18px}
+    .r-signatures{gap:16px;margin-top:16px}
 }
 
 /* =========================================================
-   STRICT 1-PAGE ZERO-SPILL PRINT STYLESHEET (A4 STRICT)
+   STRICT PRINT STYLESHEET (NO EXTRA BLANK PAGE)
    ========================================================= */
 @media print{
     html, body{
@@ -404,44 +403,33 @@ button{cursor:pointer}
         -webkit-print-color-adjust:exact !important; 
         print-color-adjust:exact !important; 
         box-shadow:none !important;
-        text-shadow:none !important;
     }
-
-    /* Total wipeout of UI wrapper constraints */
-    .app-topbar, .editor, .preview-head, .toast, .add-service, button{
+    .app-topbar, .editor, .preview-head, .toast, button{
         display:none !important;
     }
-
     .app-shell, .workspace, .preview-panel, .receipt-wrap{
         display:block !important;
         width:100% !important;
-        max-width:100% !important;
         margin:0 !important;
         padding:0 !important;
     }
-
-    /* Force Table layout on print even if triggered from mobile browser */
     .receipt{
         display:block !important;
         border:0 !important;
         padding:0 !important;
         margin:0 !important;
         width:100% !important;
-        max-width:100% !important;
         page-break-inside:avoid !important;
         break-inside:avoid !important;
     }
-
-    .r-topline{margin:0 0 12px 0 !important}
+    .r-topline{margin:0 0 10px 0 !important}
     .r-box-grid{display:grid !important;grid-template-columns:1fr 1fr !important;gap:10px !important}
     .r-split{display:grid !important;grid-template-columns:1.2fr 0.8fr !important;gap:10px !important}
-    .r-table{width:100% !important;display:table !important}
+    .r-table{display:table !important}
     .r-table thead{display:table-header-group !important}
     .r-table tr{display:table-row !important}
     .r-table th,.r-table td{display:table-cell !important}
-    .r-signatures{margin-top:20px !important}
 
-    /* Explicit A4 Single Sheet Margins to kill trailing blank page */
     @page{
         size:A4 portrait;
         margin:8mm 8mm 6mm 8mm;
@@ -467,15 +455,14 @@ button{cursor:pointer}
         </div>
 
         <div class="top-actions">
-            <button class="btn btn-green" type="button" onclick="shareReceiptVisual()">📤 Share Bill</button>
-            <button class="btn btn-wa" type="button" onclick="sendWhatsAppText()">💬 WhatsApp</button>
-            <button class="btn btn-accent" type="button" onclick="printBill()">🖨️ PDF Bill</button>
+            <button class="btn btn-green" type="button" onclick="generateAndSharePDF()">📤 Share PDF to WhatsApp</button>
+            <button class="btn btn-accent" type="button" onclick="printOrDownloadPDF()">📄 Download PDF</button>
         </div>
     </header>
 
     <main class="workspace">
 
-        <!-- ================= EDITOR ================= -->
+        <!-- ================= FORM EDITOR ================= -->
         <section class="editor" id="editor">
 
             <div class="card">
@@ -502,7 +489,7 @@ button{cursor:pointer}
                     </div>
                     <div class="field full">
                         <label>Address</label>
-                        <textarea id="companyAddress" placeholder="Office / Business address"></textarea>
+                        <textarea id="companyAddress" placeholder="Business address / City"></textarea>
                     </div>
                     <div class="field full">
                         <label>Logo Direct URL</label>
@@ -553,7 +540,7 @@ button{cursor:pointer}
                     </div>
                     <div class="field full">
                         <label>Client Location / Address</label>
-                        <input id="clientAddress" placeholder="Address">
+                        <input id="clientAddress" placeholder="Address / Location">
                     </div>
                 </div>
             </div>
@@ -588,7 +575,7 @@ button{cursor:pointer}
 
             <div class="card">
                 <div class="card-head">
-                    <span class="card-title">Services & Scope</span>
+                    <span class="card-title">Services & Requirements</span>
                     <span class="section-num">05</span>
                 </div>
                 <div id="serviceList" class="services-editor"></div>
@@ -643,14 +630,14 @@ button{cursor:pointer}
                 </div>
                 <div class="field">
                     <label>Specific Instructions</label>
-                    <textarea id="specialRequirements" placeholder="e.g. Fresh orchid flowers only, stage clearance at 7 PM."></textarea>
+                    <textarea id="specialRequirements" placeholder="e.g. Fresh flower decor only, complete clearance by 7 PM."></textarea>
                 </div>
                 <div class="field" style="margin-top:6px">
                     <label>Terms & Conditions</label>
-                    <textarea id="terms" style="min-height:80px">1. Advance payment confirms event date & equipment allocation.
-2. The balance amount shall be cleared on or before the event date.
-3. Extra requirements requested on-site attract additional charges.
-4. Client shall be responsible for venue permissions and safe access.</textarea>
+                    <textarea id="terms" style="min-height:80px">1. Advance payment confirms event date & equipment booking.
+2. The balance amount shall be paid before or on the event date.
+3. Extra services requested on-site attract additional charges.
+4. Client is responsible for venue permissions and safe access.</textarea>
                 </div>
             </div>
 
@@ -667,8 +654,8 @@ button{cursor:pointer}
             <div class="preview-head">
                 <strong style="font-size:11px;color:#475569">LIVE BILL PREVIEW</strong>
                 <div style="display:flex;gap:5px">
-                    <button class="btn btn-green" type="button" onclick="shareReceiptVisual()">📤 Share</button>
-                    <button class="btn btn-accent" type="button" onclick="printBill()">🖨️ PDF</button>
+                    <button class="btn btn-green" type="button" onclick="generateAndSharePDF()">📤 WhatsApp PDF</button>
+                    <button class="btn btn-accent" type="button" onclick="printOrDownloadPDF()">📄 PDF</button>
                 </div>
             </div>
 
@@ -678,7 +665,7 @@ button{cursor:pointer}
 
                     <header class="r-header">
                         <div class="r-brand-info">
-                            <img id="rLogo" class="r-logo is-hidden" alt="Logo">
+                            <img id="rLogo" class="r-logo is-hidden" alt="Logo" crossorigin="anonymous">
                             <div>
                                 <h2 id="rCompanyName">Ultimate Planner</h2>
                                 <div class="tagline" id="rTagline">Event Planning • Decoration • Management</div>
@@ -709,7 +696,7 @@ button{cursor:pointer}
                                 <div class="row"><span>Location:</span><span id="rClientAddress">-</span></div>
                             </div>
                             <div class="r-card">
-                                <strong>Event Schedule</strong>
+                                <strong>Event Logistics</strong>
                                 <div class="row"><span>Event:</span><span id="rEventType">-</span></div>
                                 <div class="row"><span>Function Date:</span><span id="rFunctionDate">-</span></div>
                                 <div class="row"><span>Venue:</span><span id="rVenue">-</span></div>
@@ -805,7 +792,7 @@ function showToast(msg){
     t.textContent = msg;
     t.classList.add("show");
     clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(() => t.classList.remove("show"), 1800);
+    showToast.timer = setTimeout(() => t.classList.remove("show"), 2000);
 }
 
 function formatINR(val){
@@ -818,7 +805,7 @@ function formatDate(val){
     return Number.isNaN(d.getTime()) ? "-" : d.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
 }
 
-/* NUMBERS TO INDIAN WORDS */
+/* NUMBERS TO WORDS (INDIAN RUPEES) */
 function inWords(num){
     const a = ['','One ','Two ','Three ','Four ', 'Five ','Six ','Seven ','Eight ','Nine ','Ten ','Eleven ','Twelve ','Thirteen ','Fourteen ','Fifteen ','Sixteen ','Seventeen ','Eighteen ','Nineteen '];
     const b = ['', '', 'Twenty','Thirty','Forty','Fifty', 'Sixty','Seventy','Eighty','Ninety'];
@@ -948,103 +935,81 @@ function renderReceipt(){
 }
 
 /* =========================================================
-   CLEAN 1-PAGE A4 PRINT/PDF TRIGGER
+   GENERATE TRUE A4 SINGLE-PAGE PDF BLOB
    ========================================================= */
-function printBill(){
+async function buildPDFBlob(){
     renderReceipt();
-    // Brief timeout ensures render cycle finishes before print dialog locks thread
-    setTimeout(() => {
-        window.print();
-    }, 120);
+    const receiptEl = $("receipt");
+
+    const canvas = await html2canvas(receiptEl, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        logging: false
+    });
+
+    const imgData = canvas.toDataURL("image/jpeg", 0.95);
+    const { jsPDF } = window.jspdf;
+    
+    // A4 dimensions: 210mm x 297mm
+    const pdf = new jsPDF("p", "mm", "a4");
+    const pdfWidth = 210;
+    const pageHeight = 297;
+    const margin = 10;
+    const printableWidth = pdfWidth - (margin * 2);
+    const printableHeight = (canvas.height * printableWidth) / canvas.width;
+
+    // Center on single A4 sheet without page spillover
+    pdf.addImage(imgData, "JPEG", margin, margin, printableWidth, Math.min(printableHeight, pageHeight - (margin * 2)));
+
+    const fileName = `Receipt_${$("receiptNumber").value.trim() || "UP"}.pdf`;
+    const blob = pdf.output("blob");
+
+    return { blob, fileName, pdf };
 }
 
 /* =========================================================
-   DIRECT BILL COMPILER (Sends actual file to WhatsApp / Apps)
+   SHARE TRUE PDF DIRECTLY (WhatsApp / System Share Sheet)
    ========================================================= */
-async function shareReceiptVisual(){
-    renderReceipt();
-    showToast("Generating receipt visual...");
-    
-    const receiptElement = $("receipt");
-    
+async function generateAndSharePDF(){
+    showToast("Generating PDF for WhatsApp...");
     try {
-        const canvas = await html2canvas(receiptElement, {
-            scale: 2, // High resolution output
-            useCORS: true,
-            backgroundColor: "#ffffff",
-            logging: false
-        });
+        const { blob, fileName } = await buildPDFBlob();
+        const pdfFile = new File([blob], fileName, { type: "application/pdf" });
 
-        canvas.toBlob(async (blob) => {
-            if (!blob) {
-                sendWhatsAppText();
-                return;
-            }
-
-            const fileName = `Receipt_${$("receiptNumber").value.trim() || "Booking"}.png`;
-            const file = new File([blob], fileName, { type: "image/png" });
-
-            // Trigger system share with the actual rendered receipt file
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                try {
-                    await navigator.share({
-                        files: [file],
-                        title: `Receipt - ${$("companyName").value}`,
-                        text: `Booking receipt for ${$("clientName").value || "Client"}.`
-                    });
-                    showToast("Receipt sent successfully");
-                    return;
-                } catch (err) {
-                    if (err.name !== "AbortError") sendWhatsAppText();
-                }
-            } else {
-                // Fallback: Download file directly on devices not supporting file web sharing
-                const link = document.createElement("a");
-                link.download = fileName;
-                link.href = URL.createObjectURL(blob);
-                link.click();
-                showToast("Receipt saved. Sending WhatsApp summary...");
-                setTimeout(sendWhatsAppText, 1000);
-            }
-        }, "image/png");
-
-    } catch (e) {
-        console.error(e);
-        sendWhatsAppText();
+        if (navigator.canShare && navigator.canShare({ files: [pdfFile] })) {
+            await navigator.share({
+                files: [pdfFile],
+                title: `${$("companyName").value} Receipt`,
+                text: `Please find the event booking receipt (${fileName}) attached.`
+            });
+            showToast("PDF shared successfully");
+        } else {
+            // If browser blocks direct file sharing, download PDF automatically
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+            showToast("PDF downloaded! Attach file in WhatsApp.");
+        }
+    } catch (err) {
+        if (err.name !== "AbortError") {
+            showToast("Falling back to print PDF...");
+            window.print();
+        }
     }
 }
 
-/* DIRECT WHATSAPP TEXT FALLBACK */
-function sendWhatsAppText(){
-    renderReceipt();
-    const name = $("companyName").value.trim() || DEFAULT_NAME;
-    const rc = $("receiptNumber").value.trim() || "DRAFT";
-    const cl = $("clientName").value.trim() || "Customer";
-    const dt = formatDate($("functionDate").value);
-    const vn = $("eventVenue").value.trim() || "Venue to be decided";
-    const tot = formatINR($("totalAmount").value);
-    const adv = formatINR($("advanceAmount").value);
-    const bal = formatINR(Math.max(0, Number($("totalAmount").value) - Number($("advanceAmount").value)));
-
-    const text = 
-`*BOOKING CONFIRMATION & RECEIPT*
-*${name.toUpperCase()}*
---------------------------------
-📄 *Receipt No:* ${rc}
-👤 *Client Name:* ${cl}
-🎉 *Event:* ${$("eventType").value}
-📅 *Event Date:* ${dt}
-📍 *Venue:* ${vn}
---------------------------------
-💰 *Agreed Amount:* ${tot}
-✅ *Advance Received:* ${adv}
-⚠️ *Balance Pending:* ${bal}
---------------------------------
-_Thank you for choosing ${name}!_`;
-
-    const phone = ($("clientPhone").value || "").replace(/\D/g, "");
-    const waUrl = phone.length >= 10 ? `https://wa.me/${phone}?text=${encodeURIComponent(text)}` : `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(waUrl, "_blank");
+/* DOWNLOAD PDF DIRECTLY */
+async function printOrDownloadPDF(){
+    showToast("Preparing PDF...");
+    try {
+        const { pdf, fileName } = await buildPDFBlob();
+        pdf.save(fileName);
+        showToast("PDF downloaded successfully");
+    } catch (e) {
+        window.print();
+    }
 }
 
 /* STORAGE */
