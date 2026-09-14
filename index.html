@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#111827">
-<title>Ultimate Planner | Event Booking & Receipt Generator</title>
+<title>Rank Odisha | Event Booking & Receipt Generator</title>
 
 <style>
 :root{
@@ -826,7 +826,7 @@ button{cursor:pointer}
 
 @media print{
     body{background:#fff !important}
-    * print-color-adjust:exact !important;
+    * { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
     .app-topbar, .editor, .preview-toolbar, .toast{display:none !important}
     .workspace{display:block;margin:0}
     .receipt{border:0;box-shadow:none;width:100%;max-width:none}
@@ -843,11 +843,11 @@ button{cursor:pointer}
         <div class="brand">
             <div class="brand-mark" id="topbarBrandMark">
                 <img id="topbarLogoImg" src="" alt="Brand Logo" style="display:none;">
-                <span id="topbarFallbackMark">UP</span>
+                <span id="topbarFallbackMark">RO</span>
             </div>
             <div class="brand-copy">
-                <h1 id="topbarCompanyName">Ultimate Planner</h1>
-                <p>Event Booking & Receipt Generator</p>
+                <h1 id="topbarCompanyName">Rank Odisha</h1>
+                <p>Event Planning • Management • Production</p>
             </div>
         </div>
 
@@ -860,7 +860,7 @@ button{cursor:pointer}
 
     <main class="workspace">
 
-        <!-- EDITOR -->
+        <!-- ===================== EDITOR ===================== -->
         <section class="editor" id="editor">
 
             <div class="card">
@@ -875,22 +875,22 @@ button{cursor:pointer}
                 <div class="form-grid">
                     <div class="field">
                         <label>Company name</label>
-                        <input id="companyName" value="Ultimate Planner" placeholder="e.g. Ultimate Planner">
+                        <input id="companyName" value="Rank Odisha" placeholder="e.g. Rank Odisha">
                     </div>
 
                     <div class="field">
                         <label>Tagline</label>
-                        <input id="companyTagline" value="Event Planning • Decoration • Management" placeholder="Your tagline">
+                        <input id="companyTagline" value="Event Planning • Management • Production" placeholder="Your tagline">
                     </div>
 
                     <div class="field">
                         <label>Company phone</label>
-                        <input id="companyPhone" placeholder="+91 XXXXX XXXXX">
+                        <input id="companyPhone" value="+91 7537936973" placeholder="+91 XXXXX XXXXX">
                     </div>
 
                     <div class="field">
                         <label>Company email</label>
-                        <input id="companyEmail" placeholder="contact@example.com">
+                        <input id="companyEmail" placeholder="contact@rankodisha.in">
                     </div>
 
                     <div class="field full">
@@ -927,7 +927,7 @@ button{cursor:pointer}
                 <div class="form-grid three">
                     <div class="field">
                         <label>Receipt / booking no.</label>
-                        <input id="receiptNumber" placeholder="UP-2026-001">
+                        <input id="receiptNumber" placeholder="RO-2026-001">
                     </div>
 
                     <div class="field">
@@ -1131,7 +1131,7 @@ button{cursor:pointer}
 
         </section>
 
-        <!-- PREVIEW -->
+        <!-- ===================== PREVIEW ===================== -->
         <section class="preview-panel">
 
             <div class="preview-toolbar">
@@ -1154,13 +1154,13 @@ button{cursor:pointer}
                                 <img id="rLogo" class="receipt-logo is-hidden" alt="Company Logo">
 
                                 <div class="receipt-company">
-                                    <h2 id="rCompanyName">Ultimate Planner</h2>
-                                    <div class="tagline" id="rTagline">Event Planning • Decoration • Management</div>
+                                    <h2 id="rCompanyName">Rank Odisha</h2>
+                                    <div class="tagline" id="rTagline">Event Planning • Management • Production</div>
 
                                     <div class="contact">
-                                        <span id="rCompanyPhone">Phone not added</span>
+                                        <span id="rCompanyPhone">+91 7537936973</span>
                                         <span aria-hidden="true"> • </span>
-                                        <span id="rCompanyEmail">Email not added</span>
+                                        <span id="rCompanyEmail">contact@rankodisha.in</span>
                                         <br>
                                         <span id="rCompanyAddress">Address not added</span>
                                     </div>
@@ -1196,8 +1196,8 @@ button{cursor:pointer}
                                 <div class="info-card">
                                     <div class="info-card-head">ORGANIZER</div>
                                     <div class="info-card-body">
-                                        <div class="info-row"><div class="key">Company</div><div class="val" id="rCompanyName2">-</div></div>
-                                        <div class="info-row"><div class="key">Phone</div><div class="val" id="rCompanyPhone2">-</div></div>
+                                        <div class="info-row"><div class="key">Company</div><div class="val" id="rCompanyName2">Rank Odisha</div></div>
+                                        <div class="info-row"><div class="key">Phone</div><div class="val" id="rCompanyPhone2">+91 7537936973</div></div>
                                         <div class="info-row"><div class="key">Email</div><div class="val" id="rCompanyEmail2">-</div></div>
                                         <div class="info-row"><div class="key">Address</div><div class="val" id="rCompanyAddress2">-</div></div>
                                     </div>
@@ -1278,7 +1278,7 @@ button{cursor:pointer}
 
                             <div class="sign-box">
                                 <div class="sign-line">AUTHORIZED SIGNATURE</div>
-                                <div class="sign-name" id="rSignatureCompany">Authorized Representative</div>
+                                <div class="sign-name" id="rSignatureCompany">For Rank Odisha</div>
                                 <div class="sign-name">Date: ____________________</div>
                             </div>
                         </section>
@@ -1302,6 +1302,9 @@ button{cursor:pointer}
 
 const $ = (id) => document.getElementById(id);
 
+const DEFAULT_COMPANY_NAME = "Rank Odisha";
+const DEFAULT_TAGLINE = "Event Planning • Management • Production";
+const DEFAULT_PHONE = "+91 7537936973";
 const DEFAULT_LOGO_URL = "https://lh3.googleusercontent.com/pw/AP1GczNknWNBppAZ_tf9H4nukzScsw8aPMiUyY8dRWaSy_JyuTS3lBjPoQVvNsmgVU8P-S9fJH6w61VMMNckROuDndlAQ9QGn0k-zEdBD8whW7Cqc3PKU9TgevPjCn0VMZ32N3llvgV_Xr1svbDQr6MEQ4E=w878-h878-s-no-gm?authuser=0";
 
 const fieldsToSave = [
@@ -1471,14 +1474,14 @@ function updateMoneySummary(){
 }
 
 function generateReceipt(){
-    const name = $("companyName").value.trim() || "Ultimate Planner";
+    const name = $("companyName").value.trim() || DEFAULT_COMPANY_NAME;
     $("rCompanyName").textContent = name;
     $("rCompanyName2").textContent = name;
     $("topbarCompanyName").textContent = name;
     $("rSignatureCompany").textContent = "For " + name;
 
-    $("rTagline").textContent = $("companyTagline").value.trim();
-    const phone = $("companyPhone").value.trim() || "-";
+    $("rTagline").textContent = $("companyTagline").value.trim() || DEFAULT_TAGLINE;
+    const phone = $("companyPhone").value.trim() || DEFAULT_PHONE;
     const email = $("companyEmail").value.trim() || "-";
     const addr = $("companyAddress").value.trim() || "-";
 
@@ -1553,12 +1556,12 @@ function saveDraft(){
     const data = {};
     fieldsToSave.forEach(k => { if($(k)) data[k] = $(k).value; });
     data.services = collectServices();
-    localStorage.setItem("up_event_bill_draft", JSON.stringify(data));
+    localStorage.setItem("rank_odisha_bill_draft", JSON.stringify(data));
     showToast("Draft saved locally");
 }
 
 function loadDraft(){
-    const raw = localStorage.getItem("up_event_bill_draft");
+    const raw = localStorage.getItem("rank_odisha_bill_draft");
     if(!raw) return showToast("No draft found");
     try{
         const data = JSON.parse(raw);
@@ -1577,8 +1580,9 @@ function resetForm(){
     if(!confirm("Reset all fields?")) return;
     fieldsToSave.forEach(k => {
         if(!$(k)) return;
-        if(k === "companyName") $(k).value = "Ultimate Planner";
-        else if(k === "companyTagline") $(k).value = "Event Planning • Decoration • Management";
+        if(k === "companyName") $(k).value = DEFAULT_COMPANY_NAME;
+        else if(k === "companyTagline") $(k).value = DEFAULT_TAGLINE;
+        else if(k === "companyPhone") $(k).value = DEFAULT_PHONE;
         else if(k === "bookingDate") $(k).value = todayISO();
         else if(k === "eventType") $(k).value = "Wedding";
         else if(k === "paymentStatus") $(k).value = "Advance Received";
@@ -1591,7 +1595,7 @@ function resetForm(){
     addService("Stage Decoration", "");
     addService("Lighting Setup", "");
     generateReceipt();
-    showToast("Form reset");
+    showToast("Form reset with defaults");
 }
 
 async function shareBill(){
@@ -1616,9 +1620,13 @@ async function shareBill(){
 
 function init(){
     if(!$("bookingDate").value) $("bookingDate").value = todayISO();
+    if(!$("companyPhone").value) $("companyPhone").value = DEFAULT_PHONE;
+    if(!$("companyName").value) $("companyName").value = DEFAULT_COMPANY_NAME;
+    if(!$("companyTagline").value) $("companyTagline").value = DEFAULT_TAGLINE;
+
     if(!$("receiptNumber").value){
         const now = new Date();
-        $("receiptNumber").value = `UP-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}-${String(Date.now()).slice(-4)}`;
+        $("receiptNumber").value = `RO-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}-${String(Date.now()).slice(-4)}`;
     }
 
     $("logoUrl").value = DEFAULT_LOGO_URL;
