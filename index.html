@@ -24,20 +24,17 @@
 }
 
 *{box-sizing:border-box}
-
 html{scroll-behavior:smooth}
 
 body{
     margin:0;
     font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
     color:var(--ink);
-    background:
-      radial-gradient(circle at top left,#fff7ed 0,#f8fafc 28%,#eef2f7 100%);
+    background:radial-gradient(circle at top left,#fff7ed 0,#f8fafc 28%,#eef2f7 100%);
     min-height:100vh;
 }
 
 button,input,textarea,select{font:inherit}
-
 button{cursor:pointer}
 
 .app-shell{
@@ -279,11 +276,7 @@ button{cursor:pointer}
 }
 
 .file-control input[type=file]{
-    position:absolute;
-    width:1px;
-    height:1px;
-    opacity:0;
-    pointer-events:none;
+    display:none;
 }
 
 .file-label{
@@ -297,6 +290,7 @@ button{cursor:pointer}
     font-size:12px;
     font-weight:800;
     color:#374151;
+    cursor:pointer;
 }
 
 .service-list{
@@ -502,13 +496,8 @@ button{cursor:pointer}
     font-size:10px;
 }
 
-.meta-grid .label{
-    color:#6b7280;
-}
-
-.meta-grid .value{
-    font-weight:900;
-}
+.meta-grid .label{color:#6b7280}
+.meta-grid .value{font-weight:900}
 
 .status-pill{
     margin-top:10px;
@@ -534,9 +523,7 @@ button{cursor:pointer}
     color:#991b1b;
 }
 
-.section-block{
-    margin-top:20px;
-}
+.section-block{margin-top:20px}
 
 .section-heading{
     font-size:10px;
@@ -568,9 +555,7 @@ button{cursor:pointer}
     color:#374151;
 }
 
-.info-card-body{
-    padding:11px;
-}
+.info-card-body{padding:11px}
 
 .info-row{
     display:flex;
@@ -607,9 +592,7 @@ button{cursor:pointer}
     gap:10px;
 }
 
-.event-cell{
-    min-width:0;
-}
+.event-cell{min-width:0}
 
 .event-cell .eyebrow{
     color:#9a3412;
@@ -715,17 +698,9 @@ button{cursor:pointer}
 }
 
 .payment-line:last-child{border-bottom:0}
-
 .payment-line strong{font-size:11px}
-
-.payment-line.total{
-    background:#f8fafc;
-}
-
-.payment-line.pending{
-    background:#fff7f7;
-    color:#991b1b;
-}
+.payment-line.total{background:#f8fafc}
+.payment-line.pending{background:#fff7f7;color:#991b1b}
 
 .amount-words{
     color:#6b7280;
@@ -815,19 +790,6 @@ button{cursor:pointer}
     line-height:1.5;
 }
 
-.mobile-share-hint{
-    display:none;
-}
-
-.empty-note{
-    padding:14px;
-    border:1px dashed #cbd5e1;
-    border-radius:10px;
-    color:#64748b;
-    font-size:11px;
-    background:#f8fafc;
-}
-
 .toast{
     position:fixed;
     left:50%;
@@ -852,447 +814,41 @@ button{cursor:pointer}
 }
 
 @media(max-width:1100px){
-    .workspace{
-        grid-template-columns:1fr;
-    }
-    .preview-panel{
-        position:static;
-    }
+    .workspace{grid-template-columns:1fr}
+    .preview-panel{position:static}
 }
 
 @media(max-width:700px){
-    html,body{
-        width:100%;
-        max-width:100%;
-        overflow-x:hidden;
-    }
-
-    .app-shell{
-        width:100%;
-        max-width:100%;
-        padding:8px;
-    }
-
-    .app-topbar{
-        position:relative;
-        top:auto;
-        width:100%;
-        border-radius:14px;
-        padding:12px;
-        flex-direction:column;
-        align-items:stretch;
-        gap:11px;
-    }
-
-    .brand{
-        width:100%;
-    }
-
-    .brand-copy h1{
-        font-size:17px;
-    }
-
-    .top-actions{
-        width:100%;
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:7px;
-    }
-
-    .top-actions .btn{
-        width:100%;
-        min-height:42px;
-        padding:9px 5px;
-        font-size:11px;
-    }
-
-    .workspace{
-        width:100%;
-        grid-template-columns:minmax(0,1fr);
-        gap:12px;
-        margin-top:12px;
-    }
-
-    .editor,
-    .preview-panel{
-        width:100%;
-        min-width:0;
-    }
-
-    .card{
-        width:100%;
-        padding:14px;
-        border-radius:13px;
-    }
-
-    .card-head{
-        margin-bottom:13px;
-    }
-
-    .form-grid,
-    .form-grid.three{
-        grid-template-columns:minmax(0,1fr);
-        gap:11px;
-    }
-
-    .field input,
-    .field textarea,
-    .field select{
-        min-width:0;
-        width:100%;
-        font-size:14px;
-    }
-
-    .logo-row{
-        grid-template-columns:minmax(0,1fr);
-    }
-
-    .logo-preview{
-        width:100%;
-        height:92px;
-    }
-
-    .service-item{
-        padding:12px;
-        width:100%;
-    }
-
-    .service-grid{
-        grid-template-columns:minmax(0,1fr);
-        gap:9px;
-    }
-
-    .service-remove{
-        width:100%;
-        min-height:42px;
-    }
-
-    .money-summary{
-        grid-template-columns:1fr;
-    }
-
-    .mini-actions{
-        width:100%;
-    }
-
-    .mini-actions .btn{
-        flex:1 1 auto;
-    }
-
-    .preview-toolbar{
-        width:100%;
-        position:relative;
-        top:auto;
-        z-index:5;
-        align-items:stretch;
-        flex-direction:column;
-        padding:10px;
-        margin-bottom:10px;
-    }
-
-    .preview-toolbar .mini-actions{
-        display:grid;
-        grid-template-columns:1fr 1fr;
-    }
-
-    .receipt-wrap{
-        display:block;
-        width:100%;
-        max-width:100%;
-        padding:0;
-        overflow:visible;
-    }
-
-    .receipt{
-        width:100%;
-        max-width:100%;
-        min-width:0;
-        border-radius:12px;
-        overflow:hidden;
-    }
-
-    .receipt-inner{
-        width:100%;
-        min-width:0;
-        padding:18px 12px 15px;
-    }
-
-    .receipt-topline{
-        margin:-18px -12px 15px;
-    }
-
-    .receipt-header{
-        width:100%;
-        flex-direction:column;
-        gap:13px;
-        padding-bottom:15px;
-    }
-
-    .receipt-brand{
-        width:100%;
-        align-items:center;
-        gap:10px;
-    }
-
-    .receipt-logo{
-        width:66px;
-        height:66px;
-        border-radius:11px;
-        flex:0 0 66px;
-    }
-
-    .receipt-company{
-        min-width:0;
-        flex:1;
-    }
-
-    .receipt-company h2{
-        font-size:20px;
-        overflow-wrap:anywhere;
-    }
-
-    .receipt-company .tagline,
-    .receipt-company .contact{
-        font-size:9px;
-        overflow-wrap:anywhere;
-        word-break:break-word;
-    }
-
-    .receipt-meta{
-        width:100%;
-        min-width:0;
-        text-align:left;
-    }
-
-    .meta-grid{
-        width:100%;
-        grid-template-columns:auto minmax(0,1fr);
-        gap:5px 8px;
-    }
-
-    .meta-grid .value{
-        min-width:0;
-        overflow-wrap:anywhere;
-        word-break:break-word;
-    }
-
-    .section-block{
-        width:100%;
-        min-width:0;
-        margin-top:15px;
-    }
-
-    .info-cards{
-        grid-template-columns:minmax(0,1fr);
-    }
-
-    .info-card,
-    .info-card-body,
-    .info-row{
-        min-width:0;
-    }
-
-    .info-row .val{
-        overflow-wrap:anywhere;
-        word-break:break-word;
-    }
-
-    .event-grid{
-        grid-template-columns:1fr 1fr;
-        gap:8px;
-    }
-
-    .event-cell .big{
-        font-size:10px;
-        overflow-wrap:anywhere;
-        word-break:break-word;
-    }
-
-    .event-note{
-        font-size:9px;
-        overflow-wrap:anywhere;
-        word-break:break-word;
-    }
-
-    /* Mobile services become stacked cards instead of a cramped table. */
-    .services,
-    .services tbody,
-    .services tr,
-    .services td{
-        display:block;
-        width:100%;
-    }
-
-    .services thead{
-        display:none;
-    }
-
-    .services tr{
-        border:1px solid #e5e7eb;
-        border-radius:11px;
-        margin-bottom:9px;
-        overflow:hidden;
-        background:#fff;
-    }
-
-    .services td{
-        border:0;
-        border-bottom:1px solid #f1f5f9;
-        padding:8px 10px 8px 82px;
-        position:relative;
-        min-height:34px;
-        font-size:9px;
-        line-height:1.5;
-        overflow-wrap:anywhere;
-        word-break:break-word;
-    }
-
-    .services td:last-child{
-        border-bottom:0;
-    }
-
-    .services td::before{
-        position:absolute;
-        left:10px;
-        top:8px;
-        width:65px;
-        color:#64748b;
-        font-size:8px;
-        font-weight:900;
-        text-transform:uppercase;
-        letter-spacing:.05em;
-    }
-
+    html,body{width:100%;max-width:100%;overflow-x:hidden}
+    .app-shell{width:100%;padding:8px}
+    .app-topbar{position:relative;top:auto;padding:12px;flex-direction:column;align-items:stretch}
+    .top-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+    .workspace{grid-template-columns:minmax(0,1fr);gap:12px;margin-top:12px}
+    .form-grid,.form-grid.three{grid-template-columns:minmax(0,1fr);gap:11px}
+    .logo-row{grid-template-columns:minmax(0,1fr)}
+    .service-grid{grid-template-columns:minmax(0,1fr);gap:9px}
+    .money-summary{grid-template-columns:1fr}
+    .services, .services tbody, .services tr, .services td{display:block;width:100%}
+    .services thead{display:none}
+    .services tr{border:1px solid #e5e7eb;border-radius:11px;margin-bottom:9px;background:#fff}
+    .services td{border:0;border-bottom:1px solid #f1f5f9;padding:8px 10px 8px 82px;position:relative}
+    .services td:last-child{border-bottom:0}
+    .services td::before{position:absolute;left:10px;top:8px;width:65px;color:#64748b;font-size:8px;font-weight:900;text-transform:uppercase}
     .services td:nth-child(1)::before{content:"Item"}
     .services td:nth-child(2)::before{content:"Service"}
     .services td:nth-child(3)::before{content:"Requirement"}
-
-    .services .num{
-        width:100%;
-        text-align:left;
-    }
-
-    .services .type{
-        width:100%;
-    }
-
-    .payment-area{
-        grid-template-columns:minmax(0,1fr);
-    }
-
-    .payment-line{
-        align-items:flex-start;
-        gap:10px;
-        padding:9px 10px;
-        font-size:9px;
-    }
-
-    .payment-line > span:first-child{
-        flex:0 0 39%;
-    }
-
-    .amount-words{
-        max-width:61%;
-        text-align:right;
-        overflow-wrap:anywhere;
-        word-break:break-word;
-    }
-
-    .received-box .amount{
-        font-size:20px;
-    }
-
-    .special-box,
-    .terms,
-    .terms li{
-        overflow-wrap:anywhere;
-        word-break:break-word;
-    }
-
-    .signature{
-        grid-template-columns:1fr;
-        gap:34px;
-        margin-top:34px;
-    }
-
-    .receipt-footer{
-        font-size:7px;
-    }
+    .payment-area{grid-template-columns:minmax(0,1fr)}
+    .signature{grid-template-columns:1fr;gap:34px;margin-top:34px}
 }
 
 @media print{
     body{background:#fff !important}
-    *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important}
-    .app-topbar,
-    .editor,
-    .preview-toolbar,
-    .toast{
-        display:none !important;
-    }
-    .app-shell{
-        max-width:none;
-        margin:0;
-        padding:0;
-    }
-    .workspace{
-        display:block;
-        margin:0;
-    }
-    .preview-panel{
-        display:block;
-    }
-    .receipt-wrap{
-        display:block;
-        padding:0;
-    }
-    .receipt{
-        max-width:none;
-        width:100%;
-        border:0;
-        box-shadow:none;
-    }
-    .receipt-inner{
-        padding:14px 18px 10px;
-    }
-    .receipt-topline{
-        margin:-14px -18px 14px;
-    }
-    @page{
-        size:A4;
-        margin:10mm;
-    }
-    .section-block,
-    .event-banner,
-    .payment-area,
-    .special-box,
-    .terms,
-    .signature{
-        break-inside:avoid;
-        page-break-inside:avoid;
-    }
-    .services thead{
-        display:table-header-group;
-    }
-    .services tr,
-    .services td,
-    .services th{
-        break-inside:avoid;
-        page-break-inside:avoid;
-    }
+    * print-color-adjust:exact !important}
+    .app-topbar,.editor,.preview-toolbar,.toast{display:none !important}
+    .app-shell,.workspace,.preview-panel,.receipt-wrap{display:block;margin:0;padding:0;max-width:none}
+    .receipt{border:0;box-shadow:none;max-width:none;width:100%}
+    @page{size:A4;margin:10mm}
 }
-
-@media (max-width: 700px){
-    .btn, .file-label, .add-service, .service-remove{
-        min-height:44px;
-    }
-    input, textarea, select, button{
-        touch-action:manipulation;
-    }
-    .receipt{
-        box-shadow:0 8px 30px rgba(15,23,42,.10);
-    }
-}
-
 </style>
 </head>
 
@@ -1303,7 +859,7 @@ button{cursor:pointer}
         <div class="brand">
             <div class="brand-mark">UP</div>
             <div class="brand-copy">
-                <h1>Ultimate Planner</h1>
+                <h1 id="topbarTitle">Ultimate Planner</h1>
                 <p>Event Booking & Receipt Generator</p>
             </div>
         </div>
@@ -1317,7 +873,6 @@ button{cursor:pointer}
 
     <main class="workspace">
 
-        <!-- ===================== EDITOR ===================== -->
         <section class="editor" id="editor">
 
             <div class="card">
@@ -1332,7 +887,7 @@ button{cursor:pointer}
                 <div class="form-grid">
                     <div class="field">
                         <label>Company name</label>
-                        <input id="companyName" value="Ultimate Planner" readonly aria-readonly="true">
+                        <input id="companyName" value="Ultimate Planner">
                     </div>
 
                     <div class="field">
@@ -1342,12 +897,12 @@ button{cursor:pointer}
 
                     <div class="field">
                         <label>Company phone</label>
-                        <input id="companyPhone" placeholder="+91 XXXXX XXXXX">
+                        <input id="companyPhone" value="+91 7537936973" placeholder="+91 7537936973">
                     </div>
 
                     <div class="field">
                         <label>Company email</label>
-                        <input id="companyEmail" placeholder="hello@example.com">
+                        <input id="companyEmail" placeholder="hello@ultimateplanner.in">
                     </div>
 
                     <div class="field full">
@@ -1357,15 +912,16 @@ button{cursor:pointer}
 
                     <div class="field full">
                         <label>Logo</label>
-
                         <div class="logo-row">
                             <div>
-                                <input id="logoUrl" type="url" inputmode="url" autocomplete="url" placeholder="https://example.com/logo.png">
+                                <input id="logoUrl" type="url" placeholder="Direct image URL or upload below">
                                 <div class="file-control" style="margin-top:8px">
-                                    <button class="btn btn-light" type="button" onclick="clearLogo()">Reload fixed logo</button>
+                                    <label class="file-label" for="logoFileInput">📁 Upload Logo Image</label>
+                                    <input type="file" id="logoFileInput" accept="image/*" onchange="handleLogoUpload(event)">
+                                    <button class="btn btn-light" type="button" onclick="clearLogo()">Remove Logo</button>
                                 </div>
                                 <div class="help" style="margin-top:8px">
-                                    Paste a stable direct PNG/JPG/WebP logo URL in the field above, or leave it blank. Instagram/CDN profile-image URLs may expire.
+                                    Google Photos share links (like photos.app.goo.gl) are HTML web pages, not direct image files. Use <strong>Upload Logo Image</strong> to select your logo file directly from your device.
                                 </div>
                             </div>
 
@@ -1445,7 +1001,7 @@ button{cursor:pointer}
                 <div class="card-head">
                     <div>
                         <h2 class="card-title">Event details</h2>
-                        <p class="card-subtitle">This is the core schedule and venue information.</p>
+                        <p class="card-subtitle">Schedule and venue information.</p>
                     </div>
                     <div class="section-number">04</div>
                 </div>
@@ -1491,7 +1047,7 @@ button{cursor:pointer}
                 <div class="card-head">
                     <div>
                         <h2 class="card-title">Payment</h2>
-                        <p class="card-subtitle">Balance is calculated automatically from total minus advance.</p>
+                        <p class="card-subtitle">Balance is calculated automatically.</p>
                     </div>
                     <div class="section-number">05</div>
                 </div>
@@ -1539,13 +1095,12 @@ button{cursor:pointer}
                 <div class="card-head">
                     <div>
                         <h2 class="card-title">Finalized services & requirements</h2>
-                        <p class="card-subtitle">Record the exact items the client approved. This is better than using only generic service names.</p>
+                        <p class="card-subtitle">Record the exact items the client approved.</p>
                     </div>
                     <div class="section-number">06</div>
                 </div>
 
                 <div id="serviceList" class="service-list"></div>
-
                 <button class="add-service" type="button" onclick="addService()">＋ Add service / requirement</button>
             </div>
 
@@ -1553,14 +1108,14 @@ button{cursor:pointer}
                 <div class="card-head">
                     <div>
                         <h2 class="card-title">Special client requirements</h2>
-                        <p class="card-subtitle">Use this for specifications that need extra attention during execution.</p>
+                        <p class="card-subtitle">Specifications that need extra attention.</p>
                     </div>
                     <div class="section-number">07</div>
                 </div>
 
                 <div class="field">
                     <label>Special requirements</label>
-                    <textarea id="specialRequirements" style="min-height:135px" placeholder="Example: Fresh flowers only. No plastic/artificial flowers. White and gold theme. 10 pedestal fans. Specific flower types. Specific stage design."></textarea>
+                    <textarea id="specialRequirements" style="min-height:135px" placeholder="Example: Fresh flowers only. White and gold theme. 10 pedestal fans."></textarea>
                 </div>
             </div>
 
@@ -1568,7 +1123,7 @@ button{cursor:pointer}
                 <div class="card-head">
                     <div>
                         <h2 class="card-title">Terms & conditions</h2>
-                        <p class="card-subtitle">Editable business terms. Keep them aligned with your actual agreement and local legal advice.</p>
+                        <p class="card-subtitle">Editable business terms.</p>
                     </div>
                     <div class="section-number">08</div>
                 </div>
@@ -1595,19 +1150,17 @@ button{cursor:pointer}
                     <button class="btn btn-danger" type="button" onclick="resetForm()">Reset</button>
                 </div>
                 <div class="help" style="margin-top:10px">
-                    Data is stored locally in this browser only. No server or database is required.
+                    Data is stored locally in this browser.
                 </div>
             </div>
 
         </section>
 
-        <!-- ===================== PREVIEW ===================== -->
         <section class="preview-panel">
 
             <div class="preview-toolbar">
                 <div>
                     <div class="title">LIVE BILL PREVIEW</div>
-                    <div class="mobile-share-hint">On mobile, use Share to send a compact receipt summary or use Print / PDF for the complete document.</div>
                 </div>
 
                 <div class="mini-actions">
@@ -1625,15 +1178,14 @@ button{cursor:pointer}
 
                         <header class="receipt-header">
                             <div class="receipt-brand">
-
-                                <img id="rLogo" class="receipt-logo is-hidden" alt="Ultimate Planner Logo">
+                                <img id="rLogo" class="receipt-logo is-hidden" alt="Business Logo">
 
                                 <div class="receipt-company">
                                     <h2 id="rCompanyName">Ultimate Planner</h2>
                                     <div class="tagline" id="rTagline">Event Planning • Decoration • Management</div>
 
                                     <div class="contact">
-                                        <span id="rCompanyPhone">Phone not added</span>
+                                        <span id="rCompanyPhone">+91 7537936973</span>
                                         <span aria-hidden="true"> • </span>
                                         <span id="rCompanyEmail">Email not added</span>
                                         <br>
@@ -1665,44 +1217,20 @@ button{cursor:pointer}
                                 <div class="info-card">
                                     <div class="info-card-head">CLIENT DETAILS</div>
                                     <div class="info-card-body">
-                                        <div class="info-row">
-                                            <div class="key">Name</div>
-                                            <div class="val" id="rClientName">-</div>
-                                        </div>
-                                        <div class="info-row">
-                                            <div class="key">Phone</div>
-                                            <div class="val" id="rClientPhone">-</div>
-                                        </div>
-                                        <div class="info-row">
-                                            <div class="key">Alt. Phone</div>
-                                            <div class="val" id="rClientAltPhone">-</div>
-                                        </div>
-                                        <div class="info-row">
-                                            <div class="key">Address</div>
-                                            <div class="val" id="rClientAddress">-</div>
-                                        </div>
+                                        <div class="info-row"><div class="key">Name</div><div class="val" id="rClientName">-</div></div>
+                                        <div class="info-row"><div class="key">Phone</div><div class="val" id="rClientPhone">-</div></div>
+                                        <div class="info-row"><div class="key">Alt. Phone</div><div class="val" id="rClientAltPhone">-</div></div>
+                                        <div class="info-row"><div class="key">Address</div><div class="val" id="rClientAddress">-</div></div>
                                     </div>
                                 </div>
 
                                 <div class="info-card">
                                     <div class="info-card-head">BOOKING PARTY</div>
                                     <div class="info-card-body">
-                                        <div class="info-row">
-                                            <div class="key">Company</div>
-                                            <div class="val" id="rCompanyName2">Ultimate Planner</div>
-                                        </div>
-                                        <div class="info-row">
-                                            <div class="key">Phone</div>
-                                            <div class="val" id="rCompanyPhone2">-</div>
-                                        </div>
-                                        <div class="info-row">
-                                            <div class="key">Email</div>
-                                            <div class="val" id="rCompanyEmail2">-</div>
-                                        </div>
-                                        <div class="info-row">
-                                            <div class="key">Address</div>
-                                            <div class="val" id="rCompanyAddress2">-</div>
-                                        </div>
+                                        <div class="info-row"><div class="key">Company</div><div class="val" id="rCompanyName2">Ultimate Planner</div></div>
+                                        <div class="info-row"><div class="key">Phone</div><div class="val" id="rCompanyPhone2">+91 7537936973</div></div>
+                                        <div class="info-row"><div class="key">Email</div><div class="val" id="rCompanyEmail2">-</div></div>
+                                        <div class="info-row"><div class="key">Address</div><div class="val" id="rCompanyAddress2">-</div></div>
                                     </div>
                                 </div>
 
@@ -1713,36 +1241,29 @@ button{cursor:pointer}
                             <div class="section-heading">Event information</div>
 
                             <div class="event-banner">
-
                                 <div class="event-grid">
-
                                     <div class="event-cell">
                                         <div class="eyebrow">Event</div>
                                         <div class="big" id="rEventType">Wedding</div>
                                     </div>
-
                                     <div class="event-cell">
                                         <div class="eyebrow">Function date</div>
                                         <div class="big" id="rFunctionDate">-</div>
                                     </div>
-
                                     <div class="event-cell">
                                         <div class="eyebrow">Function time</div>
                                         <div class="big" id="rFunctionTime">-</div>
                                     </div>
-
                                     <div class="event-cell">
                                         <div class="eyebrow">Venue</div>
                                         <div class="big" id="rEventVenueShort">-</div>
                                     </div>
-
                                 </div>
 
                                 <div class="event-note">
                                     <strong>Additional information:</strong>
                                     <span id="rEventAdditional">-</span>
                                 </div>
-
                             </div>
                         </section>
 
@@ -1758,14 +1279,12 @@ button{cursor:pointer}
                                     </tr>
                                 </thead>
                                 <tbody id="rServices">
-                                    <tr>
-                                        <td colspan="3" style="text-align:center;color:#9ca3af">No services added yet.</td>
-                                    </tr>
+                                    <tr><td colspan="3" style="text-align:center;color:#9ca3af">No services added yet.</td></tr>
                                 </tbody>
                             </table>
 
                             <div class="service-total-note">
-                                The above items are intended to record the scope finalized with the client. Any changes or additions should be documented separately.
+                                The above items represent the finalized scope communicated with the client.
                             </div>
                         </section>
 
@@ -1780,39 +1299,31 @@ button{cursor:pointer}
                             <div class="section-heading">Payment summary</div>
 
                             <div class="payment-area">
-
                                 <div class="payment-main">
-
                                     <div class="payment-line total">
                                         <span>Total agreed amount</span>
                                         <strong id="rTotalAmount">₹0</strong>
                                     </div>
-
                                     <div class="payment-line">
                                         <span>Amount in words</span>
                                         <span class="amount-words" id="rTotalWords">Rupees Zero Only</span>
                                     </div>
-
                                     <div class="payment-line">
                                         <span>Advance received</span>
                                         <strong id="rAdvanceAmount">₹0</strong>
                                     </div>
-
                                     <div class="payment-line">
                                         <span>Advance in words</span>
                                         <span class="amount-words" id="rAdvanceWords">Rupees Zero Only</span>
                                     </div>
-
                                     <div class="payment-line pending">
                                         <span>Balance pending</span>
                                         <strong id="rBalanceAmount">₹0</strong>
                                     </div>
-
                                     <div class="payment-line pending">
                                         <span>Balance in words</span>
                                         <span class="amount-words" id="rBalanceWords">Rupees Zero Only</span>
                                     </div>
-
                                 </div>
 
                                 <div class="received-box">
@@ -1823,7 +1334,6 @@ button{cursor:pointer}
                                         Status: <strong id="rPaymentStatus">Advance Received</strong>
                                     </div>
                                 </div>
-
                             </div>
                         </section>
 
@@ -1848,7 +1358,7 @@ button{cursor:pointer}
 
                         <footer class="receipt-footer">
                             This computer-generated document is intended as a booking confirmation and advance/payment receipt.
-                            Please verify all event details, service specifications and payment figures before signing.
+                            Please verify all event details and figures before signing.
                         </footer>
 
                     </div>
@@ -1864,13 +1374,7 @@ button{cursor:pointer}
 <script>
 "use strict";
 
-/* =========================================================
-   ULTIMATE PLANNER - SINGLE FILE EVENT BILL GENERATOR
-   ========================================================= */
-
 const $ = (id) => document.getElementById(id);
-
-const DEFAULT_LOGO_URL = "";
 
 const fieldsToSave = [
     "companyName","companyTagline","companyPhone","companyEmail","companyAddress",
@@ -1939,27 +1443,19 @@ function formatINR(amount){
     }).format(number);
 }
 
-/* ---------------- NUMBER TO WORDS ---------------- */
-
-const ONES = [
-    "","One","Two","Three","Four","Five","Six","Seven","Eight","Nine",
-    "Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen",
-    "Seventeen","Eighteen","Nineteen"
-];
-
-const TENS = [
-    "","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"
-];
+/* ---------------- NUMBER TO WORDS (INDIAN FORMAT) ---------------- */
+const ONES = ["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine",
+              "Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen",
+              "Seventeen","Eighteen","Nineteen"];
+const TENS = ["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
 
 function belowThousand(n){
     let out = "";
-
     if(n >= 100){
         out += ONES[Math.floor(n/100)] + " Hundred";
         n %= 100;
         if(n) out += " ";
     }
-
     if(n >= 20){
         out += TENS[Math.floor(n/10)];
         n %= 10;
@@ -1967,26 +1463,21 @@ function belowThousand(n){
     }else if(n > 0){
         out += ONES[n];
     }
-
     return out;
 }
 
 function numberToIndianWords(value){
     let num = Math.floor(Number(value) || 0);
-
     if(num === 0) return "Rupees Zero Only";
 
     const crore = Math.floor(num / 10000000);
     num %= 10000000;
-
     const lakh = Math.floor(num / 100000);
     num %= 100000;
-
     const thousand = Math.floor(num / 1000);
     num %= 1000;
 
     const parts = [];
-
     if(crore) parts.push(belowThousand(crore) + " Crore");
     if(lakh) parts.push(belowThousand(lakh) + " Lakh");
     if(thousand) parts.push(belowThousand(thousand) + " Thousand");
@@ -1995,140 +1486,120 @@ function numberToIndianWords(value){
     return "Rupees " + parts.join(" ") + " Only";
 }
 
-/* ---------------- LOGO ---------------- */
-
+/* ---------------- LOGO MANAGEMENT ---------------- */
 function setLogoPreview(src){
     const preview = $("logoPreview");
-
     if(!src){
         preview.innerHTML = `<div class="logo-fallback">LOGO<br>PREVIEW</div>`;
         return;
     }
-
-    preview.innerHTML = `
-        <img src="${escapeHTML(src)}" alt="Logo preview"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
-        <div class="logo-fallback" style="display:none">LOGO<br>COULD NOT LOAD</div>
-    `;
-}
-
-function clearLogo(){
-    localStorage.removeItem("ultimatePlannerLogoData");
-    $("logoUrl").value = DEFAULT_LOGO_URL;
-    setLogoPreview(DEFAULT_LOGO_URL);
-    updateLogoOnReceipt(DEFAULT_LOGO_URL);
-    showToast(DEFAULT_LOGO_URL ? "Default logo restored" : "Logo cleared");
+    preview.innerHTML = `<img src="${src}" alt="Logo preview">`;
 }
 
 function updateLogoOnReceipt(src){
     const img = $("rLogo");
-
     if(!src){
         img.removeAttribute("src");
         img.classList.add("is-hidden");
         return;
     }
-
     img.src = src;
     img.classList.remove("is-hidden");
-
     img.onerror = () => {
         img.classList.add("is-hidden");
-        showToast("Logo URL could not be loaded");
     };
 }
 
+function handleLogoUpload(event){
+    const file = event.target.files && event.target.files[0];
+    if(!file) return;
 
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const base64 = e.target.result;
+        try {
+            localStorage.setItem("ultimatePlannerLogoData", base64);
+        } catch(err) {
+            console.warn("Logo too large for localStorage, will hold in memory for session");
+        }
+        $("logoUrl").value = "";
+        setLogoPreview(base64);
+        updateLogoOnReceipt(base64);
+        showToast("Logo uploaded successfully");
+    };
+    reader.readAsDataURL(file);
+}
 
+function clearLogo(){
+    localStorage.removeItem("ultimatePlannerLogoData");
+    $("logoUrl").value = "";
+    $("logoFileInput").value = "";
+    setLogoPreview("");
+    updateLogoOnReceipt("");
+    showToast("Logo removed");
+}
 
 /* ---------------- SERVICES ---------------- */
-
 let serviceCounter = 0;
 
 function addService(type="", description=""){
     serviceCounter++;
-
     const item = document.createElement("div");
     item.className = "service-item";
     item.dataset.id = String(serviceCounter);
-
     item.innerHTML = `
         <div class="service-grid">
-
             <div class="field">
                 <label>Service / category</label>
                 <input class="serviceType" placeholder="e.g. Stage Decoration" value="${escapeHTML(type)}">
             </div>
-
             <div class="field">
                 <label>Exact finalized requirement</label>
-                <textarea class="serviceDescription" placeholder="e.g. 24×16 ft stage, white & gold theme, fresh flowers only">${escapeHTML(description)}</textarea>
+                <textarea class="serviceDescription" placeholder="e.g. 24×16 ft stage, white & gold theme">${escapeHTML(description)}</textarea>
             </div>
-
-            <button class="service-remove" type="button" title="Remove service" aria-label="Remove service"
-                onclick="removeService(this)">×</button>
-
+            <button class="service-remove" type="button" title="Remove" onclick="removeService(this)">×</button>
         </div>
     `;
-
     $("serviceList").appendChild(item);
 }
 
 function removeService(button){
     const item = button.closest(".service-item");
-    if(item) item.remove();
+    if(item) {
+        item.remove();
+        generateReceipt();
+    }
 }
 
 function collectServices(){
-    return [...document.querySelectorAll(".service-item")].map(item => {
-        return {
-            type: item.querySelector(".serviceType")?.value.trim() || "",
-            description: item.querySelector(".serviceDescription")?.value.trim() || ""
-        };
-    }).filter(x => x.type || x.description);
+    return [...document.querySelectorAll(".service-item")].map(item => ({
+        type: item.querySelector(".serviceType")?.value.trim() || "",
+        description: item.querySelector(".serviceDescription")?.value.trim() || ""
+    })).filter(x => x.type || x.description);
 }
 
 function renderServices(){
     const target = $("rServices");
     const services = collectServices();
-
     target.innerHTML = "";
 
     if(!services.length){
-        target.innerHTML = `
-            <tr>
-                <td colspan="3" style="text-align:center;color:#9ca3af">
-                    No services added yet.
-                </td>
-            </tr>
-        `;
+        target.innerHTML = `<tr><td colspan="3" style="text-align:center;color:#9ca3af">No services added yet.</td></tr>`;
         return;
     }
 
-    services.forEach((service,index) => {
+    services.forEach((service, index) => {
         const tr = document.createElement("tr");
-
-        const td1 = document.createElement("td");
-        td1.className = "num";
-        td1.textContent = String(index + 1);
-
-        const td2 = document.createElement("td");
-        td2.textContent = service.type || "-";
-
-        const td3 = document.createElement("td");
-        td3.textContent = service.description || "-";
-
-        tr.appendChild(td1);
-        tr.appendChild(td2);
-        tr.appendChild(td3);
-
+        tr.innerHTML = `
+            <td class="num">${index + 1}</td>
+            <td class="type">${escapeHTML(service.type || "-")}</td>
+            <td>${escapeHTML(service.description || "-")}</td>
+        `;
         target.appendChild(tr);
     });
 }
 
-/* ---------------- PAYMENT ---------------- */
-
-
+/* ---------------- PAYMENT & CALCULATIONS ---------------- */
 function getNumericAmount(id){
     const el = $(id);
     if(!el) return 0;
@@ -2144,32 +1615,20 @@ function normalizePaymentAmounts(){
     let total = getNumericAmount("totalAmount");
     let advance = getNumericAmount("advanceAmount");
 
-    // Advance can never exceed the final agreed amount.
     if(advance > total){
         advance = total;
         advanceEl.value = String(total);
     }
 
-    // Keep fields clean if the user pasted a negative/invalid value.
-    totalEl.value = String(total);
-    advanceEl.value = String(advance);
-
     return {total, advance, balance: Math.max(total - advance, 0)};
-}
-
-function getBalance(){
-    return normalizePaymentAmounts().balance;
 }
 
 function updateMoneySummary(){
     const {total, advance, balance} = normalizePaymentAmounts();
-
     $("sumTotal").textContent = formatINR(total);
     $("sumAdvance").textContent = formatINR(advance);
     $("sumBalance").textContent = formatINR(balance);
 }
-
-/* ---------------- STATUS ---------------- */
 
 function updateStatusPill(status){
     const pill = $("rStatusPill");
@@ -2180,14 +1639,13 @@ function updateStatusPill(status){
         pill.classList.add("danger");
     }else if(status === "Partially Paid"){
         pill.classList.add("warn");
-    }else if(status === "Fully Paid"){
-        /* default green */
     }
 }
 
-/* ---------------- GENERATE ---------------- */
-
+/* ---------------- RECEIPT GENERATION ---------------- */
 function generateReceipt(){
+    const {total, advance, balance} = normalizePaymentAmounts();
+
     const companyName = $("companyName").value.trim() || "Ultimate Planner";
     const tagline = $("companyTagline").value.trim() || "";
     const companyPhone = $("companyPhone").value.trim() || "-";
@@ -2196,6 +1654,7 @@ function generateReceipt(){
 
     const receiptNumber = $("receiptNumber").value.trim() || "Not assigned";
     const bookingDate = $("bookingDate").value;
+
     let paymentStatus = $("paymentStatus").value;
     if(total > 0 && advance >= total){
         paymentStatus = "Fully Paid";
@@ -2215,23 +1674,19 @@ function generateReceipt(){
     const functionTime = $("functionTime").value;
     const venue = $("eventVenue").value.trim() || "-";
     const additional = $("eventAdditional").value.trim() || "-";
-
-    const {total, advance, balance} = normalizePaymentAmounts();
     const paymentMode = $("paymentMode").value || "-";
 
-    const special = $("specialRequirements").value.trim()
-        || "No additional special requirements recorded.";
+    const special = $("specialRequirements").value.trim() || "No additional special requirements recorded.";
 
+    $("topbarTitle").textContent = companyName;
     $("rCompanyName").textContent = companyName;
     $("rCompanyName2").textContent = companyName;
     $("rTagline").textContent = tagline;
 
     $("rCompanyPhone").textContent = companyPhone;
     $("rCompanyPhone2").textContent = companyPhone;
-
     $("rCompanyEmail").textContent = companyEmail;
     $("rCompanyEmail2").textContent = companyEmail;
-
     $("rCompanyAddress").textContent = companyAddress;
     $("rCompanyAddress2").textContent = companyAddress;
 
@@ -2251,32 +1706,39 @@ function generateReceipt(){
 
     $("rTotalAmount").textContent = formatINR(total);
     $("rTotalWords").textContent = numberToIndianWords(total);
-
     $("rAdvanceAmount").textContent = formatINR(advance);
     $("rAdvanceWords").textContent = numberToIndianWords(advance);
-
     $("rBalanceAmount").textContent = formatINR(balance);
     $("rBalanceWords").textContent = numberToIndianWords(balance);
 
     $("rReceivedBig").textContent = formatINR(advance);
     $("rPaymentMode").textContent = paymentMode;
     $("rPaymentStatus").textContent = paymentStatus;
-
     $("rSpecialRequirements").textContent = special;
 
     updateStatusPill(paymentStatus);
     renderServices();
     renderTerms();
 
-    $("rSignatureClient").textContent =
-        "Name: " + (clientName === "-" ? "____________________" : clientName);
-
-    $("rSignatureDate").textContent =
-        "Date: " + (bookingDate ? formatDate(bookingDate) : "____________________");
-
+    $("rSignatureClient").textContent = "Name: " + (clientName === "-" ? "____________________" : clientName);
+    $("rSignatureDate").textContent = "Date: " + (bookingDate ? formatDate(bookingDate) : "____________________");
     $("rSignatureCompany").textContent = "For " + companyName;
 
     updateMoneySummary();
+}
+
+function renderTerms(){
+    const target = $("rTerms");
+    const raw = $("terms").value || "";
+    target.innerHTML = "";
+    raw.split(/\n+/)
+        .map(x => x.trim())
+        .filter(Boolean)
+        .forEach(line => {
+            const li = document.createElement("li");
+            li.textContent = line.replace(/^\d+\.\s*/,"");
+            target.appendChild(li);
+        });
 }
 
 function openPreview(){
@@ -2291,43 +1753,21 @@ function printBill(){
     setTimeout(() => window.print(), 80);
 }
 
-function renderTerms(){
-    const target = $("rTerms");
-    const raw = $("terms").value || "";
-
-    target.innerHTML = "";
-
-    raw.split(/\n+/)
-        .map(x => x.trim())
-        .filter(Boolean)
-        .forEach(line => {
-            const li = document.createElement("li");
-            li.textContent = line.replace(/^\d+\.\s*/,"");
-            target.appendChild(li);
-        });
-}
-
-/* ---------------- DRAFT STORAGE ---------------- */
-
+/* ---------------- STORAGE ---------------- */
 function getFormData(){
     const data = {};
-
     fieldsToSave.forEach(id => {
         const el = $(id);
         if(el) data[id] = el.value;
     });
-
     data.services = collectServices();
-
     const logoData = localStorage.getItem("ultimatePlannerLogoData");
     if(logoData) data.logoData = logoData;
-
     return data;
 }
 
 function applyFormData(data){
     if(!data || typeof data !== "object") return;
-
     fieldsToSave.forEach(id => {
         if(data[id] !== undefined && $(id)){
             $(id).value = data[id];
@@ -2335,24 +1775,21 @@ function applyFormData(data){
     });
 
     $("serviceList").innerHTML = "";
-
     (Array.isArray(data.services) ? data.services : [])
         .forEach(item => addService(item.type || "", item.description || ""));
 
-    if(Array.isArray(data.services) && data.services.length === 0){
+    if(!data.services || data.services.length === 0){
         addDefaultServices();
     }
 
     if(data.logoData){
         localStorage.setItem("ultimatePlannerLogoData", data.logoData);
-        $("logoUrl").value = data.logoData;
         setLogoPreview(data.logoData);
         updateLogoOnReceipt(data.logoData);
-    }else{
-        localStorage.removeItem("ultimatePlannerLogoData");
-        const logo = $("logoUrl").value.trim();
-        setLogoPreview(logo);
-        updateLogoOnReceipt(logo);
+    }else if($("logoUrl").value.trim()){
+        const directUrl = $("logoUrl").value.trim();
+        setLogoPreview(directUrl);
+        updateLogoOnReceipt(directUrl);
     }
 
     updateMoneySummary();
@@ -2361,10 +1798,7 @@ function applyFormData(data){
 
 function saveDraft(){
     try{
-        localStorage.setItem(
-            "ultimatePlannerDraft",
-            JSON.stringify(getFormData())
-        );
+        localStorage.setItem("ultimatePlannerDraft", JSON.stringify(getFormData()));
         showToast("Draft saved in this browser");
     }catch(error){
         showToast("Could not save draft");
@@ -2378,15 +1812,12 @@ function loadDraft(){
             showToast("No saved draft found");
             return;
         }
-
         applyFormData(JSON.parse(raw));
         showToast("Draft loaded");
     }catch(error){
         showToast("Saved draft is invalid");
     }
 }
-
-/* ---------------- RESET ---------------- */
 
 function addDefaultServices(){
     addService("Stage Decoration","");
@@ -2395,9 +1826,7 @@ function addDefaultServices(){
 }
 
 function resetForm(){
-    const ok = confirm("Reset all booking details?");
-    if(!ok) return;
-
+    if(!confirm("Reset all booking details?")) return;
     fieldsToSave.forEach(id => {
         const el = $(id);
         if(!el) return;
@@ -2405,6 +1834,8 @@ function resetForm(){
             el.value = "Ultimate Planner";
         }else if(id === "companyTagline"){
             el.value = "Event Planning • Decoration • Management";
+        }else if(id === "companyPhone"){
+            el.value = "+91 7537936973";
         }else if(id === "bookingDate"){
             el.value = todayISO();
         }else if(id === "eventType"){
@@ -2416,49 +1847,33 @@ function resetForm(){
         }else if(id === "totalAmount" || id === "advanceAmount"){
             el.value = "0";
         }else if(id === "terms"){
-            /* keep default terms */
+            /* default terms kept */
         }else{
             el.value = "";
         }
     });
 
-    localStorage.removeItem("ultimatePlannerLogoData");
-    $("logoUrl").value = DEFAULT_LOGO_URL;
+    clearLogo();
     $("serviceList").innerHTML = "";
     addDefaultServices();
-
-    setLogoPreview("");
-    updateLogoOnReceipt("");
-    updateMoneySummary();
+    ensureReceiptNumber();
     generateReceipt();
-
     showToast("Form reset");
 }
 
-/* ---------------- SHARE ---------------- */
-
 function buildShareText(){
-    const receiptNo = $("rReceiptNumber").textContent;
-    const client = $("rClientName").textContent;
-    const eventType = $("rEventType").textContent;
-    const eventDate = $("rFunctionDate").textContent;
-    const venue = $("rEventVenueShort").textContent;
-    const total = $("rTotalAmount").textContent;
-    const advance = $("rAdvanceAmount").textContent;
-    const balance = $("rBalanceAmount").textContent;
-
     return [
-        "ULTIMATE PLANNER",
+        $("rCompanyName").textContent.toUpperCase(),
         "Booking Receipt",
         "",
-        `Receipt No: ${receiptNo}`,
-        `Client: ${client}`,
-        `Event: ${eventType}`,
-        `Function Date: ${eventDate}`,
-        `Venue: ${venue}`,
-        `Total Amount: ${total}`,
-        `Advance Received: ${advance}`,
-        `Balance Pending: ${balance}`,
+        `Receipt No: ${$("rReceiptNumber").textContent}`,
+        `Client: ${$("rClientName").textContent}`,
+        `Event: ${$("rEventType").textContent}`,
+        `Function Date: ${$("rFunctionDate").textContent}`,
+        `Venue: ${$("rEventVenueShort").textContent}`,
+        `Total Amount: ${$("rTotalAmount").textContent}`,
+        `Advance Received: ${$("rAdvanceAmount").textContent}`,
+        `Balance Pending: ${$("rBalanceAmount").textContent}`,
         "",
         "Please refer to the complete booking receipt for finalized services and requirements."
     ].join("\n");
@@ -2471,11 +1886,7 @@ async function shareBill(){
 
     if(navigator.share){
         try{
-            await navigator.share({
-                title:"Ultimate Planner Booking Receipt",
-                text,
-                url
-            });
+            await navigator.share({title:"Booking Receipt", text, url});
             showToast("Share panel opened");
             return;
         }catch(error){
@@ -2483,17 +1894,13 @@ async function shareBill(){
         }
     }
 
-    const fallback = url && !url.startsWith("file:")
-        ? text + "\n\n" + url
-        : text;
     try{
-        await navigator.clipboard.writeText(fallback);
-        showToast("Receipt details copied");
-    }catch(error){
-        window.prompt("Copy this receipt information:", fallback);
+        await navigator.clipboard.writeText(text);
+        showToast("Receipt details copied to clipboard");
+    }catch(err){
+        window.prompt("Copy this receipt information:", text);
     }
 }
-
 
 function ensureReceiptNumber(){
     const el = $("receiptNumber");
@@ -2506,44 +1913,43 @@ function ensureReceiptNumber(){
     el.value = `UP-${y}${m}${d}-${suffix}`;
 }
 
-/* ---------------- INIT ---------------- */
-
 function init(){
     setDefaultDates();
     ensureReceiptNumber();
 
-    if(!localStorage.getItem("ultimatePlannerDraft")){
-        addDefaultServices();
-    }else{
-        const raw = localStorage.getItem("ultimatePlannerDraft");
-        try{
-            const draft = JSON.parse(raw);
-            if(draft?.services){
-                applyFormData(draft);
-            }else{
-                addDefaultServices();
-            }
-        }catch(error){
-            addDefaultServices();
-        }
+    const savedLogo = localStorage.getItem("ultimatePlannerLogoData");
+    if(savedLogo){
+        setLogoPreview(savedLogo);
+        updateLogoOnReceipt(savedLogo);
     }
 
-    $("logoUrl").value = DEFAULT_LOGO_URL;
-    setLogoPreview(DEFAULT_LOGO_URL);
-    updateLogoOnReceipt(DEFAULT_LOGO_URL);
+    const rawDraft = localStorage.getItem("ultimatePlannerDraft");
+    if(rawDraft){
+        try{
+            applyFormData(JSON.parse(rawDraft));
+        }catch(e){
+            addDefaultServices();
+        }
+    }else{
+        addDefaultServices();
+    }
 
     generateReceipt();
 
-    /* Auto-refresh preview for quick editing */
     document.querySelectorAll("#editor input, #editor textarea, #editor select")
         .forEach(el => {
-            el.addEventListener("input", () => {
-                generateReceipt();
-            });
-            el.addEventListener("change", () => {
-                generateReceipt();
-            });
+            el.addEventListener("input", generateReceipt);
+            el.addEventListener("change", generateReceipt);
         });
+
+    $("logoUrl").addEventListener("input", (e) => {
+        const url = e.target.value.trim();
+        if(url){
+            localStorage.removeItem("ultimatePlannerLogoData");
+            setLogoPreview(url);
+            updateLogoOnReceipt(url);
+        }
+    });
 }
 
 init();
