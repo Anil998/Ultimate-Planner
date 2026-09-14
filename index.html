@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#111827">
-<title>Rank Odisha | Event Booking & Receipt Generator</title>
+<title>Ultimate Planner | Event Booking & Receipt Generator</title>
 
 <style>
 :root{
@@ -843,11 +843,11 @@ button{cursor:pointer}
         <div class="brand">
             <div class="brand-mark" id="topbarBrandMark">
                 <img id="topbarLogoImg" src="" alt="Brand Logo" style="display:none;">
-                <span id="topbarFallbackMark">RO</span>
+                <span id="topbarFallbackMark">UP</span>
             </div>
             <div class="brand-copy">
                 <h1 id="topbarCompanyName">Ultimate Planner</h1>
-                <p>Event Planning • Management • Production</p>
+                <p>Event Booking & Receipt Generator</p>
             </div>
         </div>
 
@@ -875,12 +875,12 @@ button{cursor:pointer}
                 <div class="form-grid">
                     <div class="field">
                         <label>Company name</label>
-                        <input id="companyName" value="Rank Odisha" placeholder="e.g. Rank Odisha">
+                        <input id="companyName" value="Ultimate Planner" placeholder="e.g. Ultimate Planner">
                     </div>
 
                     <div class="field">
                         <label>Tagline</label>
-                        <input id="companyTagline" value="Event Planning • Management • Production" placeholder="Your tagline">
+                        <input id="companyTagline" value="Event Planning • Decoration • Management" placeholder="Your tagline">
                     </div>
 
                     <div class="field">
@@ -890,7 +890,7 @@ button{cursor:pointer}
 
                     <div class="field">
                         <label>Company email</label>
-                        <input id="companyEmail" placeholder="contact@rankodisha.in">
+                        <input id="companyEmail" placeholder="hello@example.com">
                     </div>
 
                     <div class="field full">
@@ -927,7 +927,7 @@ button{cursor:pointer}
                 <div class="form-grid three">
                     <div class="field">
                         <label>Receipt / booking no.</label>
-                        <input id="receiptNumber" placeholder="RO-2026-001">
+                        <input id="receiptNumber" placeholder="UP-2026-001">
                     </div>
 
                     <div class="field">
@@ -1151,16 +1151,16 @@ button{cursor:pointer}
 
                         <header class="receipt-header">
                             <div class="receipt-brand">
-                                <img id="rLogo" class="receipt-logo is-hidden" alt="Company Logo">
+                                <img id="rLogo" class="receipt-logo is-hidden" alt="Ultimate Planner Logo">
 
                                 <div class="receipt-company">
-                                    <h2 id="rCompanyName">Rank Odisha</h2>
-                                    <div class="tagline" id="rTagline">Event Planning • Management • Production</div>
+                                    <h2 id="rCompanyName">Ultimate Planner</h2>
+                                    <div class="tagline" id="rTagline">Event Planning • Decoration • Management</div>
 
                                     <div class="contact">
                                         <span id="rCompanyPhone">+91 7537936973</span>
                                         <span aria-hidden="true"> • </span>
-                                        <span id="rCompanyEmail">contact@rankodisha.in</span>
+                                        <span id="rCompanyEmail">hello@example.com</span>
                                         <br>
                                         <span id="rCompanyAddress">Address not added</span>
                                     </div>
@@ -1196,7 +1196,7 @@ button{cursor:pointer}
                                 <div class="info-card">
                                     <div class="info-card-head">ORGANIZER</div>
                                     <div class="info-card-body">
-                                        <div class="info-row"><div class="key">Company</div><div class="val" id="rCompanyName2">Rank Odisha</div></div>
+                                        <div class="info-row"><div class="key">Company</div><div class="val" id="rCompanyName2">Ultimate Planner</div></div>
                                         <div class="info-row"><div class="key">Phone</div><div class="val" id="rCompanyPhone2">+91 7537936973</div></div>
                                         <div class="info-row"><div class="key">Email</div><div class="val" id="rCompanyEmail2">-</div></div>
                                         <div class="info-row"><div class="key">Address</div><div class="val" id="rCompanyAddress2">-</div></div>
@@ -1278,7 +1278,7 @@ button{cursor:pointer}
 
                             <div class="sign-box">
                                 <div class="sign-line">AUTHORIZED SIGNATURE</div>
-                                <div class="sign-name" id="rSignatureCompany">For Rank Odisha</div>
+                                <div class="sign-name" id="rSignatureCompany">For Ultimate Planner</div>
                                 <div class="sign-name">Date: ____________________</div>
                             </div>
                         </section>
@@ -1302,8 +1302,8 @@ button{cursor:pointer}
 
 const $ = (id) => document.getElementById(id);
 
-const DEFAULT_COMPANY_NAME = "Rank Odisha";
-const DEFAULT_TAGLINE = "Event Planning • Management • Production";
+const DEFAULT_COMPANY_NAME = "Ultimate Planner";
+const DEFAULT_TAGLINE = "Event Planning • Decoration • Management";
 const DEFAULT_PHONE = "+91 7537936973";
 const DEFAULT_LOGO_URL = "https://lh3.googleusercontent.com/pw/AP1GczNknWNBppAZ_tf9H4nukzScsw8aPMiUyY8dRWaSy_JyuTS3lBjPoQVvNsmgVU8P-S9fJH6w61VMMNckROuDndlAQ9QGn0k-zEdBD8whW7Cqc3PKU9TgevPjCn0VMZ32N3llvgV_Xr1svbDQr6MEQ4E=w878-h878-s-no-gm?authuser=0";
 
@@ -1556,12 +1556,12 @@ function saveDraft(){
     const data = {};
     fieldsToSave.forEach(k => { if($(k)) data[k] = $(k).value; });
     data.services = collectServices();
-    localStorage.setItem("rank_odisha_bill_draft", JSON.stringify(data));
+    localStorage.setItem("up_event_bill_draft", JSON.stringify(data));
     showToast("Draft saved locally");
 }
 
 function loadDraft(){
-    const raw = localStorage.getItem("rank_odisha_bill_draft");
+    const raw = localStorage.getItem("up_event_bill_draft");
     if(!raw) return showToast("No draft found");
     try{
         const data = JSON.parse(raw);
@@ -1626,7 +1626,7 @@ function init(){
 
     if(!$("receiptNumber").value){
         const now = new Date();
-        $("receiptNumber").value = `RO-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}-${String(Date.now()).slice(-4)}`;
+        $("receiptNumber").value = `UP-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}-${String(Date.now()).slice(-4)}`;
     }
 
     $("logoUrl").value = DEFAULT_LOGO_URL;
