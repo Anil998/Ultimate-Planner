@@ -72,7 +72,7 @@ button{cursor:pointer}
     flex-shrink:0;
     border:1px solid #fed7aa;
 }
-.brand-mark img{width:100%;height:100%;object-fit:cover}
+.brand-mark img{width:100%;height:100%;object-fit:contain}
 .brand-copy h1{font-size:16px;font-weight:800;letter-spacing:-0.02em}
 .brand-copy p{font-size:11px;color:#94a3b8}
 
@@ -91,7 +91,6 @@ button{cursor:pointer}
     white-space:nowrap;
 }
 .btn:active{transform:scale(0.97)}
-.btn-dark{background:#fff;color:#0f172a}
 .btn-accent{background:linear-gradient(135deg,#f59e0b,#b45309);color:#fff}
 .btn-green{background:#16a34a;color:#fff}
 .btn-light{background:#f1f5f9;color:#334155;border:1px solid #cbd5e1}
@@ -249,7 +248,6 @@ button{cursor:pointer}
     background:#fff;
     flex-shrink:0;
 }
-.r-logo.is-hidden{display:none}
 .r-brand-info h2{font-size:20px;font-weight:900;letter-spacing:-0.02em;color:#0f172a;line-height:1.1}
 .r-brand-info .tagline{font-size:10px;font-weight:700;color:#d97706;margin-top:2px}
 .r-brand-info .contact{font-size:9.5px;color:#475569;margin-top:3px;line-height:1.35}
@@ -383,10 +381,6 @@ button{cursor:pointer}
     .r-box-grid,.r-split{grid-template-columns:1fr}
     .r-signatures{gap:16px;margin-top:16px}
 }
-
-@media print{
-    body{display:none} /* Direct users to pure PDF generator for guaranteed 1-page output */
-}
 </style>
 </head>
 
@@ -444,8 +438,12 @@ button{cursor:pointer}
                         <textarea id="companyAddress" placeholder="Bhubaneswar, Odisha"></textarea>
                     </div>
                     <div class="field full">
-                        <label>Logo Source</label>
-                        <input id="logoUrl" type="url" placeholder="Paste direct image URL">
+                        <label>Logo Direct URL / Google Drive</label>
+                        <input id="logoUrl" type="url" placeholder="https://drive.google.com/file/d/...">
+                    </div>
+                    <div class="field full">
+                        <label>Or Upload Logo From Phone/PC</label>
+                        <input id="logoFileInput" type="file" accept="image/*" style="padding:6px;font-size:11px;">
                     </div>
                 </div>
             </div>
@@ -730,7 +728,10 @@ const $ = (id) => document.getElementById(id);
 const DEFAULT_NAME = "Ultimate Planner";
 const DEFAULT_TAGLINE = "Event Planning • Decoration • Management";
 const DEFAULT_PHONE = "+91 7537936973";
-const DEFAULT_LOGO = "https://drive.google.com/file/d/1SVwY2T9U7y2J2vuw2YYVnB1pqd7bFKlk/view?usp=drivesdk";
+
+// Your Google Drive file ID: 1SVwY2T9U7y2J2vuw2YYVnB1pqd7bFKlk converted to direct high-res content endpoint
+const DEFAULT_DRIVE_RAW = "https://drive.google.com/file/d/1SVwY2T9U7y2J2vuw2YYVnB1pqd7bFKlk/view?usp=drivesdk";
+const DEFAULT_LOGO_URL = "https://lh3.googleusercontent.com/d/1SVwY2T9U7y2J2vuw2YYVnB1pqd7bFKlk";
 
 let cachedLogoBase64 = null;
 
@@ -774,8 +775,25 @@ function inWords(num){
     return str;
 }
 
-/* PRE-BUFFER LOGO AS BASE64 TO AVOID CORS BLOCKING IN PDF */
+/* RESOLVES GOOGLE DRIVE LINKS TO DIRECT IMAGE URLS */
+function transformDriveUrl(raw){
+    if(!raw) return "";
+    const driveMatch = raw.match(/\/d\/([a-zA-Z0-9_-]+)/) || raw.match(/id=([a-zA-Z0-9_-]+)/);
+    if(driveMatch && driveMatch[1]){
+        return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+    }
+    return raw;
+}
+
+/* PRE-BUFFER LOGO AS BASE64 TO PREVENT CORS DROPS */
 function preloadLogo(url){
+    const directUrl = transformDriveUrl(url);
+    if(!directUrl){
+        cachedLogoBase64 = null;
+        updateLogoUI(null);
+        return;
+    }
+
     const img = new Image();
     img.crossOrigin = "Anonymous";
     img.onload = function(){
@@ -786,18 +804,34 @@ function preloadLogo(url){
         ctx.drawImage(img, 0, 0);
         try {
             cachedLogoBase64 = canvas.toDataURL("image/png");
-            $("rLogo").src = cachedLogoBase64;
-            $("topbarLogoImg").src = cachedLogoBase64;
-            $("topbarLogoImg").style.display = "block";
-            $("topbarFallback").style.display = "none";
+            updateLogoUI(cachedLogoBase64);
         } catch(e) {
-            console.warn("CORS prevented Base64 extraction:", e);
+            // If cross-origin prevents canvas reading, set directly to image src
+            updateLogoUI(directUrl);
         }
     };
     img.onerror = function(){
-        cachedLogoBase64 = null;
+        updateLogoUI(directUrl);
     };
-    img.src = url;
+    img.src = directUrl;
+}
+
+function updateLogoUI(src){
+    const rLogo = $("rLogo");
+    const topImg = $("topbarLogoImg");
+    const fallback = $("topbarFallback");
+
+    if(src){
+        rLogo.src = src;
+        rLogo.style.display = "block";
+        topImg.src = src;
+        topImg.style.display = "block";
+        fallback.style.display = "none";
+    } else {
+        rLogo.style.display = "none";
+        topImg.style.display = "none";
+        fallback.style.display = "block";
+    }
 }
 
 /* SERVICES ENGINE */
@@ -893,7 +927,7 @@ function renderReceipt(){
 }
 
 /* =========================================================
-   PURE VECTOR PDF GENERATOR (NO CANVAS STRETCHING, SHARP TEXT)
+   PURE VECTOR PDF GENERATOR (TRUE VECTOR, STRICT SINGLE A4)
    ========================================================= */
 function buildNativeVectorPDF(){
     const { jsPDF } = window.jspdf;
@@ -908,25 +942,25 @@ function buildNativeVectorPDF(){
     const contentWidth = pageWidth - (margin * 2);
 
     // Accent top bar
-    doc.setFillColor(15, 23, 42); // Navy
+    doc.setFillColor(15, 23, 42);
     doc.rect(margin, 10, contentWidth * 0.72, 2.5, "F");
-    doc.setFillColor(217, 119, 6); // Amber
+    doc.setFillColor(217, 119, 6);
     doc.rect(margin + (contentWidth * 0.72), 10, contentWidth * 0.28, 2.5, "F");
 
     let y = 20;
 
-    // Direct Logo Embedding (Never stretches or disappears)
+    // Vector Logo Placement
     if(cachedLogoBase64){
         try{
             doc.addImage(cachedLogoBase64, "PNG", margin, y, 20, 20);
         }catch(e){
-            console.warn("Logo injection skipped:", e);
+            console.warn("Logo skipped in PDF build:", e);
         }
     }
 
     const brandX = cachedLogoBase64 ? margin + 24 : margin;
 
-    // Company Header
+    // Header Content
     doc.setFont("helvetica", "bold");
     doc.setFontSize(18);
     doc.setTextColor(15, 23, 42);
@@ -943,7 +977,7 @@ function buildNativeVectorPDF(){
     doc.text(`Phone: ${$("companyPhone").value.trim() || DEFAULT_PHONE} | Email: ${$("companyEmail").value.trim() || "N/A"}`, brandX, y + 14.5);
     doc.text(`Address: ${$("companyAddress").value.trim() || "Bhubaneswar, Odisha"}`, brandX, y + 18.5);
 
-    // Invoice Meta Right Box
+    // Meta Badge
     doc.setFillColor(15, 23, 42);
     doc.roundedRect(pageWidth - margin - 44, y, 44, 7, 1, 1, "F");
     doc.setFont("helvetica", "bold");
@@ -974,17 +1008,16 @@ function buildNativeVectorPDF(){
     doc.setTextColor(status === "Payment Pending" ? 185 : status === "Partially Paid" ? 194 : 21, status === "Payment Pending" ? 28 : status === "Partially Paid" ? 65 : 128, status === "Payment Pending" ? 28 : status === "Partially Paid" ? 12 : 61);
     doc.text(status.toUpperCase(), pageWidth - margin - 17.5, y + 22, { align: "center" });
 
-    // Horizontal Divider
+    // Divider Line
     y += 26;
     doc.setDrawColor(226, 232, 240);
     doc.setLineWidth(0.4);
     doc.line(margin, y, pageWidth - margin, y);
 
-    // Two Column Details Box (Client & Event)
+    // Cards Grid
     y += 4;
     const colWidth = (contentWidth - 6) / 2;
 
-    // Client Card
     doc.setFillColor(248, 250, 252);
     doc.roundedRect(margin, y, colWidth, 23, 1.5, 1.5, "F");
     doc.setFont("helvetica", "bold");
@@ -1009,7 +1042,6 @@ function buildNativeVectorPDF(){
     doc.setTextColor(15, 23, 42);
     doc.text($("clientAddress").value.trim() || "-", margin + 24, y + 18.5);
 
-    // Event Card
     const col2X = margin + colWidth + 6;
     doc.setFillColor(248, 250, 252);
     doc.roundedRect(col2X, y, colWidth, 23, 1.5, 1.5, "F");
@@ -1035,7 +1067,7 @@ function buildNativeVectorPDF(){
     doc.setTextColor(15, 23, 42);
     doc.text($("eventVenue").value.trim() || "-", col2X + 24, y + 18.5);
 
-    // Services AutoTable
+    // Services Table
     y += 26;
     const services = getServices();
     const tableRows = services.length ? services.map((s, idx) => [idx + 1, s.type || "-", s.desc || "-"]) : [[1, "Allied Event Operations", "Complete event coordination as per discussion"]];
@@ -1069,7 +1101,6 @@ function buildNativeVectorPDF(){
 
     y = doc.lastAutoTable.finalY + 4;
 
-    // Calculation & Terms
     const splitColWidth = (contentWidth - 6) / 2;
     const calcX = margin + splitColWidth + 6;
 
@@ -1094,7 +1125,7 @@ function buildNativeVectorPDF(){
         termY += 3.2;
     });
 
-    // Right: Calculation Table
+    // Right: Calculation Summary
     let total = Math.max(0, Number($("totalAmount").value) || 0);
     let adv = Math.max(0, Number($("advanceAmount").value) || 0);
     if(adv > total) adv = total;
@@ -1133,7 +1164,7 @@ function buildNativeVectorPDF(){
     doc.text("Balance Pending:", calcX + 3, y + 21.5);
     doc.text(formatINR(bal), calcX + splitColWidth - 3, y + 21.5, { align: "right" });
 
-    // Signatures
+    // Bottom Signatures
     const signY = 265;
     doc.setDrawColor(15, 23, 42);
     doc.setLineWidth(0.4);
@@ -1159,7 +1190,7 @@ function buildNativeVectorPDF(){
    SHARE VECTOR PDF DIRECTLY TO WHATSAPP
    ========================================================= */
 async function sharePDFToWhatsApp(){
-    showToast("Compiling official PDF...");
+    showToast("Generating official vector PDF...");
     const doc = buildNativeVectorPDF();
     const fileName = `Bill_${$("receiptNumber").value.trim() || "UP"}.pdf`;
     const pdfBlob = doc.output("blob");
@@ -1179,12 +1210,11 @@ async function sharePDFToWhatsApp(){
         }
     }
 
-    // Direct download fallback if browser does not support file sharing
     doc.save(fileName);
-    showToast("PDF downloaded! Attach it in WhatsApp.");
+    showToast("PDF downloaded. Attach it directly in WhatsApp.");
 }
 
-/* DOWNLOAD TRUE VECTOR PDF */
+/* DOWNLOAD VECTOR PDF */
 function downloadVectorPDF(){
     const doc = buildNativeVectorPDF();
     const fileName = `Bill_${$("receiptNumber").value.trim() || "UP"}.pdf`;
@@ -1209,7 +1239,7 @@ function loadDraft(){
         FIELDS.forEach(k => { if(data[k] !== undefined && $(k)) $(k).value = data[k]; });
         $("serviceList").innerHTML = "";
         (data.services || []).forEach(s => addService(s.type, s.desc));
-        preloadLogo($("logoUrl").value.trim() || DEFAULT_LOGO);
+        preloadLogo($("logoUrl").value.trim() || DEFAULT_LOGO_URL);
         renderReceipt();
         showToast("Draft loaded");
     }catch(e){ showToast("Failed to load draft"); }
@@ -1222,7 +1252,7 @@ function resetAll(){
         if(k === "companyName") $(k).value = DEFAULT_NAME;
         else if(k === "companyTagline") $(k).value = DEFAULT_TAGLINE;
         else if(k === "companyPhone") $(k).value = DEFAULT_PHONE;
-        else if(k === "logoUrl") $(k).value = DEFAULT_LOGO;
+        else if(k === "logoUrl") $(k).value = DEFAULT_DRIVE_RAW;
         else if(k === "bookingDate") $(k).value = new Date().toISOString().slice(0,10);
         else if(k === "totalAmount" || k === "advanceAmount") $(k).value = "0";
         else $(k).value = "";
@@ -1230,7 +1260,7 @@ function resetAll(){
     $("serviceList").innerHTML = "";
     addService("Stage & Mandap Decoration", "Theme finalized as discussed");
     addService("Lighting Setup", "Warm-white ambient setup");
-    preloadLogo(DEFAULT_LOGO);
+    preloadLogo(DEFAULT_LOGO_URL);
     renderReceipt();
     showToast("Form reset");
 }
@@ -1242,8 +1272,9 @@ function init(){
     const now = new Date();
     $("receiptNumber").value = `UP-${now.getFullYear()}${String(now.getMonth()+1).padStart(2,"0")}-${String(Date.now()).slice(-4)}`;
     
-    $("logoUrl").value = DEFAULT_LOGO;
-    preloadLogo(DEFAULT_LOGO);
+    // Set Drive URL by default
+    $("logoUrl").value = DEFAULT_DRIVE_RAW;
+    preloadLogo(DEFAULT_LOGO_URL);
 
     addService("Stage & Mandap Setup", "Fresh flower backdrop");
     addService("Ambient Lighting", "Full venue par-can and focus lights");
@@ -1257,6 +1288,20 @@ function init(){
     });
 
     $("logoUrl").addEventListener("change", (e) => preloadLogo(e.target.value.trim()));
+
+    // Local Image File Upload Handler
+    $("logoFileInput").addEventListener("change", function(e){
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = function(evt){
+            cachedLogoBase64 = evt.target.result;
+            updateLogoUI(cachedLogoBase64);
+            showToast("Local logo applied");
+        };
+        reader.readAsDataURL(file);
+    });
+
     renderReceipt();
 }
 
